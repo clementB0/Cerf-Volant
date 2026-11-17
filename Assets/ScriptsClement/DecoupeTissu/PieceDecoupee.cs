@@ -48,7 +48,8 @@ public class PieceDecoupee : MonoBehaviour
             return;
         }
 
-        Vector2[] coins = patron.Coins;
+        // La forme vient du fichier Forme du patron (Papillon, Raie, Dragon...). Sans forme : erreur juste en dessous.
+        Vector2[] coins = patron.Forme != null ? patron.Forme.Coins : null;
 
         if (coins == null || coins.Length < 3)
         {
