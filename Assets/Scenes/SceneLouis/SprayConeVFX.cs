@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(SprayInput))]
 [RequireComponent(typeof(SprayColor))]
 public class SprayConeVFX : MonoBehaviour
@@ -32,6 +33,15 @@ public class SprayConeVFX : MonoBehaviour
     private Color previousColor;
     private bool hasColor;
 
+    // Le script de peinture lit ces mêmes réglages.
+    public float ConeHalfAngle => coneHalfAngle;
+    public float SprayRange => sprayRange;
+
+    public Transform SprayOrigin =>
+        sprayParticles != null
+            ? sprayParticles.transform
+            : null;
+
     private void Awake()
     {
         sprayInput = GetComponent<SprayInput>();
@@ -40,7 +50,7 @@ public class SprayConeVFX : MonoBehaviour
         if (sprayParticles == null)
         {
             Debug.LogError(
-                "SprayConeVFX : assigne SprayParticles dans l'Inspector.",
+                "SprayConeVFX : assigne SprayParticles.",
                 this
             );
 
@@ -53,7 +63,9 @@ public class SprayConeVFX : MonoBehaviour
         var main = sprayParticles.main;
         main.playOnAwake = false;
         main.loop = true;
-        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        main.simulationSpace =
+            ParticleSystemSimulationSpace.World;
+
         main.gravityModifier = 0f;
         main.maxParticles = 1000;
 
@@ -94,6 +106,7 @@ public class SprayConeVFX : MonoBehaviour
         main.startColor = color;
         main.startSpeed = particleSpeed;
         main.startSize = particleSize;
+
         main.startLifetime =
             sprayRange / Mathf.Max(0.1f, particleSpeed);
 
@@ -103,7 +116,6 @@ public class SprayConeVFX : MonoBehaviour
         var shape = sprayParticles.shape;
         shape.angle = coneHalfAngle;
 
-        // Met aussi à jour les particules déjà présentes.
         if (!hasColor || previousColor != color)
         {
             int count =
@@ -112,7 +124,10 @@ public class SprayConeVFX : MonoBehaviour
             for (int i = 0; i < count; i++)
                 particleBuffer[i].startColor = color;
 
-            sprayParticles.SetParticles(particleBuffer, count);
+            sprayParticles.SetParticles(
+                particleBuffer,
+                count
+            );
 
             previousColor = color;
             hasColor = true;
@@ -121,13 +136,13 @@ public class SprayConeVFX : MonoBehaviour
 
     private void StopSpray()
     {
-        if (sprayParticles != null)
-        {
-            sprayParticles.Stop(
-                true,
-                ParticleSystemStopBehavior.StopEmittingAndClear
-            );
-        }
+        if (sprayParticles == null)
+            return;
+
+        sprayParticles.Stop(
+            true,
+            ParticleSystemStopBehavior.StopEmittingAndClear
+        );
     }
 
     private void OnDisable()
