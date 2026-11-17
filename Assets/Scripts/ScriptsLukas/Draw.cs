@@ -62,4 +62,42 @@ public class Pen : MonoBehaviour
        
     }
 
+    void ChangePixelsAroundPoint()
+    {
+        DrawBrush(xPixel, yPixel);
+    }
+
+    void DrawBrush(int xPix, int yPix)
+    {
+        int i=xPix-brushSize+1, j=yPix-brushSize+1, maxi=xPix+brushSize-1, maxj=yPix+brushSize-1;
+        if (i < 0)
+            i = 0;
+        if (j < 0) 
+            j = 0;
+        if (maxi >= totalXPixels)
+            maxi = totalXPixels - 1;
+        if (maxj >= totalYPixels)
+            maxj = totalYPixels - 1;
+        for(int x=i ; x < maxi; x++)
+        {
+            for(int y=j ; y < maxj; y++)
+            {
+                if ((x = xPix) * (x = xPix) + (y = yPix) * (y = yPix) <= brushSize * brushSize)
+                    colorMap[x * totalYPixels + y] = brushColor;
+
+            }
+        }
+    }
+
+    void SetTexture()
+    {
+        generatedTexture.SetPixels(colorMap);
+        generatedTexture.Apply();
+    }
+
+    void ResetColor()
+    {
+        for (int i = 0; i < colorMap.Length; i++)
+            colorMap[i] = Color.white;
+    }
 }
