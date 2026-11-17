@@ -4,30 +4,42 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class TransitionDecoupePeinture : MonoBehaviour
 {
-    [Header("Objets")]
-    [SerializeField] private GameObject tissu;
-    [SerializeField] private GameObject pieceDecoupee;
+    [Header("Outils")]
     [SerializeField] private GameObject cutter;
     [SerializeField] private GameObject[] bombes;
 
-    [Header("Fumée")]
+    [Header("Effet")]
     [SerializeField] private ParticleSystem fumeePrefab;
-    [SerializeField] private float delaiBascule = 0.2f;
-    [SerializeField] private float dureeFumee = 1.2f;
+    [SerializeField, Min(0f)] private float delaiBascule = 0.2f;
+    [SerializeField, Min(0.1f)] private float dureeFumee = 1.2f;
 
     private bool transitionLancee;
 
     private void Start()
     {
+        // Les bombes attendent la fin de la découpe.
         foreach (GameObject bombe in bombes)
-            bombe.SetActive(false);
+        {
+            if (bombe != null)
+                bombe.SetActive(false);
+        }
     }
 
-    // Appelé lorsque tous les pointillés sont reliés.
+    // À ajouter aux événements de fin de découpe existants.
     public void TerminerDecoupe()
     {
         if (transitionLancee)
             return;
+
+        if (cutter == null || fumeePrefab == null)
+        {
+            Debug.LogError(
+                "Transition : assigne le Cutter et le Fumee Prefab.",
+                this
+            );
+
+            return;
+        }
 
         transitionLancee = true;
         StartCoroutine(Transition());
@@ -35,16 +47,13 @@ public class TransitionDecoupePeinture : MonoBehaviour
 
     private IEnumerator Transition()
     {
-        // Laisse terminer la frame de découpe.
+        // Laisse les événements de découpe finir leur travail.
         yield return null;
 
-        pieceDecoupee.SetActive(true);
-        tissu.SetActive(false);
-
-        // Libère le cutter s'il est encore tenu.
         XRGrabInteractable grab =
             cutter.GetComponent<XRGrabInteractable>();
 
+        // Libère le cutter s'il est encore tenu.
         if (grab != null)
         {
             if (grab.interactionManager != null)
@@ -63,15 +72,14 @@ public class TransitionDecoupePeinture : MonoBehaviour
             grab.enabled = false;
         }
 
-        // Attend la fin du détachement XR puis fige le cutter.
         yield return new WaitForEndOfFrame();
 
+        // Maintient le cutter sur place pendant sa disparition.
         Rigidbody corps = cutter.GetComponent<Rigidbody>();
 
         if (corps != null)
             corps.isKinematic = true;
 
-        // Disparition du cutter.
         CreerFumee(cutter.transform.position);
 
         yield return new WaitForSeconds(delaiBascule);
@@ -82,14 +90,20 @@ public class TransitionDecoupePeinture : MonoBehaviour
             Mathf.Max(0f, dureeFumee - delaiBascule)
         );
 
-        // Apparition simultanée des bombes.
+        // Un nuage à l'emplacement de chaque bombe.
         foreach (GameObject bombe in bombes)
-            CreerFumee(bombe.transform.position);
+        {
+            if (bombe != null)
+                CreerFumee(bombe.transform.position);
+        }
 
         yield return new WaitForSeconds(delaiBascule);
 
         foreach (GameObject bombe in bombes)
-            bombe.SetActive(true);
+        {
+            if (bombe != null)
+                bombe.SetActive(true);
+        }
     }
 
     private void CreerFumee(Vector3 position)
@@ -100,8 +114,19 @@ public class TransitionDecoupePeinture : MonoBehaviour
             Quaternion.identity
         );
 
-        fumee.Play();
+        // Fonctionne aussi si le prefab était enregistré inactif.
+        fumee.gameObject.SetActive(true);
 
-        Destroy(fumee.gameObject, dureeFumee);
+        fumee.Stop(
+            true,
+            ParticleSystemStopBehavior.StopEmittingAndClear
+        );
+
+        fumee.Play(true);
+
+        Destroy(
+            fumee.gameObject,
+            Mathf.Max(dureeFumee, delaiBascule + 0.1f)
+        );
     }
 }
