@@ -15,30 +15,8 @@ public class PieceDecoupee : MonoBehaviour
         // On se met exactement à la place du tissu, pour que la pièce apparaisse sous la ligne tracée.
         transform.SetPositionAndRotation(patron.transform.position, patron.transform.rotation);
 
-        Vector2[] coins = patron.Coins;
-
-        // Les sommets du maillage : le centre du tissu (n° 0), puis les coins de la forme (n° 1, 2, 3...), à plat (z = 0).
-        Vector3[] sommets = new Vector3[coins.Length + 1];
-        sommets[0] = Vector3.zero;
-        for (int i = 0; i < coins.Length; i++)
-            sommets[i + 1] = new Vector3(coins[i].x, coins[i].y, 0f);
-
-        // Les triangles, en "éventail" depuis le centre : (centre, coin 1, coin 2), (centre, coin 2, coin 3)...
-        // Le "%" fait revenir le dernier coin au premier pour fermer la forme.
-        // shortcut: marche seulement si on "voit" tout le contour depuis le centre (losange, papillon) ; une forme en U ou en C demandera une vraie découpe en triangles.
-        int[] triangles = new int[coins.Length * 3];
-        for (int i = 0; i < coins.Length; i++)
-        {
-            triangles[i * 3] = 0;
-            triangles[i * 3 + 1] = i + 1;
-            triangles[i * 3 + 2] = (i + 1) % coins.Length + 1;
-        }
-
-        Mesh maillage = new Mesh();
-        maillage.name = "Forme cerf-volant";
-        maillage.vertices = sommets;
-        maillage.triangles = triangles;
-        maillage.RecalculateNormals(); // pour que la lumière sache de quel côté est le dessus
+        // La forme en 3D, fabriquée par le fichier Forme du patron (même forme que les pointillés).
+        Mesh maillage = patron.Forme.CreerMaillage();
         GetComponent<MeshFilter>().mesh = maillage;
 
         // La zone où la main peut attraper la pièce (utilisée par le XR Grab Interactable du template).

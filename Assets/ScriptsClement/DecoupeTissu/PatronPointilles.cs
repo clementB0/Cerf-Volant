@@ -7,60 +7,9 @@ using UnityEngine.Events;
 // À mettre sur l'objet "Tissu" (un Quad couché, de 1 m x 1 m quand son échelle vaut 1).
 public class PatronPointilles : MonoBehaviour
 {
-    // Les coins de la forme, en mètres, mesurés depuis le centre du tissu.
-    // x = gauche (-) / droite (+), y = vers soi (-) / loin de soi (+).
-    // Par défaut : un papillon de 80 cm de large (relevé sur le dessin, sans les antennes). Modifiable dans l'Inspector.
-    // Attention :
-    //  - donner les coins dans le sens des aiguilles d'une montre (vu du dessus), sinon la PieceDecoupee est invisible ;
-    //  - depuis le centre du tissu (0, 0), on doit "voir" tout le contour (voir PieceDecoupee).
-    [SerializeField] private Vector2[] coins =
-    {
-        new Vector2(0f, 0.13f),         // haut du corps (entre les antennes)
-
-        // Aile droite du haut
-        new Vector2(0.022f, 0.12f),
-        new Vector2(0.082f, 0.18f),
-        new Vector2(0.162f, 0.225f),
-        new Vector2(0.262f, 0.252f),    // haut de l'aile
-        new Vector2(0.342f, 0.235f),
-        new Vector2(0.392f, 0.19f),
-        new Vector2(0.4f, 0.14f),       // bout de l'aile
-        new Vector2(0.377f, 0.08f),
-        new Vector2(0.322f, 0.025f),
-        new Vector2(0.247f, 0f),        // creux entre les deux ailes droites
-
-        // Aile droite du bas
-        new Vector2(0.312f, -0.05f),
-        new Vector2(0.344f, -0.095f),
-        new Vector2(0.337f, -0.145f),
-        new Vector2(0.292f, -0.185f),
-        new Vector2(0.202f, -0.202f),   // bas de l'aile
-        new Vector2(0.102f, -0.195f),
-        new Vector2(0.037f, -0.15f),
-
-        new Vector2(0f, -0.14f),        // bas du corps
-
-        // Aile gauche du bas (le miroir de la droite : x devient -x)
-        new Vector2(-0.037f, -0.15f),
-        new Vector2(-0.102f, -0.195f),
-        new Vector2(-0.202f, -0.202f),
-        new Vector2(-0.292f, -0.185f),
-        new Vector2(-0.337f, -0.145f),
-        new Vector2(-0.344f, -0.095f),
-        new Vector2(-0.312f, -0.05f),
-        new Vector2(-0.247f, 0f),       // creux entre les deux ailes gauches
-
-        // Aile gauche du haut
-        new Vector2(-0.322f, 0.025f),
-        new Vector2(-0.377f, 0.08f),
-        new Vector2(-0.4f, 0.14f),
-        new Vector2(-0.392f, 0.19f),
-        new Vector2(-0.342f, 0.235f),
-        new Vector2(-0.262f, 0.252f),
-        new Vector2(-0.162f, 0.225f),
-        new Vector2(-0.082f, 0.18f),
-        new Vector2(-0.022f, 0.12f),
-    };
+    // La forme à découper (un fichier "Forme" : Papillon, Raie, Dragon... dans ScenesClement/Formes).
+    // Pour changer de cerf-volant, glisser une autre forme ici dans l'Inspector.
+    [SerializeField] private FormeCerfVolant forme;
 
     [SerializeField] private float ecartEntreTraits = 0.03f; // un trait tous les 3 cm (le trait fait la moitié : 1,5 cm)
     [SerializeField] private float epaisseurTrait = 0.004f;  // 4 mm
@@ -75,10 +24,12 @@ public class PatronPointilles : MonoBehaviour
     private bool toutEstRelie;                                       // devient vrai une seule fois, à la fin
 
     // La forme, en lecture seule, pour que PieceDecoupee ait exactement la même.
-    public Vector2[] Coins => coins;
+    public FormeCerfVolant Forme => forme;
 
     private void Start()
     {
+        Vector2[] coins = forme.Coins;
+
         // On relie chaque coin au suivant. Le "% coins.Length" fait revenir le dernier coin au premier : la forme est fermée.
         for (int i = 0; i < coins.Length; i++)
         {
