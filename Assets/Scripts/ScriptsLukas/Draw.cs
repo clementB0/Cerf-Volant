@@ -11,6 +11,9 @@ public class Pen : MonoBehaviour
     public int totalYPixels = 512;
     public int brushSize = 4;
     public Color brushColor;
+    // variable for the pen
+    // if variable.comparetag, then x
+    public 
 
     public Transform topLeftCorner;
     public Transform bottomRightCorner;
@@ -54,8 +57,10 @@ public class Pen : MonoBehaviour
 
     void CalculatePixel()
     {
-        // might need to put a condition : if pen touches, ray casting
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        OnTriggerEnter(CompareTag 
+        
+        
+        Ray ray = cam.ScreenPointToRay//(Input.mousePosition); (Tag pen)
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 10f))
         {
