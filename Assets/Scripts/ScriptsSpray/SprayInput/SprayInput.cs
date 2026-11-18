@@ -40,6 +40,12 @@ public class SprayInput : MonoBehaviour
     {
         if (grab.isSelected)
             triggerHeld = true;
+
+        Debug.Log(
+            $"[TAG] {name} | tenue={grab.isSelected} | " +
+            $"focus={Application.isFocused} | spray={IsSpraying}",
+            this
+        );
     }
 
     private void OnDeactivated(DeactivateEventArgs args)
