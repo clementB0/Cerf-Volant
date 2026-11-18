@@ -142,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.039
+      value: -0.23
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5482,7 +5482,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayPainter
   paintableSurfaces:
-  - {fileID: 0}
   - {fileID: 1537839396}
   obstacleMask:
     serializedVersion: 2
@@ -5861,7 +5860,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayPainter
   paintableSurfaces:
-  - {fileID: 0}
   - {fileID: 1537839396}
   obstacleMask:
     serializedVersion: 2
@@ -6344,7 +6342,7 @@ MonoBehaviour:
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   brushRadiusPixels: 5
   suivreCouverture: 1
-  couvertureRequise: 0.267
+  couvertureRequise: 0.842
   opaciteRequise: 0.5
   quandPeintureTerminee:
     m_PersistentCalls:
@@ -16904,7 +16902,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayPainter
   paintableSurfaces:
-  - {fileID: 0}
   - {fileID: 1537839396}
   obstacleMask:
     serializedVersion: 2
