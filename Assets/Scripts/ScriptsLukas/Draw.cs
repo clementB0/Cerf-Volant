@@ -4,7 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.OpenXR.Input;
 
-public class Pen : MonoBehaviour
+public class Draw : MonoBehaviour
 {
     public Camera cam;
     public int totalXPixels = 1024;
@@ -13,7 +13,7 @@ public class Pen : MonoBehaviour
     public Color brushColor;
     // variable for the pen
     // if variable.comparetag, then x
-    public 
+    
 
     public Transform topLeftCorner;
     public Transform bottomRightCorner;
@@ -57,10 +57,11 @@ public class Pen : MonoBehaviour
 
     void CalculatePixel()
     {
-        OnTriggerEnter(CompareTag 
         
-        
-        Ray ray = cam.ScreenPointToRay//(Input.mousePosition); (Tag pen)
+        //transform.forward  transform local transformé en world
+
+
+        Ray ray = cam.ScreenPointToRay(transform.forward);
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 10f))
         {
