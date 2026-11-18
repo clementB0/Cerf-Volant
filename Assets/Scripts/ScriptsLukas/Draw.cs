@@ -35,6 +35,8 @@ public class Pen : MonoBehaviour
         generatedTexture.filterMode = FilterMode.Point;
         material.SetTexture("_BaseMap", generatedTexture);
 
+        ResetColor();
+
         xMult = totalXPixels / (bottomRightCorner.localPosition.x - topLeftCorner.localPosition.x);
         yMult = totalXPixels / (bottomRightCorner.localPosition.y - topLeftCorner.localPosition.y);
     }
@@ -44,6 +46,7 @@ public class Pen : MonoBehaviour
         if (other.gameObject.GetComponent<DrawCanvas>())
         {
             CalculatePixel();
+            Debug.Log("CalculatePixel function");
         }
         
     }
@@ -51,6 +54,7 @@ public class Pen : MonoBehaviour
 
     void CalculatePixel()
     {
+        // might need to put a condition : if pen touches, ray casting
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 10f))
@@ -58,6 +62,7 @@ public class Pen : MonoBehaviour
             point.position = hit.point;
             xPixel = (int)((point.localPosition.x - topLeftCorner.localPosition.x) / xMult);
             xPixel = (int)((point.localPosition.y - topLeftCorner.localPosition.y) / yMult);
+            ChangePixelsAroundPoint();
         }
        
     }
@@ -65,6 +70,7 @@ public class Pen : MonoBehaviour
     void ChangePixelsAroundPoint()
     {
         DrawBrush(xPixel, yPixel);
+        SetTexture();
     }
 
     void DrawBrush(int xPix, int yPix)
@@ -99,5 +105,6 @@ public class Pen : MonoBehaviour
     {
         for (int i = 0; i < colorMap.Length; i++)
             colorMap[i] = Color.white;
+        SetTexture();
     }
 }
