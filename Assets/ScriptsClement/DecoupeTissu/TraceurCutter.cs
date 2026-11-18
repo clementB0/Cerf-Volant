@@ -1,14 +1,17 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 // FONCTIONNALITÉ : découper avec le cutter.
-// Quand on TIENT le cutter et que sa pointe touche le tissu, les pointillés sous la pointe se relient.
+// Quand on TIENT le cutter et que sa pointe touche le tissu, les pointillés sous la pointe se relient,
+// et la manette qui tient le cutter vibre légèrement.
 // La main seule ne découpe pas.
 // À mettre sur l'objet "Tissu", avec PatronPointilles (un Quad couché, de 1 m x 1 m quand son échelle vaut 1).
 public class TraceurCutter : MonoBehaviour
 {
     [SerializeField] private Transform pointeDuCutter;      // le bout de la lame (l'objet "Pointe" dans le Cutter)
     [SerializeField] private float distanceContact = 0.02f; // à moins de 2 cm du tissu, la pointe "touche"
+    [SerializeField] private float forceVibration = 0.15f;  // de 0 (rien) à 1 (très fort) : légère
 
     private XRGrabInteractable cutter; // le composant du template qui permet d'attraper le cutter : il sait si on le tient
     private PatronPointilles patron;   // les pointillés du même tissu, à relier
@@ -35,6 +38,12 @@ public class TraceurCutter : MonoBehaviour
         {
             // On "écrase" la pointe sur le tissu (z = 0) pour comparer avec les traits, qui sont à plat.
             patron.RelierTraitsPres(transform.TransformPoint(new Vector3(local.x, local.y, 0f)));
+
+            // Légère vibration dans la manette qui tient le cutter, tant que la lame touche le tissu.
+            // Chaque vibration dure 2 images : elles se chevauchent, on sent donc une vibration continue.
+            // (Une main suivie sans manette ne peut pas vibrer : dans ce cas, il ne se passe rien.)
+            if (cutter.interactorsSelecting[0] is XRBaseInputInteractor manette)
+                manette.SendHapticImpulse(forceVibration, Time.deltaTime * 2f);
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-// FONCTIONNALITÉ : faire voler le cerf-volant quand on tient ses DEUX poignées (une par main).
+// FONCTIONNALITÉ : faire voler le cerf-volant quand ses DEUX cordes sont accrochées et qu'on tient ses DEUX poignées.
 // À mettre sur l'objet "PieceDecoupee" (le cerf-volant découpé).
 //
 // On pilote comme un vrai cerf-volant à deux poignées :
@@ -11,6 +11,8 @@ public class VolCerfVolant : MonoBehaviour
 {
     [SerializeField] private XRGrabInteractable poigneeGauche;          // la poignée de gauche (son composant "attrapable" sait si on la tient)
     [SerializeField] private XRGrabInteractable poigneeDroite;          // la poignée de droite
+    [SerializeField] private Transform boutCordeGauche;                 // bout libre de la corde de gauche : détruit (Fusion) = accrochée
+    [SerializeField] private Transform boutCordeDroite;                 // bout libre de la corde de droite
     [SerializeField] private float longueurFil = 3f;                    // distance mains → cerf-volant, en mètres
     [SerializeField] private Vector3 directionDuVent = Vector3.forward; // le vent pousse le cerf-volant par là (devant toi)
     [SerializeField] private float hauteurDuVol = 50f;                  // angle au-dessus de l'horizon, en degrés
@@ -27,8 +29,10 @@ public class VolCerfVolant : MonoBehaviour
 
     private void Update()
     {
-        // Il faut tenir les deux poignées pour que le cerf-volant vole ("isSelected" = attrapée).
-        bool deuxMains = poigneeGauche.isSelected && poigneeDroite.isSelected;
+        // Il faut que les deux cordes soient accrochées (leur bout libre a été détruit par Fusion : il vaut "null")
+        // et tenir les deux poignées ("isSelected" = attrapée) pour que le cerf-volant vole.
+        bool cordesAccrochees = boutCordeGauche == null && boutCordeDroite == null;
+        bool deuxMains = cordesAccrochees && poigneeGauche.isSelected && poigneeDroite.isSelected;
 
         // Pendant le vol, on ne peut pas attraper le cerf-volant lui-même (sinon la main et le vent se battent).
         prise.enabled = !deuxMains;

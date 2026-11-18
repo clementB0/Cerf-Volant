@@ -57,6 +57,6 @@ public class MiniatureCerfVolant : MonoBehaviour
 
     private void QuandOnChoisit(SelectEnterEventArgs infos)
     {
-        choix.Choisir(atelier);
+        choix.Choisir(atelier, forme);
     }
 }
