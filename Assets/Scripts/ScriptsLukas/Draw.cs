@@ -11,8 +11,7 @@ public class Draw : MonoBehaviour
     public int totalYPixels = 512;
     public int brushSize = 4;
     public Color brushColor;
-    // variable for the pen
-    // if variable.comparetag, then x
+   
     
 
     public Transform topLeftCorner;
@@ -33,6 +32,7 @@ public class Draw : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("START");
         colorMap = new Color[totalXPixels * totalYPixels];
         generatedTexture = new Texture2D(totalXPixels, totalYPixels , TextureFormat.RGBA32, false);
         generatedTexture.filterMode = FilterMode.Point;
@@ -42,26 +42,22 @@ public class Draw : MonoBehaviour
 
         xMult = totalXPixels / (bottomRightCorner.localPosition.x - topLeftCorner.localPosition.x);
         yMult = totalXPixels / (bottomRightCorner.localPosition.y - topLeftCorner.localPosition.y);
+        Debug.Log("bidule");
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.GetComponent<DrawCanvas>())
-        {
-            CalculatePixel();
-            Debug.Log("CalculatePixel function");
-        }
+   
         
-    }
+    
 
 
-    void CalculatePixel()
+    public void CalculatePixel()
     {
-        
+
         //transform.forward  transform local transformé en world
 
 
-        Ray ray = cam.ScreenPointToRay(transform.forward);
+        Ray ray = cam.ScreenPointToRay(GetComponent<Pen>().transform.forward);
+        Debug.Log("TTANSFORTM FORWARD");
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 10f))
         {
@@ -112,5 +108,8 @@ public class Draw : MonoBehaviour
         for (int i = 0; i < colorMap.Length; i++)
             colorMap[i] = Color.white;
         SetTexture();
+
     }
+
+    
 }
