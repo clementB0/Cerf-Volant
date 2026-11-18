@@ -8,12 +8,12 @@ public class SprayInput : MonoBehaviour
     private XRGrabInteractable grab;
     private bool triggerHeld;
 
+    // Lu par SprayPainter pour peindre et par SprayConeVFX pour afficher le jet.
     public bool IsSpraying =>
         isActiveAndEnabled &&
         grab != null &&
         grab.isSelected &&
-        triggerHeld &&
-        Application.isFocused;
+        triggerHeld;
 
     private void Awake()
     {
@@ -38,14 +38,7 @@ public class SprayInput : MonoBehaviour
 
     private void OnActivated(ActivateEventArgs args)
     {
-        if (grab.isSelected)
-            triggerHeld = true;
-
-        Debug.Log(
-            $"[TAG] {name} | tenue={grab.isSelected} | " +
-            $"focus={Application.isFocused} | spray={IsSpraying}",
-            this
-        );
+        triggerHeld = grab.isSelected;
     }
 
     private void OnDeactivated(DeactivateEventArgs args)
@@ -56,11 +49,5 @@ public class SprayInput : MonoBehaviour
     private void OnReleased(SelectExitEventArgs args)
     {
         triggerHeld = false;
-    }
-
-    private void OnApplicationFocus(bool focused)
-    {
-        if (!focused)
-            triggerHeld = false;
     }
 }
