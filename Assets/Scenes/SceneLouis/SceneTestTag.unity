@@ -6193,6 +6193,10 @@ PrefabInstance:
       propertyPath: poigneeGauche
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 900000025, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_Name
       value: CerfVolantADecouper
@@ -16439,6 +16443,77 @@ Transform:
   - {fileID: 1955136665}
   m_Father: {fileID: 921466033}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1966704631
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1966704634}
+  - component: {fileID: 1966704633}
+  - component: {fileID: 1966704632}
+  m_Layer: 0
+  m_Name: RespawnZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1966704632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966704631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 497285f8d7b6a4c4d912b8ecfe9a6846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnZone
+  objetsAutorises:
+  - {fileID: 1207566507382873399}
+  - {fileID: 1222213822}
+  - {fileID: 921466025}
+  - {fileID: 131090787}
+--- !u!65 &1966704633
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966704631}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 15.121139, y: 0.1517955, z: 16.138102}
+  m_Center: {x: -1.6679463, y: -0.42410225, z: -0.7937441}
+--- !u!4 &1966704634
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966704631}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13345, y: 0.451, z: 0.55585}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2102629066
 GameObject:
   m_ObjectHideFlags: 0
@@ -17000,3 +17075,4 @@ SceneRoots:
   - {fileID: 1359544932}
   - {fileID: 1552518132}
   - {fileID: 7129913796098718787}
+  - {fileID: 1966704634}
