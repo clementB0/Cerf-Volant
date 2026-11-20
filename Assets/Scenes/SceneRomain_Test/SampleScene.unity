@@ -2778,7 +2778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29cea62ac47f74944a925723e5154d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayConeVFX
-  sprayParticles: {fileID: 1720811612}
+  sprayParticles: {fileID: 0}
   coneHalfAngle: 16.5
   sprayRange: 1.5
   particleSpeed: 8
@@ -3212,64 +3212,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!1001 &1665063695
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2714134677685409011, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_Name
-      value: BlueSprayCan (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.2555
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.44403
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.80091
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8029642072769008911, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8383507503303991542, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
 --- !u!1 &1703568385
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,11 +3247,6 @@ Transform:
   - {fileID: 423529121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!198 &1720811612 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8608950852755167674, guid: cc4b456a44f5a3e4092ce12e696a50d1, type: 3}
-  m_PrefabInstance: {fileID: 1665063695}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1783572213
 GameObject:
   m_ObjectHideFlags: 0
@@ -4197,5 +4134,4 @@ SceneRoots:
   - {fileID: 1346050116}
   - {fileID: 1004742223}
   - {fileID: 1430250513}
-  - {fileID: 1665063695}
   - {fileID: 666019252}
