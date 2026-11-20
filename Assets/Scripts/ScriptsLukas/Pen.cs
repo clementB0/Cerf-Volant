@@ -15,6 +15,11 @@ public class Pen : MonoBehaviour
     private XRGrabInteractable prise;
     private PenSurface zonePrecedente;
 
+    [Header("Son du tracé")]
+    [SerializeField] private AudioClip sonTrait;
+    private AudioSource sourceTrait;
+    private float dernierMouvement;
+
     [Header("Détection de la pointe")]
     [Tooltip("Portée de chaque côté de la pointe, en mètres.")]
     [SerializeField, Min(0.001f)] private float contactTolerance = 0.008f;
@@ -26,6 +31,17 @@ public class Pen : MonoBehaviour
     private void Awake()
     {
         prise = GetComponent<XRGrabInteractable>();
+        if (tip != null && sonTrait != null)
+        {
+            sourceTrait = tip.gameObject.AddComponent<AudioSource>();
+            sourceTrait.playOnAwake = false;
+            sourceTrait.clip = sonTrait;
+            sourceTrait.loop = true;
+            sourceTrait.spatialBlend = 1f;
+            sourceTrait.dopplerLevel = 0f;
+            sourceTrait.minDistance = 0.25f;
+            sourceTrait.volume = 0.55f;
+        }
         if (indicateur != null)
         {
             var proprietes = new MaterialPropertyBlock();
@@ -37,6 +53,8 @@ public class Pen : MonoBehaviour
 
     private void OnDisable()
     {
+        if (sourceTrait != null)
+            sourceTrait.Stop();
         zonePrecedente = null;
         toucheSurface = false;
     }
@@ -62,11 +80,26 @@ public class Pen : MonoBehaviour
         }
 
         toucheSurface = zone != null;
+        bool prolongeTrait = toucheSurface && zone == zonePrecedente && point != pixelTouche;
         if (toucheSurface)
         {
             if (zone != zonePrecedente || point != pixelTouche)
                 zone.DrawPenLine(zone == zonePrecedente ? pixelTouche : point, point, couleurMine);
             pixelTouche = point;
+        }
+        if (sourceTrait != null)
+        {
+            if (prolongeTrait)
+            {
+                dernierMouvement = Time.unscaledTime;
+                if (!sourceTrait.isPlaying)
+                    sourceTrait.Play();
+            }
+            else if (sourceTrait.isPlaying &&
+                     (zone == null || zone != zonePrecedente || Time.unscaledTime - dernierMouvement >= 0.08f))
+            {
+                sourceTrait.Stop();
+            }
         }
         zonePrecedente = zone;
     }
