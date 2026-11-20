@@ -583,6 +583,8 @@ MonoBehaviour:
   miniatures: {fileID: 900000510}
   positionDuChoisi: {x: 0, y: 0.72, z: 0.75}
   dureeAgrandissement: 0.6
+  sonChoix: {fileID: 8300000, guid: 2f6b8d1e4a7c4b9e9d0a3c5e7f1b2d63, type: 3}
+  materiauEtincelles: {fileID: 2100000, guid: 6a1c3e5b7d9f4b2a8c4e6f0a2b4d6e85, type: 2}
 --- !u!1 &900000510
 GameObject:
   m_ObjectHideFlags: 0

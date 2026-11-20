@@ -24,7 +24,9 @@ public class ReussiteDecoupe : MonoBehaviour
         tailleDepart = transform.localScale;
 
         // Le son reste là où la pièce est apparue, même si elle part ensuite voler.
-        AudioSource.PlayClipAtPoint(sonReussite, transform.position, volume);
+        // Sans son réglé dans l'Inspector, la pièce saute quand même (sinon l'erreur bloquerait le saut).
+        if (sonReussite != null)
+            AudioSource.PlayClipAtPoint(sonReussite, transform.position, volume);
     }
 
     private void Update()

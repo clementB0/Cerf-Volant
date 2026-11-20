@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 // FONCTIONNALITÉ : un petit cerf-volant du menu de choix.
-// Main dessus → il grossit un peu. Main dessus + bouton de prise (grip) → il est choisi.
+// Main dessus → il grossit un peu et s'éclaircit (surbrillance).
+// Main dessus + bouton de prise (grip) → il est choisi, et la manette vibre légèrement.
 // À mettre sur chaque miniature, avec un "XR Simple Interactable" (du template : c'est lui qui détecte la main).
 [RequireComponent(typeof(MeshFilter), typeof(MeshCollider), typeof(XRSimpleInteractable))]
 [ExecuteAlways] // le script tourne aussi dans l'éditeur : on voit la forme sans lancer le jeu
@@ -16,6 +18,8 @@ public class MiniatureCerfVolant : MonoBehaviour
 
     private XRSimpleInteractable detecteur; // détecte la main (survol) et le bouton (sélection)
     private Vector3 tailleDeBase;           // sa taille normale, pour y revenir
+    private Renderer rendu;                 // ce qui l'affiche : on change sa couleur en surbrillance
+    private MaterialPropertyBlock surbrillance; // la couleur éclaircie (sans toucher au matériau partagé avec le tissu)
 
     // À l'apparition (dans l'éditeur ET en jeu) : on fabrique la forme, et la zone que la main peut toucher a la même forme.
     private void OnEnable()
@@ -36,6 +40,11 @@ public class MiniatureCerfVolant : MonoBehaviour
 
         tailleDeBase = transform.localScale;
 
+        // La surbrillance = sa couleur normale mélangée à moitié avec du blanc.
+        rendu = GetComponent<Renderer>();
+        surbrillance = new MaterialPropertyBlock();
+        surbrillance.SetColor("_BaseColor", Color.Lerp(rendu.sharedMaterial.GetColor("_BaseColor"), Color.white, 0.5f));
+
         // On s'abonne aux "événements" du XR Simple Interactable : il appellera nos fonctions au bon moment.
         detecteur = GetComponent<XRSimpleInteractable>();
         detecteur.hoverEntered.AddListener(QuandLaMainArrive);
@@ -46,17 +55,25 @@ public class MiniatureCerfVolant : MonoBehaviour
     private void QuandLaMainArrive(HoverEnterEventArgs infos)
     {
         transform.localScale = tailleDeBase * grossissement;
+        rendu.SetPropertyBlock(surbrillance);
     }
 
     private void QuandLaMainPart(HoverExitEventArgs infos)
     {
         // Le rayon et la main peuvent survoler en même temps : on ne rapetisse que si plus rien ne survole.
         if (!detecteur.isHovered)
+        {
             transform.localScale = tailleDeBase;
+            rendu.SetPropertyBlock(null); // "null" = on enlève la surbrillance : couleur normale
+        }
     }
 
     private void QuandOnChoisit(SelectEnterEventArgs infos)
     {
-        choix.Choisir(atelier, forme);
+        // Petite vibration dans la manette qui a choisi. (Une main suivie sans manette ne peut pas vibrer : rien ne se passe.)
+        if (infos.interactorObject is XRBaseInputInteractor manette)
+            manette.SendHapticImpulse(0.3f, 0.1f); // force 0,3 sur 1, pendant 0,1 seconde
+
+        choix.Choisir(atelier, forme, transform.position);
     }
 }

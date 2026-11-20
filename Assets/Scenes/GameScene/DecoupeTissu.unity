@@ -15709,6 +15709,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutterPapillion
       objectReference: {fileID: 0}
+    - target: {fileID: 900000025, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_Name
       value: CerfVolant Papillon
@@ -15739,7 +15743,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.156
+      value: 0.437
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -15959,6 +15963,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutterRaie
       objectReference: {fileID: 0}
+    - target: {fileID: 900000025, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_Name
       value: CerfVolant Raie
@@ -15989,7 +15997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.15600002
+      value: 0.43700004
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -16209,6 +16217,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CutterDragon
       objectReference: {fileID: 0}
+    - target: {fileID: 900000025, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_Name
       value: CerfVolant Dragon
@@ -16239,7 +16251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.15600002
+      value: 0.43700004
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -16442,12 +16454,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb12aa7c244b924eb710c1cc138da73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransitionDecoupePeinture
-  cutter: {fileID: 0}
+  cutter: {fileID: 900000323}
   bombes:
   - {fileID: 569395445}
   - {fileID: 1924099112}
   - {fileID: 1227447765}
-  fumeePrefab: {fileID: 0}
+  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
   delaiBascule: 0.2
   dureeFumee: 1.2
 --- !u!114 &900000405
@@ -16467,7 +16479,7 @@ MonoBehaviour:
   - {fileID: 569395445}
   - {fileID: 1924099112}
   - {fileID: 1227447765}
-  fumeePrefab: {fileID: 0}
+  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
   delaiBascule: 0.2
   dureeFumee: 1.2
 --- !u!114 &900000406
@@ -16487,7 +16499,7 @@ MonoBehaviour:
   - {fileID: 569395445}
   - {fileID: 1924099112}
   - {fileID: 1227447765}
-  fumeePrefab: {fileID: 0}
+  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
   delaiBascule: 0.2
   dureeFumee: 1.2
 --- !u!1 &900000500
@@ -16536,8 +16548,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   miniatures: {fileID: 900000510}
-  positionDuChoisi: {x: 0, y: 0.72, z: 0.75}
   dureeAgrandissement: 0.6
+  sonChoix: {fileID: 8300000, guid: 2f6b8d1e4a7c4b9e9d0a3c5e7f1b2d63, type: 3}
 --- !u!1 &900000510
 GameObject:
   m_ObjectHideFlags: 0
