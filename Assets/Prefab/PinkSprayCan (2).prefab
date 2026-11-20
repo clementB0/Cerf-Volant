@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayConeVFX
   sprayParticles: {fileID: 3623531042534724683}
-  coneHalfAngle: 23.8
+  coneHalfAngle: 15
   sprayRange: 1.5
   particleSpeed: 6
   particlesPerSecond: 480
@@ -350,9 +350,9 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  raysPerTick: 40
+  raysPerTick: 12
   ticksPerSecond: 30
-  opacityPerImpact: 0.4
+  opacityPerImpact: 0.95
 --- !u!1 &7830301941230192243
 GameObject:
   m_ObjectHideFlags: 0

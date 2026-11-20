@@ -831,7 +831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PaintableSurface
   resolution: 512
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  brushRadiusPixels: 5
+  brushRadiusPixels: 18
   suivreCouverture: 1
   couvertureRequise: 0.933
   opaciteRequise: 0.5
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PaintableSurface
   resolution: 512
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  brushRadiusPixels: 5
+  brushRadiusPixels: 18
   suivreCouverture: 1
   couvertureRequise: 0.933
   opaciteRequise: 0.5
@@ -1339,7 +1339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PaintableSurface
   resolution: 512
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  brushRadiusPixels: 5
+  brushRadiusPixels: 18
   suivreCouverture: 1
   couvertureRequise: 0.933
   opaciteRequise: 0.5
