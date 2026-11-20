@@ -5104,8 +5104,8 @@ MonoBehaviour:
   coneHalfAngle: 16.5
   sprayRange: 1.5
   particleSpeed: 6
-  particlesPerSecond: 950
-  particleSize: 0.03
+  particlesPerSecond: 740
+  particleSize: 0.105
 --- !u!114 &8383507503303991542
 MonoBehaviour:
   m_ObjectHideFlags: 0

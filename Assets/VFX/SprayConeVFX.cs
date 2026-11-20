@@ -78,13 +78,33 @@ public class SprayConeVFX : MonoBehaviour
         shape.shapeType = ParticleSystemShapeType.Cone;
         shape.radius = 0.003f;
 
+        // Chaque particule garde un motif de pigment pendant tout son trajet.
+        var sheet = sprayParticles.textureSheetAnimation;
+        sheet.enabled = true;
+        sheet.mode = ParticleSystemAnimationMode.Grid;
+        sheet.numTilesX = 2;
+        sheet.numTilesY = 2;
+        sheet.animation = ParticleSystemAnimationType.WholeSheet;
+        sheet.frameOverTime = 0f;
+        sheet.startFrame = new ParticleSystem.MinMaxCurve(0f, 0.999f);
+
+        var expansion = sprayParticles.sizeOverLifetime;
+        expansion.enabled = true;
+        expansion.separateAxes = false;
+        expansion.size = new ParticleSystem.MinMaxCurve(1f, new AnimationCurve(
+            new Keyframe(0f, 0.18f),
+            new Keyframe(0.35f, 0.65f),
+            new Keyframe(1f, 1.45f)
+        ));
+        main.startRotation = new ParticleSystem.MinMaxCurve(0f, 2f * Mathf.PI);
+
         var fade = new Gradient();
         fade.SetKeys(
             new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
             new[]
             {
-                new GradientAlphaKey(0.8f, 0f),
-                new GradientAlphaKey(0.55f, 0.45f),
+                new GradientAlphaKey(0.92f, 0f),
+                new GradientAlphaKey(0.68f, 0.5f),
                 new GradientAlphaKey(0f, 1f)
             }
         );
@@ -118,8 +138,8 @@ public class SprayConeVFX : MonoBehaviour
 
         var main = sprayParticles.main;
         main.startColor = color;
-        main.startSpeed = particleSpeed;
-        main.startSize = new ParticleSystem.MinMaxCurve(particleSize * 0.4f, particleSize);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(particleSpeed * 0.78f, particleSpeed);
+        main.startSize = new ParticleSystem.MinMaxCurve(particleSize * 0.65f, particleSize);
 
         main.startLifetime =
             sprayRange / Mathf.Max(0.1f, particleSpeed);
