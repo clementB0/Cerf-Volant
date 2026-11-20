@@ -20,13 +20,26 @@ public class PatronPointilles : MonoBehaviour
     [SerializeField] private AudioClip sonDecoupe;           // petit "tic" joué à chaque trait découpé (SonDecoupe.wav)
     [SerializeField] private float volumeDecoupe = 0.4f;     // léger
     [SerializeField] private int papiersParTrait = 6;        // combien de petits bouts de tissu sautent à chaque trait découpé
+    [SerializeField] private int nombreEtapes = 4;           // le contour est découpé en 4 morceaux, qui apparaissent l'un après l'autre
+    [SerializeField] private float opacitePale = 0.35f;      // les pointillés pas encore découpables sont visibles à 35 % (1 = blancs comme les autres)
+    [SerializeField] private float attenteDebut = 0.7f;     // le temps que l'atelier finisse d'arriver sur la table (ChoixCerfVolant) avant le 1er mouvement
 
     // Ce qui se passe quand tous les traits sont reliés. Se règle dans l'Inspector (liste "Quand Tout Est Relie").
     // Dans la scène : affiche la PieceDecoupee et cache le Tissu.
     [SerializeField] private UnityEvent quandToutEstRelie;
 
-    private List<Transform> traitsPasRelies = new List<Transform>(); // les traits que le cutter n'a pas encore touchés
+    private List<Transform> tousLesTraits = new List<Transform>();   // tous les traits, dans l'ordre du contour
+    private List<Vector2> debutsTraits = new List<Vector2>();        // où commence chaque trait sur le tissu (pour découper les chutes)
+    private Material materiauPale;                                   // les pointillés des étapes suivantes (pâles)
+    private List<List<Transform>> etapes = new List<List<Transform>>(); // pour chaque étape : ses traits pas encore découpés
+    private int etapeEnCours;                                        // l'étape qu'on est en train de découper (0 = la première)
+    private bool attendLaSuite;                                      // vrai pendant que le tissu tourne, avant d'afficher l'étape suivante
+    private TourneTissu tourneur;                                    // fait tourner le tissu entre deux étapes (facultatif)
+    private ChutesTissu chutes;                                      // fait tomber le tissu en trop à chaque étape (facultatif)
+    private float debut;                                             // le moment du tout premier mouvement
+    private bool premierMouvementFait;
     private bool toutEstRelie;                                       // devient vrai une seule fois, à la fin
+    private bool finirApresMouvement;                                // vrai pendant le mouvement final, avant de prévenir la scène
     private AudioSource hautParleur;                                 // d'où sort le "tic" : le tissu
     private ParticleSystem papiers;                                  // les petits bouts de tissu qui sautent pendant la découpe
 
@@ -65,8 +78,75 @@ public class PatronPointilles : MonoBehaviour
                 // Le trait est centré au milieu de sa case : relié (longueur x 2), il touche pile ses deux voisins.
                 Vector2 centre = depart + pas * (j + 0.5f);
                 CreerTrait(centre, pas);
+                debutsTraits.Add(depart + pas * j); // le début de sa case
             }
         }
+
+        // Les pointillés pâles : on mélange le blanc des traits avec la couleur du tissu.
+        // (Le tissu est uni : ça donne exactement le même effet qu'un blanc à moitié transparent.)
+        materiauPale = new Material(materiauTrait);
+        materiauPale.color = Color.Lerp(GetComponent<Renderer>().sharedMaterial.color, materiauTrait.color, opacitePale);
+
+        // On range les traits en étapes : des morceaux du contour qui se suivent (le 1er quart, le 2e quart...).
+        // Au départ, tous sont pâles : le tissu va d'abord tourner pour mettre la 1re étape devant le joueur.
+        int nombre = Mathf.Clamp(nombreEtapes, 1, tousLesTraits.Count);
+        Vector2[] debutsEtapes = new Vector2[nombre]; // où commence chaque étape sur le contour
+        for (int e = 0; e < nombre; e++)
+            etapes.Add(new List<Transform>());
+        for (int i = 0; i < tousLesTraits.Count; i++)
+        {
+            int e = i * nombre / tousLesTraits.Count; // de 0 à nombre-1, dans l'ordre du contour
+            if (etapes[e].Count == 0)
+                debutsEtapes[e] = debutsTraits[i]; // le premier trait de l'étape
+            etapes[e].Add(tousLesTraits[i]);
+            tousLesTraits[i].GetComponent<Renderer>().sharedMaterial = materiauPale;
+        }
+
+        // Le tissu est redécoupé : la forme du cerf-volant + une chute par étape (elle tombera quand l'étape sera découpée).
+        chutes = GetComponent<ChutesTissu>();
+        if (chutes != null)
+            chutes.Preparer(coins, debutsEtapes);
+
+        tourneur = GetComponent<TourneTissu>();
+        attendLaSuite = true;
+        debut = Time.time + attenteDebut;
+    }
+
+    private void Update()
+    {
+        // Le tout premier mouvement, une fois l'atelier arrivé sur la table : la 1re étape vient devant le joueur.
+        if (!premierMouvementFait && Time.time >= debut)
+        {
+            premierMouvementFait = true;
+            if (tourneur != null)
+                tourneur.Tourner(CentreEtape(0), false);
+        }
+
+        bool immobile = tourneur == null || !tourneur.EnMouvement;
+
+        // Le tissu a fini de tourner : les pointillés de l'étape en cours deviennent blancs, on peut les découper.
+        if (attendLaSuite && premierMouvementFait && immobile)
+        {
+            foreach (Transform trait in etapes[etapeEnCours])
+                trait.GetComponent<Renderer>().sharedMaterial = materiauTrait;
+            attendLaSuite = false;
+        }
+
+        // Le mouvement final est fini (le cerf-volant est face au joueur) : on prévient la scène, une seule fois.
+        if (finirApresMouvement && immobile)
+        {
+            finirApresMouvement = false;
+            quandToutEstRelie.Invoke();
+        }
+    }
+
+    // Le milieu des traits d'une étape, sur le tissu (à appeler avant de les découper : la liste se vide pendant la découpe).
+    private Vector3 CentreEtape(int e)
+    {
+        Vector3 somme = Vector3.zero;
+        foreach (Transform trait in etapes[e])
+            somme += trait.localPosition;
+        return somme / etapes[e].Count;
     }
 
     // Crée un petit trait blanc (un cube aplati) posé sur le tissu, dans la direction du côté.
@@ -88,7 +168,7 @@ public class PatronPointilles : MonoBehaviour
         // x = longueur (la moitié de la case, pour laisser un trou), y et z = épaisseur.
         trait.transform.localScale = new Vector3(pas.magnitude / 2f, epaisseurTrait, epaisseurTrait);
 
-        traitsPasRelies.Add(trait.transform);
+        tousLesTraits.Add(trait.transform);
     }
 
     // Prépare les petits bouts de tissu (un système de particules), sans en lancer aucun pour l'instant.
@@ -139,6 +219,13 @@ public class PatronPointilles : MonoBehaviour
     // Appelé par TraceurCutter avec la position de la pointe du cutter : relie les traits tout près d'elle.
     public void RelierTraitsPres(Vector3 positionPointe)
     {
+        // Pendant que le tissu tourne, ou une fois tout découpé, on ne découpe pas.
+        if (attendLaSuite || toutEstRelie)
+            return;
+
+        // Seuls les traits de l'étape en cours peuvent être découpés.
+        List<Transform> traitsPasRelies = etapes[etapeEnCours];
+
         // On parcourt la liste à l'envers : retirer un élément ne fait alors sauter aucune case.
         for (int i = traitsPasRelies.Count - 1; i >= 0; i--)
         {
@@ -161,11 +248,35 @@ public class PatronPointilles : MonoBehaviour
             }
         }
 
-        // Plus aucun trait à relier : la découpe est finie, on prévient la scène (une seule fois).
-        if (traitsPasRelies.Count == 0 && !toutEstRelie)
+        if (traitsPasRelies.Count > 0)
+            return; // il reste des traits dans cette étape
+
+        // Étape finie : le morceau de tissu en trop, derrière ces pointillés, tombe.
+        if (chutes != null)
+            chutes.FaireTomber(etapeEnCours);
+
+        // Étape finie. C'était la dernière : la découpe est finie.
+        // Le tissu se met face au joueur, puis on prévient la scène (voir Update) : la pièce apparaîtra dans cette position.
+        if (etapeEnCours == etapes.Count - 1)
         {
             toutEstRelie = true;
-            quandToutEstRelie.Invoke();
+            if (tourneur != null)
+            {
+                tourneur.MettreFaceAuJoueur();
+                finirApresMouvement = true;
+            }
+            else
+            {
+                quandToutEstRelie.Invoke();
+            }
+            return;
         }
+
+        // Sinon, on passe à l'étape suivante : le tissu tourne pour la mettre devant le joueur
+        // (en se retournant une fois sur deux), puis ses pointillés apparaîtront (voir Update).
+        etapeEnCours++;
+        attendLaSuite = true;
+        if (tourneur != null)
+            tourneur.Tourner(CentreEtape(etapeEnCours), etapeEnCours % 2 == 0);
     }
 }
