@@ -78,6 +78,21 @@ public class SprayConeVFX : MonoBehaviour
         shape.shapeType = ParticleSystemShapeType.Cone;
         shape.radius = 0.003f;
 
+        var fade = new Gradient();
+        fade.SetKeys(
+            new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+            new[]
+            {
+                new GradientAlphaKey(0.8f, 0f),
+                new GradientAlphaKey(0.55f, 0.45f),
+                new GradientAlphaKey(0f, 1f)
+            }
+        );
+
+        var colorOverLifetime = sprayParticles.colorOverLifetime;
+        colorOverLifetime.enabled = true;
+        colorOverLifetime.color = fade;
+
         particleBuffer =
             new ParticleSystem.Particle[main.maxParticles];
     }
@@ -88,13 +103,12 @@ public class SprayConeVFX : MonoBehaviour
 
         if (sprayInput.IsSpraying)
         {
-            if (!sprayParticles.isPlaying)
+            if (!sprayParticles.isEmitting)
                 sprayParticles.Play();
         }
-        else if (sprayParticles.isPlaying ||
-                 sprayParticles.particleCount > 0)
+        else if (sprayParticles.isEmitting)
         {
-            StopSpray();
+            sprayParticles.Stop(false, ParticleSystemStopBehavior.StopEmitting);
         }
     }
 
@@ -105,7 +119,7 @@ public class SprayConeVFX : MonoBehaviour
         var main = sprayParticles.main;
         main.startColor = color;
         main.startSpeed = particleSpeed;
-        main.startSize = particleSize;
+        main.startSize = new ParticleSystem.MinMaxCurve(particleSize * 0.4f, particleSize);
 
         main.startLifetime =
             sprayRange / Mathf.Max(0.1f, particleSpeed);
