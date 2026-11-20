@@ -1,118 +1,83 @@
-using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.OpenXR.Input;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class Draw : MonoBehaviour
 {
-    public Camera cam;
-    public int totalXPixels = 1024;
-    public int totalYPixels = 512;
-    public int brushSize = 4;
-    public Color brushColor;
-   
-    
+    [SerializeField, Min(2)] private int totalXPixels = 1024;
+    [SerializeField, Min(2)] private int totalYPixels = 512;
+    [SerializeField, Min(1)] private int brushSize = 4;
+    [SerializeField] private Color brushColor = Color.black;
 
-    public Transform topLeftCorner;
-    public Transform bottomRightCorner;
-    public Transform point;
+    private Texture2D texture;
 
-
-    public Material material;
-    public Texture2D generatedTexture;
-
-    Color[] colorMap;
-
-    int xPixel = 0;
-    int yPixel = 0;
-
-    float xMult;
-    float yMult;
-
-    private void Start()
+    private void Awake()
     {
-        Debug.Log("START");
-        colorMap = new Color[totalXPixels * totalYPixels];
-        generatedTexture = new Texture2D(totalXPixels, totalYPixels , TextureFormat.RGBA32, false);
-        generatedTexture.filterMode = FilterMode.Point;
-        material.SetTexture("_BaseMap", generatedTexture);
+        texture = new Texture2D(totalXPixels, totalYPixels, TextureFormat.RGBA32, false);
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
 
-        ResetColor();
+        Color32[] background = new Color32[totalXPixels * totalYPixels];
+        for (int i = 0; i < background.Length; i++)
+            background[i] = Color.white;
 
-        xMult = totalXPixels / (bottomRightCorner.localPosition.x - topLeftCorner.localPosition.x);
-        yMult = totalXPixels / (bottomRightCorner.localPosition.y - topLeftCorner.localPosition.y);
-        Debug.Log("bidule");
+        texture.SetPixels32(background);
+        texture.Apply(false);
+
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        MaterialPropertyBlock properties = new MaterialPropertyBlock();
+        meshRenderer.GetPropertyBlock(properties);
+        properties.SetTexture("_BaseMap", texture);
+        meshRenderer.SetPropertyBlock(properties);
     }
 
-   
-        
- 
-
-
-    public void CalculatePixel()
+    public Vector2Int UVToPixel(Vector2 uv)
     {
+        int x = Mathf.RoundToInt(Mathf.Clamp01(uv.x) * (texture.width - 1));
+        int y = Mathf.RoundToInt(Mathf.Clamp01(uv.y) * (texture.height - 1));
+        return new Vector2Int(x, y);
+    }
 
-        //transform.forward  transform local transformé en world
+    public void PaintLine(Vector2Int start, Vector2Int end)
+    {
+        int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
 
+        Stamp(start.x, start.y);
 
-        Ray ray = cam.ScreenPointToRay(GetComponent<Pen>().transform.forward);
-        // doesnt work either : not set to an instance of an object
-        Debug.Log("TTANSFORTM FORWARD");
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 10f))
+        for (int i = 1; i <= steps; i++)
         {
-            point.position = hit.point;
-            xPixel = (int)((point.localPosition.x - topLeftCorner.localPosition.x) / xMult);
-            xPixel = (int)((point.localPosition.y - topLeftCorner.localPosition.y) / yMult);
-            ChangePixelsAroundPoint();
+            float t = (float)i / steps;
+            int x = Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t));
+            int y = Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t));
+            Stamp(x, y);
         }
 
-        
-       
+        texture.Apply(false);
     }
 
-    void ChangePixelsAroundPoint()
+    private void Stamp(int centerX, int centerY)
     {
-        DrawBrush(xPixel, yPixel);
-        SetTexture();
-    }
+        int radius = brushSize;
+        int minX = Mathf.Max(0, centerX - radius);
+        int maxX = Mathf.Min(texture.width - 1, centerX + radius);
+        int minY = Mathf.Max(0, centerY - radius);
+        int maxY = Mathf.Min(texture.height - 1, centerY + radius);
 
-    void DrawBrush(int xPix, int yPix)
-    {
-        int i=xPix-brushSize+1, j=yPix-brushSize+1, maxi=xPix+brushSize-1, maxj=yPix+brushSize-1;
-        if (i < 0)
-            i = 0;
-        if (j < 0) 
-            j = 0;
-        if (maxi >= totalXPixels)
-            maxi = totalXPixels - 1;
-        if (maxj >= totalYPixels)
-            maxj = totalYPixels - 1;
-        for(int x=i ; x < maxi; x++)
+        for (int y = minY; y <= maxY; y++)
         {
-            for(int y=j ; y < maxj; y++)
+            for (int x = minX; x <= maxX; x++)
             {
-                if ((x = xPix) * (x = xPix) + (y = yPix) * (y = yPix) <= brushSize * brushSize)
-                    colorMap[x * totalYPixels + y] = brushColor;
+                int dx = x - centerX;
+                int dy = y - centerY;
 
+                if (dx * dx + dy * dy <= radius * radius)
+                    texture.SetPixel(x, y, brushColor);
             }
         }
     }
 
-    void SetTexture()
+    private void OnDestroy()
     {
-        generatedTexture.SetPixels(colorMap);
-        generatedTexture.Apply();
+        if (texture != null)
+            Destroy(texture);
     }
-
-    void ResetColor()
-    {
-        for (int i = 0; i < colorMap.Length; i++)
-            colorMap[i] = Color.white;
-        SetTexture();
-
-    }
-
-    
 }
