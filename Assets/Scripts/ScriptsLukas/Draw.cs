@@ -47,7 +47,7 @@ public class Draw : MonoBehaviour
 
    
         
-    
+ 
 
 
     public void CalculatePixel()
@@ -57,6 +57,7 @@ public class Draw : MonoBehaviour
 
 
         Ray ray = cam.ScreenPointToRay(GetComponent<Pen>().transform.forward);
+        // doesnt work either : not set to an instance of an object
         Debug.Log("TTANSFORTM FORWARD");
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 10f))
@@ -66,6 +67,8 @@ public class Draw : MonoBehaviour
             xPixel = (int)((point.localPosition.y - topLeftCorner.localPosition.y) / yMult);
             ChangePixelsAroundPoint();
         }
+
+        
        
     }
 
