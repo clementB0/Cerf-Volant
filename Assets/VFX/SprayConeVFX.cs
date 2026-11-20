@@ -78,9 +78,10 @@ public class SprayConeVFX : MonoBehaviour
         shape.shapeType = ParticleSystemShapeType.Cone;
         shape.radius = 0.003f;
 
-        // Chaque particule garde un motif de pigment pendant tout son trajet.
+        // Seuls les jets en billboard utilisent l'atlas de pigment.
         var sheet = sprayParticles.textureSheetAnimation;
-        sheet.enabled = true;
+        var particleRenderer = sprayParticles.GetComponent<ParticleSystemRenderer>();
+        sheet.enabled = particleRenderer.renderMode != ParticleSystemRenderMode.Mesh;
         sheet.mode = ParticleSystemAnimationMode.Grid;
         sheet.numTilesX = 2;
         sheet.numTilesY = 2;
