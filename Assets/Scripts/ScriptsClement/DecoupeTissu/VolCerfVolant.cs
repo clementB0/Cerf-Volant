@@ -16,20 +16,27 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private XRGrabInteractable poigneeDroite;          // la poignée de droite
     [SerializeField] private Transform boutCordeGauche;                 // bout libre de la corde de gauche : détruit (Fusion) = accrochée
     [SerializeField] private Transform boutCordeDroite;                 // bout libre de la corde de droite
-    [SerializeField] private float longueurFil = 2.5f;                   // distance maximum mains → cerf-volant, en mètres
+    [SerializeField] private float longueurFil = 4f;                     // distance maximum mains → cerf-volant, en mètres
     [SerializeField] private Vector3 directionDuVent = Vector3.forward; // le vent souffle par là (devant toi)
     [SerializeField] private float vitesseDuVent = 6f;                  // vitesse moyenne du vent, en mètres par seconde
     [SerializeField] private float rafales = 0.4f;                      // 0.4 = le vent varie de 40 % en plus ou en moins
-    [SerializeField] private float portance = 12f;                      // force avec laquelle le vent appuie sur le tissu (grand = il monte plus haut)
+    // Force avec laquelle le vent appuie sur le tissu (grand = il monte plus haut). Elle dépend de la hauteur de tes mains :
+    // mains basses (vers la taille) = il vole bas ; mains hautes (vers le visage) = il vole haut.
+    [SerializeField] private float portanceMainsBasses = 5.5f;          // il vole bas, à environ 12 degrés au-dessus de l'horizon
+    [SerializeField] private float portanceMainsHautes = 10.5f;         // il vole à environ 38 degrés
     [SerializeField] private float frottement = 1f;                     // l'air freine le cerf-volant (grand = il bouge moins vite)
     [SerializeField] private float angleDAttaque = 20f;                 // de combien le tissu est penché par rapport au fil, en degrés
     [SerializeField] private float angleDeVirageMax = 60f;              // jusqu'où il part sur le côté quand tu baisses une main, en degrés
     [SerializeField] private float hauteurDuSol = 0.3f;                 // il ne descend jamais plus bas que ça, en mètres
+    [SerializeField] private float dureeChute = 3f;                     // quand il est touché, le vent ne le porte plus pendant ce temps, en secondes
 
     // Ces trois valeurs sont lues par les autres scripts du vent (GonflementCerfVolant et TraitsDeVent).
     public bool EnVol { get; private set; }             // vrai pendant que le cerf-volant vole
     public Vector3 Vent { get; private set; }           // le vent en ce moment : sa direction, et sa longueur = sa vitesse
     public Vector3 VentApparent { get; private set; }   // le vent que "sent" le cerf-volant (le vent, moins son propre mouvement)
+    public bool Tombe => Time.time < finDeChute;        // vrai pendant qu'il tombe (après avoir été touché)
+
+    private float finDeChute; // le moment où il pourra reprendre son vol (quand Time.time aura dépassé ce nombre)
 
     private XRGrabInteractable prise; // le composant "attrapable" du cerf-volant lui-même
     private Vector3 vitesse;          // la vitesse du cerf-volant, en mètres par seconde
@@ -40,6 +47,12 @@ public class VolCerfVolant : MonoBehaviour
     }
 
     // Si le script est désactivé, le cerf-volant ne vole plus.
+    // Appelé par ObstaclesOiseaux quand un oiseau touche le cerf-volant : il tombe, puis le vent le relance.
+    public void Tomber()
+    {
+        finDeChute = Time.time + dureeChute;
+    }
+
     private void OnDisable()
     {
         EnVol = false;
@@ -109,7 +122,16 @@ public class VolCerfVolant : MonoBehaviour
         // 7) Les forces. Le vent que sent le cerf-volant dépend aussi de son mouvement
         //    (si tu tires sur le fil, il sent plus de vent et il monte : comme en vrai).
         VentApparent = Vent - vitesse;
+        //    La hauteur de tes mains, comparée à ta tête : 0 = mains 90 cm sous les yeux (taille), 1 = mains 10 cm sous les yeux.
+        //    (Sans caméra trouvée, on prend le milieu : il vole à hauteur normale.)
+        float mainsHautes = 0.55f;
+        if (Camera.main != null)
+            mainsHautes = Mathf.InverseLerp(Camera.main.transform.position.y - 0.9f, Camera.main.transform.position.y - 0.1f, milieu.y);
+        float portance = Mathf.Lerp(portanceMainsBasses, portanceMainsHautes, mainsHautes);
+
         Vector3 pousseeDuVent = dos * (Vector3.Dot(VentApparent, dos) * portance); // le vent appuie sur le tissu
+        if (Tombe)
+            pousseeDuVent = Vector3.zero; // touché : le vent ne le porte plus, son poids le fait tomber
         Vector3 frein = VentApparent * frottement;                                 // l'air l'entraîne et le freine
         vitesse += (pousseeDuVent + frein + Physics.gravity) * dt;                 // "Physics.gravity" = son poids
 

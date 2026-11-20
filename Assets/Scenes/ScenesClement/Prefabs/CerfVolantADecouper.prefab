@@ -265,6 +265,8 @@ GameObject:
   - component: {fileID: 900000306}
   - component: {fileID: 900000307}
   - component: {fileID: 900000308}
+  - component: {fileID: 900000309}
+  - component: {fileID: 900000310}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -1053,7 +1055,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 11bd6cce75896b9c3557df4a42d53183, type: 2}
+  - {fileID: 2100000, guid: 832e6119e9752f2e180cb83f646755f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1372,7 +1374,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 11bd6cce75896b9c3557df4a42d53183, type: 2}
+  - {fileID: 2100000, guid: 832e6119e9752f2e180cb83f646755f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2425,3 +2427,29 @@ MonoBehaviour:
   sonVol: {fileID: 8300000, guid: 95d977689a85735d7c5230bc6c7c8a14, type: 3}
   volumeMax: 0.6
   ventPourVolumeMax: 8
+--- !u!114 &900000309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47db1665395abc543266a2e483ea9aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &900000310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327bbc02e61f15aa84030064d2ea190e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cutter: {fileID: 900000021}
+  delai: 0.2
