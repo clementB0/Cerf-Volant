@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(MeshRenderer), typeof(MeshCollider))]
-public class PaintableSurface : MonoBehaviour
+public class PaintableSurface : PenSurface
 {
     [Header("Texture de peinture")]
     [SerializeField, Range(128, 2048)]
@@ -29,6 +29,8 @@ public class PaintableSurface : MonoBehaviour
 
     [SerializeField]
     private UnityEvent quandPeintureTerminee = new UnityEvent();
+
+    [SerializeField] private FinPeinture transitionFin;
 
     [Header("Suivi pendant le jeu — ne pas modifier")]
     [SerializeField, Range(0f, 100f)]
@@ -263,20 +265,41 @@ public class PaintableSurface : MonoBehaviour
             return;
         }
 
-        Vector2 uv = hit.textureCoord;
+        Vector2Int centre = PixelAt(hit.textureCoord);
+        Stamp(centre.x, centre.y, Mathf.Max(1, brushRadiusPixels), color, opacity);
+    }
 
-        int centreX = Mathf.Clamp(
+    protected override bool ReadyForPen => paintTexture != null &&
+        (transitionFin != null ? transitionFin.DessinEnCours : !peintureTerminee);
+
+    protected override Vector2Int PixelAt(Vector2 uv)
+    {
+        int x = Mathf.Clamp(
             Mathf.FloorToInt(uv.x * resolution),
             0, resolution - 1
         );
 
-        int centreY = Mathf.Clamp(
+        int y = Mathf.Clamp(
             Mathf.FloorToInt(uv.y * resolution),
             0, resolution - 1
         );
 
-        int rayon = Mathf.Max(1, brushRadiusPixels);
+        return new Vector2Int(x, y);
+    }
 
+    public override void DrawPenLine(Vector2Int start, Vector2Int end, Color color)
+    {
+        int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
+        for (int i = 0; i <= steps; i++)
+        {
+            float t = steps == 0 ? 0f : (float)i / steps;
+            Stamp(Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t)),
+                  Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t)), 4, color, 1f);
+        }
+    }
+
+    private void Stamp(int centreX, int centreY, int rayon, Color color, float opacity)
+    {
         for (int y = -rayon; y <= rayon; y++)
         {
             for (int x = -rayon; x <= rayon; x++)
@@ -364,7 +387,10 @@ public class PaintableSurface : MonoBehaviour
                 this
             );
 
-            quandPeintureTerminee.Invoke();
+            if (transitionFin != null)
+                transitionFin.TerminerPuis(quandPeintureTerminee);
+            else
+                quandPeintureTerminee.Invoke();
         }
     }
 

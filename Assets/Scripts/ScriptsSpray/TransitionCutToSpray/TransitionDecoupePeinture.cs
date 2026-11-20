@@ -6,7 +6,7 @@ public class TransitionDecoupePeinture : MonoBehaviour
 {
     [Header("Outils")]
     [SerializeField] private GameObject cutter;
-    [SerializeField] private GameObject[] bombes;
+    [SerializeField, InspectorName("Outils de peinture")] private GameObject[] bombes;
 
     [Header("Effet")]
     [SerializeField] private ParticleSystem fumeePrefab;

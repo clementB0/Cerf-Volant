@@ -39,22 +39,27 @@ public class Draw : MonoBehaviour
 
     public void PaintLine(Vector2Int start, Vector2Int end)
     {
+        PaintLine(start, end, brushColor);
+    }
+
+    public void PaintLine(Vector2Int start, Vector2Int end, Color color)
+    {
         int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
 
-        Stamp(start.x, start.y);
+        Stamp(start.x, start.y, color);
 
         for (int i = 1; i <= steps; i++)
         {
             float t = (float)i / steps;
             int x = Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t));
             int y = Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t));
-            Stamp(x, y);
+            Stamp(x, y, color);
         }
 
         texture.Apply(false);
     }
 
-    private void Stamp(int centerX, int centerY)
+    private void Stamp(int centerX, int centerY, Color color)
     {
         int radius = brushSize;
         int minX = Mathf.Max(0, centerX - radius);
@@ -70,7 +75,7 @@ public class Draw : MonoBehaviour
                 int dy = y - centerY;
 
                 if (dx * dx + dy * dy <= radius * radius)
-                    texture.SetPixel(x, y, brushColor);
+                    texture.SetPixel(x, y, color);
             }
         }
     }

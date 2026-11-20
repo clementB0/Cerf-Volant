@@ -1,10 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Pen : MonoBehaviour
 {
     [Header("Références")]
     [SerializeField] private Transform tip;
-    [SerializeField] private DrawCanvas surface;
+    [SerializeField, InspectorName("Zones de dessin autorisées")]
+    private List<PenSurface> zonesAutorisees = new List<PenSurface>();
+    [SerializeField] private Color couleurMine = Color.black;
+    [SerializeField] private Renderer indicateur;
+    [SerializeField] private bool dessinerEnMainSeulement;
+
+    private XRGrabInteractable prise;
+    private PenSurface zonePrecedente;
 
     [Header("Détection de la pointe")]
     [Tooltip("Portée de chaque côté de la pointe, en mètres.")]
@@ -14,38 +23,52 @@ public class Pen : MonoBehaviour
     [SerializeField] private bool toucheSurface;
     [SerializeField] private Vector2Int pixelTouche;
 
-    private void OnEnable()
+    private void Awake()
     {
-        toucheSurface = false;
-
-        if (tip == null || surface == null)
+        prise = GetComponent<XRGrabInteractable>();
+        if (indicateur != null)
         {
-            Debug.LogWarning("Pen : assigne Tip et Surface dans l’Inspector.", this);
+            var proprietes = new MaterialPropertyBlock();
+            indicateur.GetPropertyBlock(proprietes);
+            proprietes.SetColor("_BaseColor", couleurMine);
+            indicateur.SetPropertyBlock(proprietes);
         }
+    }
+
+    private void OnDisable()
+    {
+        zonePrecedente = null;
+        toucheSurface = false;
     }
 
     private void LateUpdate()
     {
-        if (tip == null || surface == null ||
-            !surface.TryGetPixel(tip.position, tip.forward, contactTolerance, out Vector2Int pixel))
+        PenSurface zone = null;
+        Vector2Int point = default;
+        float distanceMin = float.PositiveInfinity;
+        if (tip != null && (!dessinerEnMainSeulement || (prise != null && prise.isSelected)))
         {
-            toucheSurface = false;
-            return;
+            foreach (PenSurface candidate in zonesAutorisees)
+            {
+                if (candidate == null ||
+                    !candidate.TryGetContact(tip.position, contactTolerance, out var pixel, out float distance) ||
+                    distance >= distanceMin)
+                    continue;
+
+                zone = candidate;
+                point = pixel;
+                distanceMin = distance;
+            }
         }
 
-        if (!toucheSurface)
+        toucheSurface = zone != null;
+        if (toucheSurface)
         {
-            // Premier contact : pose un point à l’endroit touché.
-            surface.Drawing.PaintLine(pixel, pixel);
+            if (zone != zonePrecedente || point != pixelTouche)
+                zone.DrawPenLine(zone == zonePrecedente ? pixelTouche : point, point, couleurMine);
+            pixelTouche = point;
         }
-        else if (pixel != pixelTouche)
-        {
-            // Contact maintenu : relie les deux positions de la pointe.
-            surface.Drawing.PaintLine(pixelTouche, pixel);
-        }
-
-        pixelTouche = pixel;
-        toucheSurface = true;
+        zonePrecedente = zone;
     }
 
     private void OnDrawGizmosSelected()
