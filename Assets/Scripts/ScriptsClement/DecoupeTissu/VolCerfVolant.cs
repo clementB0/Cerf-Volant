@@ -1,24 +1,22 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-// FONCTIONNALITÉ : faire voler le cerf-volant quand sa corde est accrochée et qu'on tient le bâton.
+// FONCTIONNALITÉ : faire voler le cerf-volant quand ses DEUX cordes sont accrochées et qu'on tient ses DEUX poignées.
 // À mettre sur l'objet "PieceDecoupee" (le cerf-volant découpé).
 //
 // Le vol est une vraie petite simulation de vent :
 //  - le vent souffle avec des rafales (il n'est jamais régulier) ;
 //  - il appuie sur le tissu : c'est cette poussée qui porte le cerf-volant ;
-//  - le poids le tire vers le bas, et le fil le retient au bout du bâton.
-// On pilote avec un seul bâton :
-//  - on penche le bâton à droite → il part à droite (et inversement) ;
-//  - la manivelle du bâton (script Manivelle) déroule ou enroule le fil : il s'éloigne ou se rapproche.
+//  - le poids le tire vers le bas, et le fil le retient au bout de tes mains.
+// On pilote comme un vrai cerf-volant à deux poignées :
+//  - poignée droite plus basse que la gauche → il part à droite (et inversement).
 public class VolCerfVolant : MonoBehaviour
 {
-    [SerializeField] private XRGrabInteractable baton;                  // le bâton (son composant "attrapable" sait si on le tient)
-    [SerializeField] private Transform boutDeCorde;                     // bout libre de la corde : détruit (Fusion) = accrochée
-    [SerializeField] private float longueurFil = 4f;                     // longueur du fil au départ (distance bâton → cerf-volant), en mètres
-    [SerializeField] private float filMin = 1.5f;                       // la manivelle ne peut pas enrouler plus court que ça
-    [SerializeField] private float filMax = 10f;                        // ni dérouler plus long que ça
-    [SerializeField] private float vitesseEnroulement = 1.5f;           // le fil s'allonge ou se raccourcit d'au plus 1,5 m par seconde (fluide)
+    [SerializeField] private XRGrabInteractable poigneeGauche;          // la poignée de gauche (son composant "attrapable" sait si on la tient)
+    [SerializeField] private XRGrabInteractable poigneeDroite;          // la poignée de droite
+    [SerializeField] private Transform boutCordeGauche;                 // bout libre de la corde de gauche : détruit (Fusion) = accrochée
+    [SerializeField] private Transform boutCordeDroite;                 // bout libre de la corde de droite
+    [SerializeField] private float longueurFil = 4f;                     // distance maximum mains → cerf-volant, en mètres
     [SerializeField] private Vector3 directionDuVent = Vector3.forward; // le vent souffle par là (devant toi)
     [SerializeField] private float vitesseDuVent = 6f;                  // vitesse moyenne du vent, en mètres par seconde
     [SerializeField] private float rafales = 0.4f;                      // 0.4 = le vent varie de 40 % en plus ou en moins
@@ -28,7 +26,7 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float portanceMainsHautes = 10.5f;         // il vole à environ 38 degrés
     [SerializeField] private float frottement = 1f;                     // l'air freine le cerf-volant (grand = il bouge moins vite)
     [SerializeField] private float angleDAttaque = 20f;                 // de combien le tissu est penché par rapport au fil, en degrés
-    [SerializeField] private float angleDeVirageMax = 60f;              // jusqu'où il part sur le côté quand tu penches le bâton, en degrés
+    [SerializeField] private float angleDeVirageMax = 60f;              // jusqu'où il part sur le côté quand tu baisses une main, en degrés
     [SerializeField] private float hauteurDuSol = 0.3f;                 // il ne descend jamais plus bas que ça, en mètres
     [SerializeField] private float dureeChute = 3f;                     // quand il est touché, le vent ne le porte plus pendant ce temps, en secondes
 
@@ -43,12 +41,9 @@ public class VolCerfVolant : MonoBehaviour
     private XRGrabInteractable prise; // le composant "attrapable" du cerf-volant lui-même
     private Vector3 vitesse;          // la vitesse du cerf-volant, en mètres par seconde
 
-    private float longueurVoulue; // la longueur demandée par la manivelle ; le vrai fil la rejoint en douceur
-
     private void Start()
     {
         prise = GetComponent<XRGrabInteractable>();
-        longueurVoulue = longueurFil;
     }
 
     // Si le script est désactivé, le cerf-volant ne vole plus.
@@ -58,13 +53,6 @@ public class VolCerfVolant : MonoBehaviour
         finDeChute = Time.time + dureeChute;
     }
 
-    // Appelé par la Manivelle : positif = on déroule du fil (il s'éloigne), négatif = on l'enroule (il se rapproche).
-    // On ne change pas le fil d'un coup (le cerf-volant ferait un bond) : on change la longueur voulue, et le fil la suit (voir Update).
-    public void ChangerLongueur(float metres)
-    {
-        longueurVoulue = Mathf.Clamp(longueurVoulue + metres, filMin, filMax);
-    }
-
     private void OnDisable()
     {
         EnVol = false;
@@ -72,27 +60,27 @@ public class VolCerfVolant : MonoBehaviour
 
     private void Update()
     {
-        // Il faut que la corde soit accrochée (son bout libre a été détruit par Fusion : il vaut "null")
-        // et tenir le bâton ("isSelected" = attrapé) pour que le cerf-volant vole.
-        EnVol = boutDeCorde == null && baton.isSelected;
+        // Il faut que les deux cordes soient accrochées (leur bout libre a été détruit par Fusion : il vaut "null")
+        // et tenir les deux poignées ("isSelected" = attrapée) pour que le cerf-volant vole.
+        bool cordesAccrochees = boutCordeGauche == null && boutCordeDroite == null;
+        EnVol = cordesAccrochees && poigneeGauche.isSelected && poigneeDroite.isSelected;
 
         // Pendant le vol, on ne peut pas attraper le cerf-volant lui-même (sinon la main et le vent se battent).
         prise.enabled = !EnVol;
 
         if (!EnVol)
         {
-            vitesse = Vector3.zero; // on ne tient pas le bâton : le cerf-volant reste où il est
+            vitesse = Vector3.zero; // il manque une main : le cerf-volant reste où il est
             return;
         }
 
         // Le temps écoulé depuis l'image d'avant. On le limite : si le jeu saccade, le calcul ne s'emballe pas.
         float dt = Mathf.Min(Time.deltaTime, 0.03f);
 
-        // 1) Le bâton : c'est là que le fil est tenu.
-        Vector3 milieu = baton.transform.position;
-
-        //    Le fil rejoint petit à petit la longueur voulue avec la manivelle : le cerf-volant s'éloigne ou se rapproche sans à-coup.
-        longueurFil = Mathf.MoveTowards(longueurFil, longueurVoulue, vitesseEnroulement * dt);
+        // 1) Les deux poignées, et le milieu entre elles (c'est là que le fil est tenu).
+        Vector3 gauche = poigneeGauche.transform.position;
+        Vector3 droite = poigneeDroite.transform.position;
+        Vector3 milieu = (gauche + droite) / 2f;
 
         // 2) Le vent du moment. "PerlinNoise" donne un nombre qui change doucement avec le temps :
         //    parfait pour des rafales (plus fort / moins fort) et un vent qui tourne un peu (15 degrés au plus).
@@ -113,10 +101,8 @@ public class VolCerfVolant : MonoBehaviour
         if (tete == Vector3.zero)
             tete = -Vent.normalized; // il est pile au-dessus de toi : la tête regarde vers d'où vient le vent
 
-        // 5) Le virage : de combien le bâton penche sur le côté (-1 = à fond à gauche, +1 = à fond à droite).
-        //    On compare le haut du bâton (son axe y) avec ta droite (perpendiculaire au vent) ; penché de 40 degrés = à fond.
-        Vector3 droiteDuJoueur = Vector3.Cross(Vector3.up, Vector3.ProjectOnPlane(Vent, Vector3.up)).normalized;
-        float penche = Mathf.Clamp(Vector3.Dot(baton.transform.up, droiteDuJoueur) * 1.5f, -1f, 1f);
+        // 5) Le virage : de combien la ligne entre les poignées penche (-1 = droite tout en haut, +1 = droite tout en bas).
+        float penche = -(droite - gauche).normalized.y;
         float virage = penche * angleDeVirageMax; // où tu veux l'envoyer : angle sur le côté, en degrés
 
         //    "azimut" = où il est vraiment : son angle sur le côté par rapport au vent (positif = à droite).

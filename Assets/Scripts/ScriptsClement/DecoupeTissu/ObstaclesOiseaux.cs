@@ -12,6 +12,7 @@ public class ObstaclesOiseaux : MonoBehaviour
     [SerializeField] private float precision = 0.4f;          // ils visent jusqu'à 40 cm à gauche ou à droite du cerf-volant (petit = plus dur)
     [SerializeField] private float tailleOiseau = 0.15f;      // un cube de 15 cm
     [SerializeField] private float rayonTouche = 0.3f;        // plus près que ça du cerf-volant = touché
+    [SerializeField] private AudioClip sonPassage;            // le "swoosh" quand un oiseau passe au-dessus de ta tête (swoosh.mp3)
 
     private VolCerfVolant vol;
     private float prochainOiseau;   // le moment où le prochain oiseau part
@@ -69,6 +70,17 @@ public class ObstaclesOiseaux : MonoBehaviour
         oiseau.transform.position = cible - devant * distanceDepart; // il part loin derrière...
         oiseau.transform.rotation = Quaternion.LookRotation(devant);  // ... regarde là où il va...
         Destroy(oiseau.GetComponent<Collider>()); // ... et ne gêne pas les mains, le spray ni le cutter (le contact est calculé à la main)
+
+        // Le "swoosh" : il part de l'oiseau (en 3D), juste avant qu'il passe au plus près de ta tête.
+        // Comme il arrive de derrière, c'est ce son qui te prévient qu'il faut esquiver.
+        if (sonPassage != null && Camera.main != null)
+        {
+            AudioSource son = oiseau.AddComponent<AudioSource>();
+            son.clip = sonPassage;
+            son.spatialBlend = 1f;
+            float quand = Vector3.Dot(Camera.main.transform.position - oiseau.transform.position, devant) / vitesseOiseau; // en secondes
+            son.PlayDelayed(Mathf.Max(0f, quand - 0.3f));
+        }
 
         oiseaux.Add(oiseau.transform);
         vitesses.Add(devant * vitesseOiseau);

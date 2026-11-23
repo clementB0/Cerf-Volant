@@ -259,11 +259,12 @@ GameObject:
   - component: {fileID: 900000018}
   - component: {fileID: 900000019}
   - component: {fileID: 900000020}
+  - component: {fileID: 900000312}
+  - component: {fileID: 900000305}
   - component: {fileID: 900000300}
   - component: {fileID: 900000301}
   - component: {fileID: 900000302}
   - component: {fileID: 900000303}
-  - component: {fileID: 900000305}
   - component: {fileID: 900000306}
   - component: {fileID: 900000307}
   - component: {fileID: 900000308}
@@ -1002,7 +1003,6 @@ GameObject:
   - component: {fileID: 900000055}
   - component: {fileID: 900000056}
   - component: {fileID: 900000057}
-  - component: {fileID: 900000058}
   m_Layer: 0
   m_Name: PoigneeGauche
   m_TagString: Untagged
@@ -1639,8 +1639,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e2dbbc6aa61114438025b1b3f12836, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baton: {fileID: 900000057}
-  boutDeCorde: {fileID: 900000402}
+  poigneeGauche: {fileID: 900000057}
+  poigneeDroite: {fileID: 900000107}
+  boutCordeGauche: {fileID: 900000402}
+  boutCordeDroite: {fileID: 900000422}
 --- !u!114 &900000300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2371,20 +2373,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonPrise: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
   volume: 0.5
---- !u!114 &900000305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900000011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a4de9f0d8e4b2ac500f617b910fa318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sonSpray: {fileID: 8300000, guid: c51bef0e37b6f8eea699bad30026ace7, type: 3}
-  volume: 0.3
 --- !u!114 &900000306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2397,7 +2385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf570b9e112f2ee042b9a22c8bfcb94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sonFinPeinture: {fileID: 8300000, guid: 6a6b864f84881253b736b2a2f843fa74, type: 3}
+  sonFinPeinture: {fileID: 8300000, guid: 13f80537510c34e4683d76ea558b1e01, type: 3}
   volume: 0.7
 --- !u!114 &900000307
 MonoBehaviour:
@@ -2441,6 +2429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47db1665395abc543266a2e483ea9aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sonPassage: {fileID: 8300000, guid: d88d03c390e3c524194ce99fb84c640b, type: 3}
 --- !u!114 &900000310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2498,21 +2487,33 @@ MonoBehaviour:
   inclinaison: 15
   hauteurRebord: 0.05
   epaisseur: 0.015
-
---- !u!114 &900000058
+--- !u!114 &900000312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900000051}
+  m_GameObject: {fileID: 900000011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c9082cc507189a0936214678f263f68, type: 3}
+  m_Script: {fileID: 11500000, guid: d7d1a20ad715e9b7664f3193c661e4cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vol: {fileID: 900000019}
-  metresParTour: 1
-  rayon: 0.06
-  ecart: 0.1
-  materiau: {fileID: 2100000, guid: 832e6119e9752f2e180cb83f646755f0, type: 2}
+  dureePleine: 6
+  rechargeParSecousse: 0.1
+  vitesseSecousse: 0.6
+  sonSecouer: {fileID: 8300000, guid: 6c3d6d817852f5340a7bb06477c1e1ec, type: 3}
+--- !u!114 &900000305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4de9f0d8e4b2ac500f617b910fa318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sonSpray: {fileID: 8300000, guid: a24e85dfa927d1747882897e9d59e09b, type: 3}
+  volume: 0.4
