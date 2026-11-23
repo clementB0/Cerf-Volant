@@ -4,8 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayButton : MonoBehaviour
 {
-    private void Start()
+
+
+    public void ChangeScene()
     {
-        SceneManager.LoadScene("SceneTestLukas");
+        SceneManager.LoadScene(3);
+        
     }
 }
