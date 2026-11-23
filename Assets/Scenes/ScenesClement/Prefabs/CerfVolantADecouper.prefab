@@ -2496,5 +2496,6 @@ MonoBehaviour:
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
   materiauPresentoir: {fileID: 2100000, guid: 11bd6cce75896b9c3557df4a42d53183, type: 2}
   attente: 0.9
-  distance: 0.8
-  hauteurSousLesYeux: 0.3
+  inclinaison: 15
+  hauteurRebord: 0.05
+  epaisseur: 0.015

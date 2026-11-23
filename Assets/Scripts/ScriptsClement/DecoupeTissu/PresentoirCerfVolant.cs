@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-// FONCTIONNALITÉ : quand la découpe est finie, le cerf-volant fait "pouf" et réapparaît debout sur un présentoir
-// (un chevalet de peintre) devant le joueur, face à lui, comme une toile prête à être peinte.
+// FONCTIONNALITÉ : quand la découpe est finie, le cerf-volant fait "pouf" et réapparaît sur un petit chevalet
+// posé sur la table (comme une petite toile de peintre), un peu incliné vers l'arrière, face au joueur.
 // À mettre sur l'objet "PieceDecoupee" : il apparaît pile à la fin de la découpe, donc son Start = "découpe finie".
 public class PresentoirCerfVolant : MonoBehaviour
 {
@@ -10,8 +10,9 @@ public class PresentoirCerfVolant : MonoBehaviour
     [SerializeField] private AudioClip sonPouf;              // le "pouf !" (SonFumee.wav)
     [SerializeField] private Material materiauPresentoir;    // la couleur du chevalet (Table.mat : bois marron)
     [SerializeField] private float attente = 0.9f;           // on laisse d'abord la pièce faire son petit saut de victoire (ReussiteDecoupe)
-    [SerializeField] private float distance = 0.8f;          // le présentoir est à 80 cm devant le joueur
-    [SerializeField] private float hauteurSousLesYeux = 0.3f; // le milieu du cerf-volant est 30 cm sous les yeux (à hauteur de poitrine)
+    [SerializeField] private float inclinaison = 15f;        // la toile penche vers l'arrière de 15 degrés
+    [SerializeField] private float hauteurRebord = 0.05f;    // le rebord qui porte la toile est à 5 cm au-dessus de la table
+    [SerializeField] private float epaisseur = 0.015f;       // les baguettes de bois font 1,5 cm
 
     private void Start()
     {
@@ -26,41 +27,60 @@ public class PresentoirCerfVolant : MonoBehaviour
         Pouf(transform.position);
         yield return new WaitForSeconds(0.2f); // le temps que la fumée le cache
 
-        // 2) Où se mettre : devant le joueur, dans la direction où il regarde (à plat), à hauteur de poitrine.
-        // shortcut: sans caméra principale, rien ne bouge ; c'est le cas normal en VR d'en avoir une (la tête du joueur).
-        Transform tete = Camera.main != null ? Camera.main.transform : null;
-        if (tete == null)
-            yield break;
-        Vector3 devant = Vector3.ProjectOnPlane(tete.forward, Vector3.up).normalized;
+        // 2) Le chevalet se pose sur la table, là où était le tissu (il est à plat sur la table : sa hauteur = celle de la table).
+        Vector3 surTable = transform.position;
+
+        // "devant" = du joueur vers le chevalet, à plat : la toile sera tournée vers le joueur.
+        // shortcut: sans caméra principale, on suppose le joueur côté -z du monde ; en VR la caméra est la tête du joueur.
+        Vector3 joueur = Camera.main != null ? Camera.main.transform.position : surTable + Vector3.back;
+        Vector3 devant = Vector3.ProjectOnPlane(surTable - joueur, Vector3.up).normalized;
         if (devant == Vector3.zero)
-            devant = Vector3.forward; // il regarde pile en haut ou en bas : on prend une direction par défaut
-        Vector3 sol = Vector3.ProjectOnPlane(tete.position, Vector3.up) + devant * distance; // au sol, devant lui (le sol est à y = 0)
-        Vector3 centre = sol + Vector3.up * Mathf.Max(tete.position.y - hauteurSousLesYeux, 0.8f);
+            devant = Vector3.forward;
+        Vector3 droite = Vector3.Cross(Vector3.up, devant); // la droite du joueur
 
-        // 3) Le cerf-volant debout : sa face peinte vers le joueur (son "dos" vers l'avant), sa tête vers le ciel.
-        transform.SetPositionAndRotation(centre, Quaternion.LookRotation(devant, Vector3.up));
+        // La toile penchée : son "haut" part un peu vers l'arrière (loin du joueur).
+        float angle = inclinaison * Mathf.Deg2Rad;
+        Vector3 hautToile = Vector3.up * Mathf.Cos(angle) + devant * Mathf.Sin(angle);
+        Vector3 dosToile = devant * Mathf.Cos(angle) - Vector3.up * Mathf.Sin(angle); // la direction vers laquelle regarde le dos
 
-        // 4) Le présentoir autour de lui, puis pouf là où il apparaît.
-        ConstruirePresentoir(sol, centre, devant);
+        // 3) Le cerf-volant : sa face peinte vers le joueur, sa tête vers le haut, son bas posé pile sur le rebord.
+        Vector3 rebord = surTable + Vector3.up * hauteurRebord;
+        Bounds forme = GetComponent<MeshFilter>().sharedMesh.bounds;   // la taille de la forme (avant l'échelle)
+        float echelle = transform.lossyScale.y;                         // l'échelle réelle dans le monde
+        float bas = -forme.min.y * echelle;                             // du milieu de la forme jusqu'à son bas
+        float haut = forme.max.y * echelle;                             // du milieu jusqu'à sa tête
+        float demiLargeur = forme.extents.x * echelle;
+        Vector3 centre = rebord + hautToile * bas;
+        transform.SetPositionAndRotation(centre, Quaternion.LookRotation(dosToile, hautToile));
+
+        // 4) Le chevalet autour, puis pouf là où il apparaît.
+        ConstruirePresentoir(surTable, rebord, centre + hautToile * haut, droite, devant, hautToile, dosToile, demiLargeur);
         Pouf(centre);
     }
 
-    // Un chevalet de peintre en 4 baguettes de bois : deux pieds devant, un pied derrière, et un rebord sous la toile.
-    private void ConstruirePresentoir(Vector3 sol, Vector3 centre, Vector3 devant)
+    // Un petit chevalet comme ceux des toiles miniatures : un rebord, deux pieds écartés devant,
+    // un montant derrière la toile qui dépasse en haut, et un pied d'appui derrière.
+    private void ConstruirePresentoir(Vector3 surTable, Vector3 rebord, Vector3 sommetToile, Vector3 droite, Vector3 devant,
+                                      Vector3 hautToile, Vector3 dosToile, float demiLargeur)
     {
-        Vector3 droite = Vector3.Cross(Vector3.up, devant);           // la droite du joueur
-        float demi = GetComponent<Renderer>().bounds.extents.y;       // la moitié de la hauteur du cerf-volant
-        Vector3 derriere = devant * 0.03f;                            // les pieds sont juste derrière la toile
-        Vector3 haut = centre + Vector3.up * (demi + 0.1f) + derriere; // le sommet du chevalet, un peu au-dessus de la toile
-
         GameObject presentoir = new GameObject("Presentoir");
-        Baguette(presentoir, sol - droite * 0.2f + derriere, haut);    // pied avant gauche
-        Baguette(presentoir, sol + droite * 0.2f + derriere, haut);    // pied avant droit
-        Baguette(presentoir, sol + devant * 0.4f, haut);               // pied arrière (penché vers l'arrière)
+        float largeur = demiLargeur * 0.8f;    // le rebord est un peu moins large que la toile
+        Vector3 derriere = dosToile * 0.012f;  // le bois est juste derrière la toile, pour ne pas passer devant
 
-        // Le rebord : une baguette couchée, juste sous le bas du cerf-volant, qui le "porte".
-        Vector3 rebord = centre - Vector3.up * (demi + 0.01f);
-        Baguette(presentoir, rebord - droite * 0.25f, rebord + droite * 0.25f);
+        // Le rebord, sous le bas de la toile.
+        Baguette(presentoir, rebord - droite * largeur, rebord + droite * largeur);
+
+        // Les deux pieds avant : des bouts du rebord jusqu'à la table, un peu écartés et un peu vers le joueur.
+        Baguette(presentoir, rebord - droite * largeur * 0.8f, surTable - droite * (largeur * 0.8f + 0.02f) - devant * 0.02f);
+        Baguette(presentoir, rebord + droite * largeur * 0.8f, surTable + droite * (largeur * 0.8f + 0.02f) - devant * 0.02f);
+
+        // Le montant du milieu, derrière la toile, penché comme elle, qui dépasse un peu au-dessus.
+        Vector3 piedMontant = surTable + derriere;
+        Vector3 hautMontant = sommetToile + hautToile * 0.02f + derriere;
+        Baguette(presentoir, piedMontant, hautMontant);
+
+        // Le pied d'appui : du milieu du montant jusqu'à la table, loin derrière : c'est lui qui tient tout incliné.
+        Baguette(presentoir, Vector3.Lerp(piedMontant, hautMontant, 0.6f), surTable + devant * 0.12f);
     }
 
     // Une baguette de bois (un cube très allongé) qui va d'un point à un autre.
@@ -72,10 +92,10 @@ public class PresentoirCerfVolant : MonoBehaviour
         Destroy(baguette.GetComponent<Collider>()); // pas de collision : il ne doit pas bloquer le jet de peinture
         baguette.GetComponent<Renderer>().sharedMaterial = materiauPresentoir;
 
-        // Au milieu des deux points, tournée vers le second, aussi longue que l'écart entre eux, et épaisse de 2,5 cm.
+        // Au milieu des deux points, tournée vers le second, aussi longue que l'écart entre eux.
         baguette.transform.position = (de + a) / 2f;
         baguette.transform.rotation = Quaternion.LookRotation(a - de);
-        baguette.transform.localScale = new Vector3(0.025f, 0.025f, Vector3.Distance(de, a));
+        baguette.transform.localScale = new Vector3(epaisseur, epaisseur, Vector3.Distance(de, a));
     }
 
     // Un nuage de fumée et un "pouf !" à cet endroit (comme TransitionDecoupePeinture pour les bombes).
