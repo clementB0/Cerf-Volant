@@ -7,5 +7,19 @@ public class SprayColor : MonoBehaviour
     [SerializeField]
     private Color paintColor = Color.red;
 
+    [SerializeField] private Renderer reservoir;
+
     public Color PaintColor => paintColor;
+
+    private void Awake()
+    {
+        if (reservoir == null)
+            return;
+
+        var properties = new MaterialPropertyBlock();
+        reservoir.GetPropertyBlock(properties);
+        properties.SetColor("_BaseColor", paintColor);
+        properties.SetColor("_Color", paintColor);
+        reservoir.SetPropertyBlock(properties);
+    }
 }
