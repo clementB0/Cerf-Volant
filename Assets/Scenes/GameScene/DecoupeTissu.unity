@@ -931,7 +931,7 @@ MonoBehaviour:
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   brushRadiusPixels: 18
   suivreCouverture: 1
-  couvertureRequise: 1
+  couvertureRequise: 0.14
   opaciteRequise: 0.5
   quandPeintureTerminee:
     m_PersistentCalls:
