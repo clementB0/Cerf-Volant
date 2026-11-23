@@ -49,6 +49,15 @@ public class PatronPointilles : MonoBehaviour
     // La distance de découpe, en lecture seule, pour que TraceurCutter dessine la zone de coupe dans la vue Scene.
     public float RayonContact => rayonContact;
 
+    // Pour l'aide à la découpe (AideDecoupe) : les traits encore à découper de l'étape en cours, dans l'ordre du contour
+    // (rien pendant que le tissu tourne ou une fois tout découpé)...
+    public List<Transform> TraitsEnCours => attendLaSuite || toutEstRelie || etapes.Count == 0 ? null : etapes[etapeEnCours];
+    // ... et le moment de la dernière action du joueur (un trait découpé, ou une nouvelle étape apparue).
+    public float DerniereActivite { get; private set; }
+
+    // Prévient quand une étape est finie (EtoilesEtape s'en sert), avec l'endroit du dernier trait découpé.
+    public event System.Action<Vector3> EtapeFinie;
+
     // Appelé par ChoixCerfVolant quand on choisit un cerf-volant dans le menu (avant que le tissu apparaisse).
     public void ChangerForme(FormeCerfVolant nouvelleForme)
     {
@@ -133,6 +142,7 @@ public class PatronPointilles : MonoBehaviour
             foreach (Transform trait in etapes[etapeEnCours])
                 trait.GetComponent<Renderer>().sharedMaterial = materiauTrait;
             attendLaSuite = false;
+            DerniereActivite = Time.time; // une nouvelle étape : le compte d'inactivité repart de zéro
         }
 
         // Le mouvement final est fini (le cerf-volant est face au joueur) : on prévient la scène, une seule fois.
@@ -228,6 +238,7 @@ public class PatronPointilles : MonoBehaviour
 
         // Seuls les traits de l'étape en cours peuvent être découpés.
         List<Transform> traitsPasRelies = etapes[etapeEnCours];
+        Vector3 dernierTrait = positionPointe; // l'endroit du dernier trait découpé (pour les étoiles de fin d'étape)
 
         // On parcourt la liste à l'envers : retirer un élément ne fait alors sauter aucune case.
         for (int i = traitsPasRelies.Count - 1; i >= 0; i--)
@@ -241,6 +252,8 @@ public class PatronPointilles : MonoBehaviour
                 trait.localScale = new Vector3(taille.x * 2f, taille.y / 2f, taille.z);
                 trait.GetComponent<Renderer>().sharedMaterial = materiauDecoupe;
                 traitsPasRelies.RemoveAt(i);
+                dernierTrait = trait.position;
+                DerniereActivite = Time.time; // le joueur découpe : il n'est pas inactif
 
                 // Petit "tic", un peu plus aigu ou plus grave à chaque fois pour que ce ne soit pas toujours le même.
                 hautParleur.pitch = Random.Range(0.9f, 1.2f);
@@ -254,7 +267,8 @@ public class PatronPointilles : MonoBehaviour
         if (traitsPasRelies.Count > 0)
             return; // il reste des traits dans cette étape
 
-        // Étape finie : le morceau de tissu en trop, derrière ces pointillés, tombe.
+        // Étape finie : des étoiles (si EtoilesEtape est là), et le morceau de tissu en trop, derrière ces pointillés, tombe.
+        EtapeFinie?.Invoke(dernierTrait);
         if (chutes != null)
             chutes.FaireTomber(etapeEnCours);
 

@@ -13,6 +13,9 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class TraceurCutter : MonoBehaviour
 {
     [SerializeField] private Transform pointeDuCutter;      // l'endroit qui découpe (l'objet "Pointe" dans le Cutter)
+
+    // En lecture seule : AideDecoupe s'en sert pour placer le cutter fantôme.
+    public Transform Pointe => pointeDuCutter;
     [SerializeField] private float distanceContact = 0.08f; // la pointe "touche" jusqu'à 8 cm au-dessus ou en dessous du tissu (au cas où on rate)
     [SerializeField] private float forceVibration = 0.15f;  // de 0 (rien) à 1 (très fort) : légère
 

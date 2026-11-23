@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74affb37e28d72dff3f3c10a84618d63, type: 3}
   m_Name: Raie
   m_EditorClassIdentifier: 
+  corps: 0.15
   coins:
   - {x: -0.305, y: 0.044}
   - {x: -0.265, y: 0.067}

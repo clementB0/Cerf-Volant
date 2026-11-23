@@ -13,8 +13,13 @@ public class FormeCerfVolant : ScriptableObject
     //  - depuis le centre (0, 0), on doit "voir" tout le contour (voir PieceDecoupee).
     [SerializeField] private Vector2[] coins;
 
+    // La largeur du corps (au milieu), en part de la demi-envergure : 0.1 = le corps fait 10 % de chaque côté du milieu.
+    // Au-delà, ce sont les ailes : c'est là qu'elles pivotent quand le cerf-volant bat des ailes (BattementAiles).
+    [SerializeField, Range(0f, 0.9f)] private float corps = 0.1f;
+
     // En lecture seule pour les autres scripts.
     public Vector2[] Coins => coins;
+    public float Corps => corps;
 
     // Fabrique la forme en 3D, toute plate (utilisée par la PieceDecoupee et par les miniatures du menu).
     public Mesh CreerMaillage()

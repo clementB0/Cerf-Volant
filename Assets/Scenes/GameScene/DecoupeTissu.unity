@@ -869,15 +869,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.56621104
+      value: 0.9495097
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.56621104
+      value: 0.9495097
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.56621104
+      value: 0.9495097
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.x
@@ -889,7 +889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.23837
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1120,15 +1120,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.50499904
+      value: 0.84686
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.50499904
+      value: 0.84686
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.50499904
+      value: 0.84686
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1140,7 +1140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.47863
+      value: 0.82291996
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1371,15 +1371,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.45909002
+      value: 0.7698727
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.45909002
+      value: 0.7698727
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.45909002
+      value: 0.7698727
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1391,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.47863
+      value: 0.82291996
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1648,6 +1648,9 @@ GameObject:
   - component: {fileID: 900000503}
   - component: {fileID: 900000505}
   - component: {fileID: 900000506}
+  - component: {fileID: 900000507}
+  - component: {fileID: 900000508}
+  - component: {fileID: 900000509}
   m_Layer: 0
   m_Name: ChoixCerfVolant
   m_TagString: Untagged
@@ -1730,6 +1733,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c716bac69b593afcd5a2413aefbe2109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &900000507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26531a667679e8fd1b67a7a736319729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objets:
+  - {fileID: 900000520}
+  - {fileID: 900000530}
+  - {fileID: 900000540}
+  attente: 8
+  decalage: 0.35
+  pause: 1.2
+  dureeAnimation: 0.8
+  nombreSauts: 1
+  hauteurSaut: 0.04
+  grossissement: 0.1
+  tortillement: 12
+  balancement: 0.015
+--- !u!114 &900000508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26531a667679e8fd1b67a7a736319729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objets:
+  - {fileID: 900000701}
+  - {fileID: 900000702}
+  - {fileID: 900000703}
+  attente: 8
+  decalage: 0.35
+  pause: 1.2
+  dureeAnimation: 0.8
+  nombreSauts: 2
+  hauteurSaut: 0.04
+  grossissement: 0.1
+  tortillement: 12
+  balancement: 0.015
+--- !u!114 &900000509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26531a667679e8fd1b67a7a736319729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objets:
+  - {fileID: 910000110}
+  - {fileID: 910000111}
+  - {fileID: 910000112}
+  attente: 8
+  decalage: 0.35
+  pause: 1.2
+  dureeAnimation: 0.8
+  nombreSauts: 2
+  hauteurSaut: 0.04
+  grossissement: 0.1
+  tortillement: 12
+  balancement: 0.015
 --- !u!1 &900000510
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,6 +1856,7 @@ GameObject:
   - component: {fileID: 900000524}
   - component: {fileID: 900000525}
   - component: {fileID: 900000526}
+  - component: {fileID: 900000527}
   m_Layer: 0
   m_Name: Mini Papillon
   m_TagString: Untagged
@@ -1969,6 +2048,28 @@ MonoBehaviour:
   atelier: {fileID: 900000401}
   choix: {fileID: 900000502}
   grossissement: 1.3
+--- !u!114 &900000527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98184846083500f4f0813bdddb31beb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modele: {fileID: 919132149155446097, guid: 77ba936c5c646f049b4c5d94268e6f61, type: 3}
+  forme: {fileID: 11400000, guid: 5b4213a761a1b890f4687e4397d81618, type: 2}
+  delai: 0
+  duree: 4
+  hauteur: 2
+  balancement: 0.35
+  pliage: 0.4
+  retourner: 0
+  couleur: {r: 0.85, g: 0.2, b: 0.2, a: 1}
+  dessin: {fileID: 2800000, guid: 2ac90f6c6da84a47785dea0a44641a0e, type: 3}
 --- !u!1 &900000530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2189,10 +2290,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modele: {fileID: 919132149155446097, guid: bfb491a4f7f08a0408fdd2ecc51d32ef, type: 3}
   forme: {fileID: 11400000, guid: 73229779b6aba8e5a6dba83c5f605bb0, type: 2}
-  duree: 5
-  depart: {x: -2.5, y: 2.5, z: 4.5}
-  battementsParSeconde: 2
-  amplitude: 0.35
+  delai: 0.6
+  duree: 4
+  hauteur: 2
+  balancement: 0.35
+  pliage: 0.4
+  retourner: 0
+  couleur: {r: 0.85, g: 0.2, b: 0.2, a: 1}
+  dessin: {fileID: 2800000, guid: 128c8eef87997b666a72c520e439f6c4, type: 3}
 --- !u!1 &900000540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2207,6 +2312,7 @@ GameObject:
   - component: {fileID: 900000544}
   - component: {fileID: 900000545}
   - component: {fileID: 900000546}
+  - component: {fileID: 900000547}
   m_Layer: 0
   m_Name: Mini Dragon
   m_TagString: Untagged
@@ -2398,6 +2504,28 @@ MonoBehaviour:
   atelier: {fileID: 900000403}
   choix: {fileID: 900000502}
   grossissement: 1.3
+--- !u!114 &900000547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98184846083500f4f0813bdddb31beb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modele: {fileID: 919132149155446097, guid: 520a72f6b97447645b5f1764f1457409, type: 3}
+  forme: {fileID: 11400000, guid: 848ecb9d4a8b4d9d477dbf3aa05fcea1, type: 2}
+  delai: 1.2
+  duree: 4
+  hauteur: 2
+  balancement: 0.35
+  pliage: 0.4
+  retourner: 0
+  couleur: {r: 0.85, g: 0.2, b: 0.2, a: 1}
+  dessin: {fileID: 2800000, guid: 088b148b23f993e3d68e54d48b3dba74, type: 3}
 --- !u!1 &900000600
 GameObject:
   m_ObjectHideFlags: 0
