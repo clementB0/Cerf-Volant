@@ -219,7 +219,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1386.9563, y: 7.6}
+  m_AnchoredPosition: {x: -1386.9563, y: 16.5}
   m_SizeDelta: {x: 1101, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &150209112
@@ -614,7 +614,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36.01642, y: -6.4}
+  m_AnchoredPosition: {x: 36.01642, y: 52}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1333713964
@@ -639,8 +639,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Jouer
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a575d33bef6f3ff4f96c73edd7c91186, type: 2}
-  m_sharedMaterial: {fileID: -1765508864582671041, guid: a575d33bef6f3ff4f96c73edd7c91186, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7b39155d2ebcf1c48b88cce17a9d399f, type: 2}
+  m_sharedMaterial: {fileID: 4399979516109822875, guid: 7b39155d2ebcf1c48b88cce17a9d399f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -760,7 +760,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1333713964}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: c41fe19e6d0a1e84aa7f310a1bd4a0d7, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1703568385
 GameObject:
   m_ObjectHideFlags: 0
