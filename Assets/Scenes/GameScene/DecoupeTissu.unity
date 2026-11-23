@@ -794,6 +794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CerfVolant Papillon
       objectReference: {fileID: 0}
+    - target: {fileID: 900000305, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: sonSpray
+      value: 
+      objectReference: {fileID: 8300000, guid: a24e85dfa927d1747882897e9d59e09b, type: 3}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1017,6 +1021,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CerfVolant Raie
       objectReference: {fileID: 0}
+    - target: {fileID: 900000305, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: sonSpray
+      value: 
+      objectReference: {fileID: 8300000, guid: a24e85dfa927d1747882897e9d59e09b, type: 3}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1240,6 +1248,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CerfVolant Dragon
       objectReference: {fileID: 0}
+    - target: {fileID: 900000305, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: sonSpray
+      value: 
+      objectReference: {fileID: 8300000, guid: a24e85dfa927d1747882897e9d59e09b, type: 3}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_IsActive
       value: 0
