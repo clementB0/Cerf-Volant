@@ -1071,7 +1071,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000200, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 900000201, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: m_LocalScale.x
@@ -1610,18 +1610,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &900000506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900000500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c716bac69b593afcd5a2413aefbe2109, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &900000501
 Transform:
   m_ObjectHideFlags: 0
@@ -1685,6 +1673,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dureeDisparition: 2
   nombreDeTaches: 6
+--- !u!114 &900000506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c716bac69b593afcd5a2413aefbe2109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &900000510
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,6 +1938,7 @@ GameObject:
   - component: {fileID: 900000534}
   - component: {fileID: 900000535}
   - component: {fileID: 900000536}
+  - component: {fileID: 900000537}
   m_Layer: 0
   m_Name: Mini Raie
   m_TagString: Untagged
@@ -1945,6 +1946,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &900000537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98184846083500f4f0813bdddb31beb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modele: {fileID: 919132149155446097, guid: bfb491a4f7f08a0408fdd2ecc51d32ef, type: 3}
+  forme: {fileID: 11400000, guid: 73229779b6aba8e5a6dba83c5f605bb0, type: 2}
+  duree: 5
+  depart: {x: -2.5, y: 2.5, z: 4.5}
+  battementsParSeconde: 2
+  amplitude: 0.35
 --- !u!4 &900000531
 Transform:
   m_ObjectHideFlags: 0
