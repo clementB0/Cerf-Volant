@@ -12,9 +12,10 @@ public class DrawCanvas : PenSurface
 
     protected override Vector2Int PixelAt(Vector2 uv) => Drawing.UVToPixel(uv);
 
-    public override void DrawPenLine(Vector2Int start, Vector2Int end, Color color)
+    public override bool DrawPenLine(Vector2Int start, Vector2Int end, Color color)
     {
         Drawing.PaintLine(start, end, color);
+        return true;
     }
 
     public bool TryGetPixel(Vector3 tipPosition, Vector3 direction,

@@ -2,20 +2,16 @@ using UnityEngine;
 
 public class CerfVolant : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    internal Transform CordeAttendue { private get; set; }
 
-    // Update is called once per frame
-    void Update()
+    internal bool Accepte(Transform corde)
     {
-        
+        // Les anciennes scènes de test utilisent aussi des cibles libres.
+        return ReferenceEquals(CordeAttendue, null) || CordeAttendue == corde;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Fusion>())
+        if (other.TryGetComponent<Fusion>(out var fusion) && Accepte(fusion.transform))
         {
             foreach (Transform enfant in transform)
             {

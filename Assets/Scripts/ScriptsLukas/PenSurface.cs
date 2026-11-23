@@ -12,13 +12,20 @@ public abstract class PenSurface : MonoBehaviour
 
     protected virtual bool ReadyForPen => true;
     protected abstract Vector2Int PixelAt(Vector2 uv);
-    public abstract void DrawPenLine(Vector2Int start, Vector2Int end, Color color);
+    public abstract bool DrawPenLine(Vector2Int start, Vector2Int end, Color color);
 
     public bool TryGetContact(Vector3 tip, float tolerance, out Vector2Int pixel,
                               out float squaredDistance)
     {
+        return TryGetContact(tip, tolerance, out pixel, out squaredDistance, out _);
+    }
+
+    public bool TryGetContact(Vector3 tip, float tolerance, out Vector2Int pixel,
+                              out float squaredDistance, out RaycastHit contact)
+    {
         pixel = default;
         squaredDistance = float.PositiveInfinity;
+        contact = default;
         if (!isActiveAndEnabled || !ReadyForPen)
             return false;
 
@@ -39,6 +46,7 @@ public abstract class PenSurface : MonoBehaviour
             {
                 squaredDistance = distance;
                 pixel = PixelAt(hit.textureCoord);
+                contact = hit;
             }
         }
         return !float.IsPositiveInfinity(squaredDistance);

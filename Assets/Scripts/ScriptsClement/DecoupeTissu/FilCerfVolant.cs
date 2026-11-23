@@ -18,6 +18,23 @@ public class FilCerfVolant : MonoBehaviour
 
     // Une ligne courbe, c'est plein de petits bouts droits : plus il y a de points, plus elle est lisse.
     private const int Points = 12;
+    private const int SegmentsNoeud = 40;
+    [SerializeField] private bool noeudADroite;
+    private bool noue;
+    private float debutNoeud;
+    private float face = 1f;
+
+    private Vector3 attacheLocale;
+
+    internal void Nouer(Vector3 attache)
+    {
+        noue = true;
+        attacheLocale = cerfVolant.InverseTransformPoint(attache);
+        debutNoeud = Time.time;
+        Camera regard = Camera.main;
+        if (regard != null && Vector3.Dot(regard.transform.position - cerfVolant.position, cerfVolant.forward) < 0f)
+            face = -1f;
+    }
 
     private LineRenderer fil;
     private VolCerfVolant vol; // le script du vol : il nous donne le vent
@@ -39,6 +56,11 @@ public class FilCerfVolant : MonoBehaviour
         Vector3 depart = transform.position;
         // "!= null" : le bout libre existe encore (pas encore détruit par Fusion), donc la corde n'est pas accrochée.
         Vector3 arrivee = boutDeCorde != null ? boutDeCorde.position : cerfVolant.position;
+        if (noue)
+        {
+            arrivee = cerfVolant.TransformPoint(attacheLocale) + cerfVolant.forward * (face * 0.008f);
+            DessinerNoeud(arrivee);
+        }
 
         // De combien le milieu du fil s'écarte de la ligne droite :
         // il pend vers le bas (plus le fil est long, plus il pend), et en vol le vent le pousse en plus.
@@ -52,6 +74,25 @@ public class FilCerfVolant : MonoBehaviour
 
             // "4 * t * (1 - t)" vaut 0 aux deux bouts et 1 au milieu : le fil reste attaché aux bouts et se creuse entre.
             fil.SetPosition(i, Vector3.Lerp(depart, arrivee, t) + creux * (4f * t * (1f - t)));
+        }
+    }
+
+    private void DessinerNoeud(Vector3 attache)
+    {
+        if (fil.positionCount != Points + SegmentsNoeud)
+            fil.positionCount = Points + SegmentsNoeud;
+
+        float progression = Mathf.Clamp01((Time.time - debutNoeud) / 1.1f);
+        float tours = Mathf.SmoothStep(0f, 2f, progression / 0.8f);
+        float rayon = Mathf.Lerp(0.032f, 0.014f, Mathf.InverseLerp(0.8f, 1f, progression));
+        Vector3 cote = cerfVolant.right * (noeudADroite ? 1f : -1f);
+        for (int i = 1; i <= SegmentsNoeud; i++)
+        {
+            float tour = tours * i / SegmentsNoeud;
+            float angle = tour * 2f * Mathf.PI;
+            Vector3 boucle = cote * (1f - Mathf.Cos(angle)) + cerfVolant.up * Mathf.Sin(angle);
+            Vector3 profondeur = cerfVolant.forward * (face * tour * 0.005f);
+            fil.SetPosition(Points - 1 + i, attache + boucle * rayon + profondeur);
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 // FONCTIONNALITÉ : une aide pour accrocher les cordes au cerf-volant (l'emboîtement).
 //  - Après 8 secondes, chaque pièce à assembler (le bout libre de chaque corde) s'entoure d'un halo lumineux,
-//    puis, juste après, le point d'emboîtement au milieu du cerf-volant s'allume aussi (le même pour les deux cordes).
+//    puis le point d'emboîtement correspondant s'allume aussi.
 //  - Quand le joueur saisit une pièce, seul l'emplacement de destination de cette pièce reste éclairé.
 //  - Une pièce accrochée (son bout libre disparaît, script Fusion) : ses halos disparaissent.
 // À mettre sur l'objet "PieceDecoupee" (le cerf-volant : c'est là que les cordes s'accrochent).
@@ -80,14 +80,8 @@ public class AideEmboitement : MonoBehaviour
             bool haloDestination = presente && (tenue == i || (tenue < 0 && destinationsAllumees));
             halosDestinations[i].SetActive(haloDestination);
             if (haloDestination)
-                halosDestinations[i].transform.position = Destination(i);
+                halosDestinations[i].transform.position = transform.TransformPoint(PointAccroche.PositionLocale(i));
         }
-    }
-
-    // Le point d'emboîtement : le même pour les deux cordes, au milieu du cerf-volant (voir PointAccroche).
-    private Vector3 Destination(int i)
-    {
-        return transform.position;
     }
 
     private void OnDisable()

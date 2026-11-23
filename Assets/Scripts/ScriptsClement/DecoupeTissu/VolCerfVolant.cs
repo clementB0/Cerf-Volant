@@ -54,6 +54,10 @@ public class VolCerfVolant : MonoBehaviour
     private XRGrabInteractable prise;
     private Vector3 vitesse;
 
+    private bool cordeGaucheValidee;
+    private bool cordeDroiteValidee;
+    private bool assemblageAnnonce;
+
     private void Start()
     {
         prise = GetComponent<XRGrabInteractable>();
@@ -63,6 +67,14 @@ public class VolCerfVolant : MonoBehaviour
     public void Tomber()
     {
         finDeChute = Time.time + dureeChute;
+    }
+
+    internal void ConfirmerConnexion(Transform bout)
+    {
+        if (bout == boutCordeGauche)
+            cordeGaucheValidee = true;
+        else if (bout == boutCordeDroite)
+            cordeDroiteValidee = true;
     }
 
     private void OnDisable()
@@ -77,6 +89,13 @@ public class VolCerfVolant : MonoBehaviour
         bool cordesAccrochees =
             boutCordeGauche == null &&
             boutCordeDroite == null;
+
+        if (cordesAccrochees && cordeGaucheValidee && cordeDroiteValidee && !assemblageAnnonce)
+        {
+            assemblageAnnonce = true;
+            if (TryGetComponent<SuccessLink>(out var feedback) && feedback.isActiveAndEnabled)
+                feedback.Lancer();
+        }
 
         EnVol =
             cordesAccrochees &&

@@ -287,19 +287,22 @@ public class PaintableSurface : PenSurface
         return new Vector2Int(x, y);
     }
 
-    public override void DrawPenLine(Vector2Int start, Vector2Int end, Color color)
+    public override bool DrawPenLine(Vector2Int start, Vector2Int end, Color color)
     {
+        bool depose = false;
         int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
         for (int i = 0; i <= steps; i++)
         {
             float t = steps == 0 ? 0f : (float)i / steps;
-            Stamp(Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t)),
-                  Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t)), 4, color, 1f);
+            depose |= Stamp(Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t)),
+                            Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t)), 4, color, 1f);
         }
+        return depose;
     }
 
-    private void Stamp(int centreX, int centreY, int rayon, Color color, float opacity)
+    private bool Stamp(int centreX, int centreY, int rayon, Color color, float opacity)
     {
+        bool depose = false;
         for (int y = -rayon; y <= rayon; y++)
         {
             for (int x = -rayon; x <= rayon; x++)
@@ -357,9 +360,11 @@ public class PaintableSurface : PenSurface
                     }
                 }
 
-                textureDirty = true;
+                depose = true;
             }
         }
+        textureDirty |= depose;
+        return depose;
     }
 
     private void LateUpdate()
