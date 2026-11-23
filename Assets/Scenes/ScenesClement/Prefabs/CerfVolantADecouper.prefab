@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointeDuCutter: {fileID: 900000032}
-  distanceContact: 0.02
+  distanceContact: 0.08
 --- !u!1 &900000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,8 +259,6 @@ GameObject:
   - component: {fileID: 900000018}
   - component: {fileID: 900000019}
   - component: {fileID: 900000020}
-  - component: {fileID: 900000312}
-  - component: {fileID: 900000305}
   - component: {fileID: 900000300}
   - component: {fileID: 900000301}
   - component: {fileID: 900000302}
@@ -2487,33 +2485,3 @@ MonoBehaviour:
   inclinaison: 15
   hauteurRebord: 0.05
   epaisseur: 0.015
---- !u!114 &900000312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900000011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7d1a20ad715e9b7664f3193c661e4cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dureePleine: 6
-  rechargeParSecousse: 0.1
-  vitesseSecousse: 0.6
-  sonSecouer: {fileID: 8300000, guid: 6c3d6d817852f5340a7bb06477c1e1ec, type: 3}
---- !u!114 &900000305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900000011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a4de9f0d8e4b2ac500f617b910fa318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sonSpray: {fileID: 8300000, guid: a24e85dfa927d1747882897e9d59e09b, type: 3}
-  volume: 0.4

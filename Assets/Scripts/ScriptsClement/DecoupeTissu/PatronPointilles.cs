@@ -46,6 +46,9 @@ public class PatronPointilles : MonoBehaviour
     // La forme, en lecture seule, pour que PieceDecoupee ait exactement la même.
     public FormeCerfVolant Forme => forme;
 
+    // La distance de découpe, en lecture seule, pour que TraceurCutter dessine la zone de coupe dans la vue Scene.
+    public float RayonContact => rayonContact;
+
     // Appelé par ChoixCerfVolant quand on choisit un cerf-volant dans le menu (avant que le tissu apparaisse).
     public void ChangerForme(FormeCerfVolant nouvelleForme)
     {
