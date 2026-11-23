@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class Pen : MonoBehaviour
 {
@@ -17,8 +18,11 @@ public class Pen : MonoBehaviour
 
     [Header("Son du tracé")]
     [SerializeField] private AudioClip sonTrait;
+    [SerializeField, Range(0f, 1f)] private float volumeTrait = 1f;
     private AudioSource sourceTrait;
     private float dernierMouvement;
+    [SerializeField, Range(0f, 1f)] private float vibrationTrace = 0.09f;
+    private float prochaineVibration;
 
     [Header("Détection de la pointe")]
     [Tooltip("Portée de chaque côté de la pointe, en mètres.")]
@@ -37,10 +41,11 @@ public class Pen : MonoBehaviour
             sourceTrait.playOnAwake = false;
             sourceTrait.clip = sonTrait;
             sourceTrait.loop = true;
-            sourceTrait.spatialBlend = 1f;
+            sourceTrait.spatialBlend = 0.35f;
             sourceTrait.dopplerLevel = 0f;
-            sourceTrait.minDistance = 0.25f;
-            sourceTrait.volume = 0.55f;
+            sourceTrait.minDistance = 1f;
+            sourceTrait.priority = 64;
+            sourceTrait.volume = volumeTrait;
         }
         if (indicateur != null)
         {
@@ -56,6 +61,7 @@ public class Pen : MonoBehaviour
         if (sourceTrait != null)
             sourceTrait.Stop();
         zonePrecedente = null;
+        prochaineVibration = 0f;
         toucheSurface = false;
     }
 
@@ -80,23 +86,28 @@ public class Pen : MonoBehaviour
         }
 
         toucheSurface = zone != null;
-        bool prolongeTrait = toucheSurface && zone == zonePrecedente && point != pixelTouche;
-        if (toucheSurface)
+        bool trace = toucheSurface && (zone != zonePrecedente || point != pixelTouche);
+        if (trace)
         {
-            if (zone != zonePrecedente || point != pixelTouche)
-                zone.DrawPenLine(zone == zonePrecedente ? pixelTouche : point, point, couleurMine);
+            zone.DrawPenLine(zone == zonePrecedente ? pixelTouche : point, point, couleurMine);
+            if (Time.unscaledTime >= prochaineVibration && prise != null &&
+                prise.firstInteractorSelecting is XRBaseInputInteractor manette)
+            {
+                manette.SendHapticImpulse(vibrationTrace, 0.035f);
+                prochaineVibration = Time.unscaledTime + 0.05f;
+            }
             pixelTouche = point;
         }
         if (sourceTrait != null)
         {
-            if (prolongeTrait)
+            if (trace)
             {
                 dernierMouvement = Time.unscaledTime;
                 if (!sourceTrait.isPlaying)
                     sourceTrait.Play();
             }
             else if (sourceTrait.isPlaying &&
-                     (zone == null || zone != zonePrecedente || Time.unscaledTime - dernierMouvement >= 0.08f))
+                     (zone == null || Time.unscaledTime - dernierMouvement >= 0.15f))
             {
                 sourceTrait.Stop();
             }

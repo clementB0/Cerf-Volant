@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(XRGrabInteractable))]
 public class SprayInput : MonoBehaviour
 {
     private XRGrabInteractable grab;
+    [SerializeField, Range(0f, 1f)] private float vibrationDeclenchement = 0.16f;
     private bool triggerHeld;
 
     // Lu par SprayPainter pour peindre et par SprayConeVFX pour afficher le jet.
@@ -38,7 +40,12 @@ public class SprayInput : MonoBehaviour
 
     private void OnActivated(ActivateEventArgs args)
     {
-        triggerHeld = grab.isSelected;
+        if (triggerHeld || !grab.isSelected || args.interactorObject != grab.firstInteractorSelecting)
+            return;
+
+        triggerHeld = true;
+        if (grab.firstInteractorSelecting is XRBaseInputInteractor manette)
+            manette.SendHapticImpulse(vibrationDeclenchement, 0.055f);
     }
 
     private void OnDeactivated(DeactivateEventArgs args)

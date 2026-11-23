@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 453607819}
   - component: {fileID: 453607818}
   - component: {fileID: 453607820}
+  - component: {fileID: 8462100000000000001}
   m_Layer: 0
   m_Name: Pen
   m_TagString: Pen
@@ -635,6 +636,20 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &8462100000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453607812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f288a25e14ae4ed58449200231f5096e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonPriseOutil
+  sonPrise: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
+  volume: 0.8
 --- !u!114 &453607820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,7 +663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pen
   tip: {fileID: 217299374}
-  sonTrait: {fileID: 8300000, guid: 0dd32207139116e4393c0b85b9da2078, type: 3}
+  sonTrait: {fileID: 8300000, guid: 4e6fc74557d54cba9bc5207afc6047a3, type: 3}
   zonesAutorisees:
   - {fileID: 2034624229}
   contactTolerance: 0.015

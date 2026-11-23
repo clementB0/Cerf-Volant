@@ -4884,6 +4884,7 @@ GameObject:
   - component: {fileID: 1504822642489443854}
   - component: {fileID: 6223259374829655826}
   - component: {fileID: 6382158557451676238}
+  - component: {fileID: 8462100000000000001}
   m_Layer: 0
   m_Name: RedSprayCan
   m_TagString: Untagged
@@ -5108,6 +5109,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayColor
   paintColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &8462100000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f288a25e14ae4ed58449200231f5096e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonPriseOutil
+  sonPrise: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
+  volume: 0.8
 --- !u!114 &1504822642489443854
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,8 @@ public class SonPrise : MonoBehaviour
         foreach (XRGrabInteractable objet in FindObjectsByType<XRGrabInteractable>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             // "selectEntered" = une main vient de l'attraper.
-            objet.selectEntered.AddListener(QuandOnAttrape);
+            if (!objet.TryGetComponent<SonPriseOutil>(out _))
+                objet.selectEntered.AddListener(QuandOnAttrape);
         }
     }
 
