@@ -13,7 +13,7 @@ public class AideDecoupe : MonoBehaviour
     [SerializeField] private float attente = 5f;             // l'aide revient après 5 secondes sans découper
     [SerializeField] private float vitesse = 0.05f;          // le segment avance de 5 cm par seconde (lentement)
     [SerializeField] private float longueurSegment = 0.04f;  // il fait 4 cm de long
-    [SerializeField] private Color couleurSegment = new Color(1f, 0.95f, 0.6f); // un jaune très clair, lumineux
+    [SerializeField] private Color couleurSegment = new Color(1f, 0.55f, 0.1f); // orange vif : il se voit sur le tissu blanc
     [SerializeField, Range(0f, 1f)] private float opaciteFantome = 0.35f;     // le fantôme est transparent
 
     private PatronPointilles patron;
@@ -42,10 +42,10 @@ public class AideDecoupe : MonoBehaviour
         segment.GetComponent<Renderer>().material = lumiere;
         segment.SetActive(false);
 
-        // Le fantôme : une copie des formes du cutter (sans ses scripts), en blanc transparent.
+        // Le fantôme : une copie des formes du cutter (sans ses scripts), en bleu clair transparent.
         fantome = new GameObject("AideDecoupe_CutterFantome");
         Material transparent = new Material(Shader.Find("Sprites/Default")); // un matériau simple qui gère la transparence
-        transparent.color = new Color(1f, 1f, 1f, opaciteFantome);
+        transparent.color = new Color(0.45f, 0.65f, 1f, opaciteFantome); // bleu clair : il se voit sur le tissu blanc
         foreach (MeshFilter forme in cutter.GetComponentsInChildren<MeshFilter>(true))
         {
             GameObject morceau = new GameObject(forme.name);

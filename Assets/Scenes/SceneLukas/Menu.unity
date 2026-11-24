@@ -1207,8 +1207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PatronPointilles
   forme: {fileID: 0}
   traceOuvert:
-  - {x: -0.215, y: 0}
-  - {x: 0.215, y: 0}
+  - {x: -0.2, y: -0.07}
+  - {x: 0.2, y: 0.07}
   ecartEntreTraits: 0.047
   epaisseurTrait: 0.007
   materiauTrait: {fileID: 2100000, guid: ec387c3d2353ffc8715eb42834acf300, type: 2}

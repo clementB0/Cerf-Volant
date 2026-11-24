@@ -16,7 +16,7 @@ public class PatronPointilles : MonoBehaviour
 
     [SerializeField] private float ecartEntreTraits = 0.06f; // un trait tous les 6 cm (le trait fait la moitié : 3 cm)
     [SerializeField] private float epaisseurTrait = 0.01f;   // 1 cm (la fente fait la moitié : 5 mm)
-    [SerializeField] private Material materiauTrait;         // couleur des traits (blanc)
+    [SerializeField] private Material materiauTrait;         // couleur des traits (Pointilles.mat : bleu, visible sur le tissu blanc)
     [SerializeField] private float rayonContact = 0.02f;     // un trait se relie si la pointe du cutter passe à moins de 2 cm
     [SerializeField] private Material materiauDecoupe;       // couleur de la fente une fois découpé (presque noir : Fente.mat)
     [SerializeField] private AudioClip sonDecoupe;           // petit "tic" joué à chaque trait découpé (SonDecoupe.wav)
@@ -79,10 +79,17 @@ public class PatronPointilles : MonoBehaviour
         CreerPapiers();
 
         bool utiliserTraceOuvert = traceOuvert != null && traceOuvert.Length >= 2;
+        if (!utiliserTraceOuvert && forme == null)
+        {
+            Debug.LogError("PatronPointilles : rien à découper. Remplis \"Forme\" (un cerf-volant) ou \"Trace Ouvert\" (au moins 2 points) dans l'Inspector.", this);
+            enabled = false;
+            return;
+        }
         Vector2[] coins = utiliserTraceOuvert ? traceOuvert : forme.Coins;
         int nombreDeCotes = utiliserTraceOuvert ? coins.Length - 1 : coins.Length;
 
-        // Un contour fermé relie aussi le dernier coin au premier.
+        // On relie chaque coin au suivant. Un contour fermé relie aussi le dernier coin au premier (le "% coins.Length") ;
+        // un tracé ouvert s'arrête au dernier point.
         for (int i = 0; i < nombreDeCotes; i++)
         {
             Vector2 depart = coins[i];
@@ -239,8 +246,8 @@ public class PatronPointilles : MonoBehaviour
     // Appelé par TraceurCutter avec la position de la pointe du cutter : relie les traits tout près d'elle.
     public void RelierTraitsPres(Vector3 positionPointe)
     {
-        // Pendant que le tissu tourne, ou une fois tout découpé, on ne découpe pas.
-        if (attendLaSuite || toutEstRelie)
+        // Pendant que le tissu tourne, une fois tout découpé, ou si les pointillés n'ont pas pu être créés : on ne découpe pas.
+        if (attendLaSuite || toutEstRelie || etapes.Count == 0)
             return;
 
         // Seuls les traits de l'étape en cours peuvent être découpés.

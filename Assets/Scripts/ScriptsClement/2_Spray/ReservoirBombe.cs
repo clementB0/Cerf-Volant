@@ -6,14 +6,14 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 // FONCTIONNALITÉ : la bombe de peinture se vide, et il faut la secouer pour la recharger.
 //  - Elle a une charge (1 = pleine, 0 = vide) qui baisse pendant qu'on peint.
 //  - Vide : elle ne peint plus, et la manette qui la tient vibre très fort.
-//  - On la secoue (des allers-retours rapides avec la main) : "cling cling", elle se recharge un peu à chaque secousse.
+//  - On la secoue (des allers-retours rapides avec la main) : "cling cling", 3 secousses suffisent pour la remplir.
 //  - Vide : "Secoue !" et deux flèches (en haut et en bas) qui montent et descendent autour d'elle, jusqu'à ce qu'elle soit pleine.
 // À mettre sur une bombe de peinture (dans la scène), à côté de son script SprayInput.
 public class ReservoirBombe : MonoBehaviour
 {
     [SerializeField] private Color couleurAide = new Color(1f, 0.85f, 0.2f); // le "Secoue !" et les flèches : jaune vif
     [SerializeField] private float dureePleine = 6f;          // pleine, elle peint pendant 6 secondes
-    [SerializeField] private float rechargeParSecousse = 0.1f; // chaque secousse rend 10 % : 10 secousses = pleine
+    [SerializeField] private int secoussesPourRemplir = 3;     // 3 secousses suffisent pour la remplir entièrement (très vite)
     [SerializeField] private float vitesseSecousse = 0.6f;     // en dessous de 0,6 m/s, ce n'est pas une secousse (juste un mouvement)
     [SerializeField] private AudioClip sonSecouer;             // le "cling cling" de la bille dans la bombe (PaintShake.mp3)
     [SerializeField, Range(0f, 1f)] private float volumeSecouer = 0.8f;
@@ -72,7 +72,7 @@ public class ReservoirBombe : MonoBehaviour
         bool assezVite = ancienneVitesse.magnitude > vitesseSecousse;
         if (prise.isSelected && changeDeSens && assezVite)
         {
-            Charge = Mathf.Min(1f, Charge + rechargeParSecousse);
+            Charge = Mathf.Min(1f, Charge + 1f / Mathf.Max(1, secoussesPourRemplir));
             if (!hautParleur.isPlaying && sonSecouer != null)
                 hautParleur.Play(); // "cling cling"
             Vibrer(0.3f, 0.05f);    // petit tac dans la main à chaque secousse

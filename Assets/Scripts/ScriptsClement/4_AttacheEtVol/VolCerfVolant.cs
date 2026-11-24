@@ -18,13 +18,16 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float rafales = 0.4f;
 
     [Header("Portance")]
-    [SerializeField] private float portanceMainsBasses = 5.5f;
-    [SerializeField] private float portanceMainsHautes = 10.5f;
+    [SerializeField] private float portanceMainsBasses = 4f;   // mains basses : il descend nettement
+    [SerializeField] private float portanceMainsHautes = 13f;  // mains hautes : il monte nettement
     [SerializeField] private float frottement = 1f;
     [SerializeField] private float angleDAttaque = 20f;
 
     [Header("Direction")]
     [SerializeField] private float angleDeVirageMax = 60f;
+    [SerializeField] private float sensibiliteVirage = 1.6f;      // plus grand = il tourne avec moins d'écart de hauteur entre les mains (1 = pente des mains telle quelle)
+    [SerializeField] private float lissageVirage = 0.4f;          // il met environ 0,4 s à suivre un changement gauche/droite des mains (0 = tout de suite)
+    [SerializeField] private float amplitudeHauteurMains = 0.2f;  // de mains basses à mains hautes en 20 cm de mouvement : le haut/bas suit bien les mains
 
     [Header("Sol et chute")]
     [SerializeField] private float hauteurDuSol = 0.3f;
@@ -54,6 +57,7 @@ public class VolCerfVolant : MonoBehaviour
 
     private bool aTerre;
     private float finDeChute;
+    private float pencheLisse;           // la pente des mains, lissée (gauche/droite moins direct)
     private float ancienneHauteurGauche; // la hauteur des poignées à l'image d'avant (pour savoir si elles montent)
     private float ancienneHauteurDroite;
     private float prochaineVibration;
@@ -239,8 +243,12 @@ public class VolCerfVolant : MonoBehaviour
         // 4. CONTRÔLE AVEC LES POIGNÉES
         // =========================================
 
-        float penche = -(droite - gauche).normalized.y;
-        float virage = penche * angleDeVirageMax;
+        // Une main un peu plus basse que l'autre suffit : la pente des mains est amplifiée (sensibiliteVirage),
+        // ex. 10 cm d'écart de hauteur (mains à 40 cm l'une de l'autre) = déjà plus de la moitié du virage maximum.
+        float penche = Mathf.Clamp(-(droite - gauche).normalized.y * sensibiliteVirage, -1f, 1f);
+        // Lissé : le gauche/droite suit les mains en douceur, sans copier chaque petit mouvement.
+        pencheLisse = lissageVirage > 0f ? Mathf.Lerp(pencheLisse, penche, 1f - Mathf.Exp(-dt / lissageVirage)) : penche;
+        float virage = pencheLisse * angleDeVirageMax;
 
         float azimut = Vector3.SignedAngle(
             Vector3.ProjectOnPlane(Vent, Vector3.up),
@@ -251,7 +259,7 @@ public class VolCerfVolant : MonoBehaviour
         Vector3 cote = Vector3.Cross(tete, fil);
 
         float inclinaison = Mathf.Clamp(
-            (virage - azimut) * 2f
+            (virage - azimut) * 2f // il suit le virage demandé sans à-coup
             - Vector3.Dot(vitesse, cote) * 25f,
             -60f,
             60f
@@ -279,9 +287,12 @@ public class VolCerfVolant : MonoBehaviour
 
         if (Camera.main != null)
         {
+            // Les mains au milieu = 50 cm sous les yeux. De là, monter ou descendre les mains de la moitié de
+            // "amplitudeHauteurMains" (10 cm) suffit pour la portance la plus forte ou la plus faible.
+            float milieuMains = Camera.main.transform.position.y - 0.5f;
             mainsHautes = Mathf.InverseLerp(
-                Camera.main.transform.position.y - 0.9f,
-                Camera.main.transform.position.y - 0.1f,
+                milieuMains - amplitudeHauteurMains / 2f,
+                milieuMains + amplitudeHauteurMains / 2f,
                 milieu.y
             );
         }

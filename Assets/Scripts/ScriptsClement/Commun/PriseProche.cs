@@ -30,6 +30,9 @@ public static class PriseProche
             main.nearCasterSortingStrategy = NearFarInteractor.NearCasterSortingStrategy.ClosestPointOnCollider;
             if (main.nearInteractionCaster is SphereInteractionCaster sphere)
                 sphere.castRadius = porteeProche;
+            // Avec une manette : chercher et attraper depuis la poignée (la main), pas depuis le bout de la manette.
+            if (!main.TryGetComponent(out PointDePriseMain _))
+                main.gameObject.AddComponent<PointDePriseMain>();
         }
     }
 }

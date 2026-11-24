@@ -58,7 +58,7 @@ MonoBehaviour:
   attente: 5
   vitesse: 0.05
   longueurSegment: 0.04
-  couleurSegment: {r: 1, g: 0.95, b: 0.6, a: 1}
+  couleurSegment: {r: 1, g: 0.55, b: 0.1, a: 1}
   opaciteFantome: 0.35
 --- !u!4 &900000002
 Transform:
@@ -147,7 +147,7 @@ MonoBehaviour:
   forme: {fileID: 11400000, guid: 5b4213a761a1b890f4687e4397d81618, type: 2}
   ecartEntreTraits: 0.06
   epaisseurTrait: 0.01
-  materiauTrait: {fileID: 2100000, guid: ec387c3d2353ffc8715eb42834acf300, type: 2}
+  materiauTrait: {fileID: 2100000, guid: b3cba02afaae46b8ab944f6c6e1f183d, type: 2}
   rayonContact: 0.02
   materiauDecoupe: {fileID: 2100000, guid: 3b8f2c6e1a9d4f7b8e5c2a1d0b6f9e47, type: 2}
   sonDecoupe: {fileID: 8300000, guid: 7c1e5a0d2b4f4e8a9d3c6b1a0f2e4d51, type: 3}
@@ -679,8 +679,8 @@ MonoBehaviour:
   directionDuVent: {x: 0, y: 0, z: 1}
   vitesseDuVent: 6
   rafales: 0.4
-  portanceMainsBasses: 5.5
-  portanceMainsHautes: 10.5
+  portanceMainsBasses: 4
+  portanceMainsHautes: 13
   frottement: 1
   angleDAttaque: 20
   angleDeVirageMax: 60
@@ -821,7 +821,7 @@ MonoBehaviour:
   vitesseOiseau: 1.5
   distanceDepart: 6
   precision: 0.4
-  tailleOiseau: 0.15
+  modeleOiseau: {fileID: 919132149155446097, guid: 7c532aeafe8344c9a7fdedba379d82c5, type: 3}
   rayonTouche: 0.3
   sonPassage: {fileID: 8300000, guid: d88d03c390e3c524194ce99fb84c640b, type: 3}
 --- !u!114 &900000310
@@ -2695,7 +2695,7 @@ Transform:
   m_GameObject: {fileID: 2051945548}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: -0.4, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
