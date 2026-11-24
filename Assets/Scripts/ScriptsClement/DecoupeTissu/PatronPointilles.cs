@@ -54,6 +54,9 @@ public class PatronPointilles : MonoBehaviour
     public List<Transform> TraitsEnCours => attendLaSuite || toutEstRelie || etapes.Count == 0 ? null : etapes[etapeEnCours];
     // ... et le moment de la dernière action du joueur (un trait découpé, ou une nouvelle étape apparue).
     public float DerniereActivite { get; private set; }
+    // Le moment du dernier trait vraiment découpé (pas les nouvelles étapes). "Jamais" au début.
+    // Lu par TraceurCutter (vibrer seulement en découpant) et AideDecoupe (cacher le fantôme pendant qu'on découpe).
+    public float DerniereDecoupe { get; private set; } = float.NegativeInfinity;
 
     // Prévient quand une étape est finie (EtoilesEtape s'en sert), avec l'endroit du dernier trait découpé.
     public event System.Action<Vector3> EtapeFinie;
@@ -254,6 +257,7 @@ public class PatronPointilles : MonoBehaviour
                 traitsPasRelies.RemoveAt(i);
                 dernierTrait = trait.position;
                 DerniereActivite = Time.time; // le joueur découpe : il n'est pas inactif
+                DerniereDecoupe = Time.time;
 
                 // Petit "tic", un peu plus aigu ou plus grave à chaque fois pour que ce ne soit pas toujours le même.
                 hautParleur.pitch = Random.Range(0.9f, 1.2f);

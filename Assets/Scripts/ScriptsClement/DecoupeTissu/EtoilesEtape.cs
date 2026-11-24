@@ -11,6 +11,7 @@ public class EtoilesEtape : MonoBehaviour
     [SerializeField] private int nombre = 16;                   // combien d'étoiles à chaque fois
     [SerializeField] private float vitesse = 0.5f;              // à quelle vitesse elles s'envolent (mètres par seconde)
     [SerializeField] private float taille = 0.03f;              // leur taille (3 cm)
+    [SerializeField] private float hauteur = 0.05f;             // elles jaillissent 5 cm au-dessus du dernier trait
     [SerializeField] private Color couleur1 = new Color(1f, 0.85f, 0.2f); // jaune doré
     [SerializeField] private Color couleur2 = Color.white;      // chaque étoile a une couleur entre les deux
 
@@ -81,7 +82,7 @@ public class EtoilesEtape : MonoBehaviour
     // Une étape est finie : les étoiles jaillissent de cet endroit, avec le son.
     private void Lancer(Vector3 endroit)
     {
-        etoiles.transform.position = endroit;
+        etoiles.transform.position = endroit + Vector3.up * hauteur;
         etoiles.Emit(nombre);
         if (sonEtoiles != null)
             hautParleur.PlayOneShot(sonEtoiles, volume);

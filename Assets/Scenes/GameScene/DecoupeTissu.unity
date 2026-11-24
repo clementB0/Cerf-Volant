@@ -1748,7 +1748,7 @@ MonoBehaviour:
   - {fileID: 900000520}
   - {fileID: 900000530}
   - {fileID: 900000540}
-  attente: 8
+  attente: 5
   decalage: 0.35
   pause: 1.2
   dureeAnimation: 0.8
@@ -1773,7 +1773,7 @@ MonoBehaviour:
   - {fileID: 900000701}
   - {fileID: 900000702}
   - {fileID: 900000703}
-  attente: 8
+  attente: 5
   decalage: 0.35
   pause: 1.2
   dureeAnimation: 0.8
@@ -1801,7 +1801,7 @@ MonoBehaviour:
   - {fileID: 1117417492}
   - {fileID: 1117417491}
   - {fileID: 1117417490}
-  attente: 8
+  attente: 5
   decalage: 0.35
   pause: 1.2
   dureeAnimation: 0.8

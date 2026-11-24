@@ -4,9 +4,18 @@ using UnityEngine.UI;
 
 // FONCTIONNALITÉ : au lancement, on se réveille. Deux paupières noires couvrent la vue,
 // s'entrouvrent, se referment (on cligne un peu)... puis s'ouvrent complètement et disparaissent.
-// À mettre sur un objet présent dès le début de la scène (par exemple "ChoixCerfVolant").
+// Rien à poser dans la scène : il se crée tout seul au lancement du jeu.
 public class OuvertureYeux : MonoBehaviour
 {
+    // Au lancement (une seule fois, après le chargement de la première scène) : on crée l'effet,
+    // sauf s'il a déjà été posé à la main sur un objet.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void AuLancement()
+    {
+        if (FindFirstObjectByType<OuvertureYeux>() == null)
+            new GameObject("OuvertureYeux").AddComponent<OuvertureYeux>();
+    }
+
     // L'ouverture des yeux dans le temps : 0 = fermés, 1 = grands ouverts. Le temps est en secondes.
     [SerializeField] private AnimationCurve ouverture = new AnimationCurve(
         new Keyframe(0f, 0f),

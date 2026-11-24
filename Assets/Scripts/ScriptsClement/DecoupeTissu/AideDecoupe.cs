@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-// FONCTIONNALITÉ : une aide quand le joueur ne découpe plus. Après 16 secondes sans découper (ou depuis qu'une étape est apparue) :
+// FONCTIONNALITÉ : une aide pour découper. Dès qu'on prend le cutter dans la main :
 //  - un petit segment lumineux avance lentement le long des pointillés qui restent à découper ;
 //  - un cutter "fantôme" (transparent) le suit, la lame posée sur le tissu, pour montrer le geste.
-// Tout disparaît dès que le joueur découpe un trait.
+// Tout disparaît dès que le joueur découpe un trait, et revient après 5 secondes sans découper.
 // À mettre sur l'objet "Tissu", avec PatronPointilles et TraceurCutter.
 [RequireComponent(typeof(PatronPointilles), typeof(TraceurCutter))]
 public class AideDecoupe : MonoBehaviour
 {
-    [SerializeField] private float attente = 16f;            // l'aide apparaît après 16 secondes sans découper
+    [SerializeField] private float attente = 5f;             // l'aide revient après 5 secondes sans découper
     [SerializeField] private float vitesse = 0.05f;          // le segment avance de 5 cm par seconde (lentement)
     [SerializeField] private float longueurSegment = 0.04f;  // il fait 4 cm de long
     [SerializeField] private Color couleurSegment = new Color(1f, 0.95f, 0.6f); // un jaune très clair, lumineux
@@ -19,6 +19,7 @@ public class AideDecoupe : MonoBehaviour
     private PatronPointilles patron;
     private Transform pointe;         // le bout de la lame du vrai cutter
     private Transform cutter;         // le vrai cutter (l'objet qu'on attrape)
+    private XRGrabInteractable prise; // sait si on tient le cutter
     private Vector3 pointeDansLeCutter; // où est la pointe, vue depuis le cutter (pour placer le fantôme pareil)
     private GameObject segment;
     private GameObject fantome;
@@ -28,7 +29,8 @@ public class AideDecoupe : MonoBehaviour
     {
         patron = GetComponent<PatronPointilles>();
         pointe = GetComponent<TraceurCutter>().Pointe;
-        cutter = pointe.GetComponentInParent<XRGrabInteractable>().transform;
+        prise = pointe.GetComponentInParent<XRGrabInteractable>();
+        cutter = prise.transform;
         pointeDansLeCutter = cutter.InverseTransformPoint(pointe.position);
 
         // Le segment lumineux : un petit bâton allongé, couleur unie et vive.
@@ -62,8 +64,9 @@ public class AideDecoupe : MonoBehaviour
     private void Update()
     {
         List<Transform> traits = patron.TraitsEnCours;
-        bool montrer = traits != null && traits.Count > 0 && cutter.gameObject.activeInHierarchy
-                       && Time.time - patron.DerniereActivite > attente;
+        // Cutter en main, et pas de découpe depuis 5 secondes (ou jamais découpé : tout de suite).
+        bool montrer = traits != null && traits.Count > 0 && cutter.gameObject.activeInHierarchy && prise.isSelected
+                       && Time.time - patron.DerniereDecoupe > attente;
         segment.SetActive(montrer);
         fantome.SetActive(montrer);
         if (!montrer)

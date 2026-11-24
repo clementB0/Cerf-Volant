@@ -10,7 +10,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class SautillementAttente : MonoBehaviour
 {
     [SerializeField] private GameObject[] objets;            // les objets qui sautillent
-    [SerializeField] private float attente = 8f;             // ils commencent après 8 secondes sans qu'on les touche
+    [SerializeField] private float attente = 5f;             // ils commencent après 5 secondes sans qu'on les touche
     [SerializeField] private float decalage = 0.35f;         // le suivant commence 0,35 seconde après le précédent
     [SerializeField] private float pause = 1.2f;             // pause après le dernier, avant de recommencer
     [SerializeField] private float dureeAnimation = 0.8f;    // l'animation d'un objet dure 0,8 seconde

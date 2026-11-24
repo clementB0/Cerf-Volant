@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5adc29daf95b4be385aa258faec5c0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attente: 16
+  attente: 5
   vitesse: 0.05
   longueurSegment: 0.04
   couleurSegment: {r: 1, g: 0.95, b: 0.6, a: 1}
@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objets:
   - {fileID: 900000021}
-  attente: 8
+  attente: 5
   decalage: 0.35
   pause: 1.2
   hauteur: 0.04
