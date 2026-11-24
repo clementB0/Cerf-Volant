@@ -11,6 +11,8 @@ public class PatronPointilles : MonoBehaviour
     // La forme à découper (un fichier "Forme" : Papillon, Raie, Dragon... dans ScenesClement/Formes).
     // Pour changer de cerf-volant, glisser une autre forme ici dans l'Inspector.
     [SerializeField] private FormeCerfVolant forme;
+    [Tooltip("Points d'un tracé ouvert. Si la liste est vide, le contour fermé de la forme est utilisé.")]
+    [SerializeField] private Vector2[] traceOuvert;
 
     [SerializeField] private float ecartEntreTraits = 0.06f; // un trait tous les 6 cm (le trait fait la moitié : 3 cm)
     [SerializeField] private float epaisseurTrait = 0.01f;   // 1 cm (la fente fait la moitié : 5 mm)
@@ -76,10 +78,12 @@ public class PatronPointilles : MonoBehaviour
 
         CreerPapiers();
 
-        Vector2[] coins = forme.Coins;
+        bool utiliserTraceOuvert = traceOuvert != null && traceOuvert.Length >= 2;
+        Vector2[] coins = utiliserTraceOuvert ? traceOuvert : forme.Coins;
+        int nombreDeCotes = utiliserTraceOuvert ? coins.Length - 1 : coins.Length;
 
-        // On relie chaque coin au suivant. Le "% coins.Length" fait revenir le dernier coin au premier : la forme est fermée.
-        for (int i = 0; i < coins.Length; i++)
+        // Un contour fermé relie aussi le dernier coin au premier.
+        for (int i = 0; i < nombreDeCotes; i++)
         {
             Vector2 depart = coins[i];
             Vector2 arrivee = coins[(i + 1) % coins.Length];
