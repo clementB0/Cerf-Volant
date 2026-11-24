@@ -27,6 +27,9 @@ public class PieceDecoupee : MonoBehaviour
 
     public bool EstConstruite => maillage != null;
 
+    // Vrai une fois la peinture validée (bouton "Passer au montage") : PresentoirCerfVolant fait alors disparaître le chevalet.
+    public bool PriseFinaleAutorisee { get; private set; }
+
     private void Awake()
     {
         Construire();
@@ -163,6 +166,7 @@ public class PieceDecoupee : MonoBehaviour
     {
         if (!EstConstruite)
             return;
+        PriseFinaleAutorisee = true;
 
         // Le collider de peinture ne sert plus.
         colliderPeinture.enabled = false;

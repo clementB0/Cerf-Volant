@@ -3,6 +3,7 @@ using UnityEngine;
 
 // FONCTIONNALITÉ : quand la découpe est finie, le cerf-volant fait "pouf" et réapparaît sur un petit chevalet
 // posé sur la table (comme une petite toile de peintre), un peu incliné vers l'arrière, face au joueur.
+// Une fois la peinture validée (bouton "Passer au montage"), le chevalet disparaît dans un pouf.
 // À mettre sur l'objet "PieceDecoupee" : il apparaît pile à la fin de la découpe, donc son Start = "découpe finie".
 public class PresentoirCerfVolant : MonoBehaviour
 {
@@ -52,15 +53,23 @@ public class PresentoirCerfVolant : MonoBehaviour
         float demiLargeur = forme.extents.x * echelle;
         Vector3 centre = rebord + hautToile * bas;
         transform.SetPositionAndRotation(centre, Quaternion.LookRotation(dosToile, hautToile));
+        // Pile au milieu du chevalet : le milieu de la forme n'est pas toujours son point (0, 0) (ex. la raie, plus large d'un côté).
+        transform.position -= transform.right * (forme.center.x * transform.lossyScale.x);
 
         // 4) Le chevalet autour, puis pouf là où il apparaît.
-        ConstruirePresentoir(surTable, rebord, centre + hautToile * haut, droite, devant, hautToile, dosToile, demiLargeur);
+        GameObject presentoir = ConstruirePresentoir(surTable, rebord, centre + hautToile * haut, droite, devant, hautToile, dosToile, demiLargeur);
         Pouf(centre);
+
+        // 5) La peinture est validée (bouton "Passer au montage") : le chevalet ne sert plus, il disparaît dans un pouf.
+        PieceDecoupee piece = GetComponent<PieceDecoupee>();
+        yield return new WaitUntil(() => piece == null || piece.PriseFinaleAutorisee);
+        Pouf(surTable + hautToile * 0.1f);
+        Destroy(presentoir);
     }
 
     // Un petit chevalet comme ceux des toiles miniatures : un rebord, deux pieds écartés devant,
     // un montant derrière la toile qui dépasse en haut, et un pied d'appui derrière.
-    private void ConstruirePresentoir(Vector3 surTable, Vector3 rebord, Vector3 sommetToile, Vector3 droite, Vector3 devant,
+    private GameObject ConstruirePresentoir(Vector3 surTable, Vector3 rebord, Vector3 sommetToile, Vector3 droite, Vector3 devant,
                                       Vector3 hautToile, Vector3 dosToile, float demiLargeur)
     {
         GameObject presentoir = new GameObject("Presentoir");
@@ -81,6 +90,7 @@ public class PresentoirCerfVolant : MonoBehaviour
 
         // Le pied d'appui : du milieu du montant jusqu'à la table, loin derrière : c'est lui qui tient tout incliné.
         Baguette(presentoir, Vector3.Lerp(piedMontant, hautMontant, 0.6f), surTable + devant * 0.12f);
+        return presentoir;
     }
 
     // Une baguette de bois (un cube très allongé) qui va d'un point à un autre.

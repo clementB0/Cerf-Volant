@@ -4,7 +4,7 @@ using UnityEngine;
 // posé à plat, ça bougerait vers le haut et vers le bas).
 // Chaque aile pivote en entier autour du bord du corps, comme une charnière (le corps, lui, ne bouge pas).
 // La largeur du corps vient de la forme (Papillon, Raie, Dragon : champ "Corps", mesurée sur les modèles 3D).
-// Il commence en douceur au décollage et s'arrête quand il ne vole plus.
+// Il commence en douceur au décollage et s'arrête quand il ne vole plus ou quand il tombe (touché par un oiseau).
 // À mettre sur l'objet "PieceDecoupee", avec VolCerfVolant et GonflementCerfVolant.
 // Il passe juste après GonflementCerfVolant (qui redessine le tissu gonflé à chaque image) et ajoute le battement par-dessus.
 [DefaultExecutionOrder(100)]
@@ -41,7 +41,8 @@ public class BattementAiles : MonoBehaviour
     // LateUpdate, après GonflementCerfVolant (ordre 100) : le tissu vient d'être redessiné, on ajoute le battement.
     private void LateUpdate()
     {
-        force = Mathf.MoveTowards(force, vol.EnVol ? 1f : 0f, Time.deltaTime / tempsPourDemarrer);
+        // Il bat des ailes en vol, mais pas quand il tombe (touché par un oiseau) : les ailes se reposent.
+        force = Mathf.MoveTowards(force, vol.EnVol && !vol.Tombe ? 1f : 0f, Time.deltaTime / tempsPourDemarrer);
         Mesh maillage = filtre.sharedMesh;
 
         // Seulement sur le tissu de GonflementCerfVolant : il est redessiné à chaque image, donc le battement ne s'additionne pas.

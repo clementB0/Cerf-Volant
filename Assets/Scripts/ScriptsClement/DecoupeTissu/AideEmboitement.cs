@@ -20,9 +20,11 @@ public class AideEmboitement : MonoBehaviour
     private GameObject[] halosDestinations;
     private Material lumiere;     // transparent, pour que les halos laissent voir ce qu'ils entourent
     private float attenteEcoulee; // depuis combien de temps la phase a commencé
+    private PointAccroche accroche; // sait où sont les points d'emboîtement
 
     private void Start()
     {
+        accroche = GetComponent<PointAccroche>();
         lumiere = new Material(Shader.Find("Sprites/Default"));
         halosPieces = new GameObject[pieces.Length];
         halosDestinations = new GameObject[pieces.Length];
@@ -80,7 +82,7 @@ public class AideEmboitement : MonoBehaviour
             bool haloDestination = presente && (tenue == i || (tenue < 0 && destinationsAllumees));
             halosDestinations[i].SetActive(haloDestination);
             if (haloDestination)
-                halosDestinations[i].transform.position = transform.TransformPoint(PointAccroche.PositionLocale(i));
+                halosDestinations[i].transform.position = transform.TransformPoint(accroche.PositionLocale(i));
         }
     }
 

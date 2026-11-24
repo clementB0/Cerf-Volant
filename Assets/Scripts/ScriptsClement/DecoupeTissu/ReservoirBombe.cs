@@ -105,14 +105,7 @@ public class ReservoirBombe : MonoBehaviour
         Material couleur = new Material(Shader.Find("Sprites/Default")); // couleur unie, visible des deux côtés
         couleur.color = couleurAide;
 
-        // Une flèche de 4 cm qui pointe vers le haut : la tige (un rectangle) puis la pointe (un triangle).
-        Mesh fleche = new Mesh();
-        fleche.vertices = new[]
-        {
-            new Vector3(-0.005f, 0f), new Vector3(0.005f, 0f), new Vector3(0.005f, 0.02f), new Vector3(-0.005f, 0.02f), // la tige
-            new Vector3(-0.015f, 0.02f), new Vector3(0.015f, 0.02f), new Vector3(0f, 0.04f),                           // la pointe
-        };
-        fleche.triangles = new[] { 0, 2, 1, 0, 3, 2, 4, 6, 5 };
+        Mesh fleche = MaillageFleche();
         Fleche("FlecheHaut", fleche, couleur, new Vector3(0f, demiHauteur + 0.02f, 0f), 0f);
         Fleche("FlecheBas", fleche, couleur, new Vector3(0f, -demiHauteur - 0.02f, 0f), 180f); // la même, retournée
 
@@ -128,6 +121,20 @@ public class ReservoirBombe : MonoBehaviour
         texte.color = couleurAide;
 
         aideSecouer.gameObject.SetActive(false);
+    }
+
+    // Une flèche plate de 4 cm qui pointe vers le haut : la tige (un rectangle) puis la pointe (un triangle).
+    // Sa base est en 0, sa pointe en y = 0,04. (Aussi utilisée par IndicationsCordes.)
+    internal static Mesh MaillageFleche()
+    {
+        Mesh fleche = new Mesh();
+        fleche.vertices = new[]
+        {
+            new Vector3(-0.005f, 0f), new Vector3(0.005f, 0f), new Vector3(0.005f, 0.02f), new Vector3(-0.005f, 0.02f), // la tige
+            new Vector3(-0.015f, 0.02f), new Vector3(0.015f, 0.02f), new Vector3(0f, 0.04f),                           // la pointe
+        };
+        fleche.triangles = new[] { 0, 2, 1, 0, 3, 2, 4, 6, 5 };
+        return fleche;
     }
 
     private void Fleche(string nom, Mesh forme, Material couleur, Vector3 place, float angle)

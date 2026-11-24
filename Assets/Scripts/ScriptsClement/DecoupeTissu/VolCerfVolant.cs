@@ -28,7 +28,8 @@ public class VolCerfVolant : MonoBehaviour
 
     [Header("Sol et chute")]
     [SerializeField] private float hauteurDuSol = 0.3f;
-    [SerializeField] private float dureeChute = 3f;
+    [SerializeField] private float dureeChute = 3f;        // il reste au moins 3 s au sol avant de pouvoir repartir
+    [SerializeField] private float vitesseRelance = 0.7f;  // pour repartir : lever les deux poignées en même temps, à plus de 0,7 m/s
 
     [Header("Vibrations VR")]
     [SerializeField] private bool activerVibrations = true;
@@ -46,9 +47,15 @@ public class VolCerfVolant : MonoBehaviour
     public bool EnVol { get; private set; }
     public Vector3 Vent { get; private set; }
     public Vector3 VentApparent { get; private set; }
-    public bool Tombe => Time.time < finDeChute;
+    // Touché par un oiseau : il tombe et reste au sol jusqu'à ce que le joueur le relance (en levant les deux poignées).
+    public bool Tombe => aTerre;
+    // Il est tombé depuis assez longtemps : il attend que le joueur lève les deux poignées (MessageRelance affiche "Monte").
+    public bool AttendRelance => aTerre && Time.time >= finDeChute;
 
+    private bool aTerre;
     private float finDeChute;
+    private float ancienneHauteurGauche; // la hauteur des poignées à l'image d'avant (pour savoir si elles montent)
+    private float ancienneHauteurDroite;
     private float prochaineVibration;
 
     private XRGrabInteractable prise;
@@ -66,6 +73,7 @@ public class VolCerfVolant : MonoBehaviour
     // Appelé lorsqu'un obstacle touche le cerf-volant
     public void Tomber()
     {
+        aTerre = true;
         finDeChute = Time.time + dureeChute;
     }
 
@@ -105,11 +113,28 @@ public class VolCerfVolant : MonoBehaviour
         // Empêcher d'attraper le cerf-volant pendant le vol
         prise.enabled = !EnVol;
 
+        // La hauteur des poignées, gardée pour l'image suivante (pour savoir si elles montent).
+        float hauteurGauche = poigneeGauche.transform.position.y;
+        float hauteurDroite = poigneeDroite.transform.position.y;
+
         if (!EnVol)
         {
             vitesse = Vector3.zero;
+            ancienneHauteurGauche = hauteurGauche;
+            ancienneHauteurDroite = hauteurDroite;
             return;
         }
+
+        // Relance après une chute : les deux poignées montent vite en même temps (le geste de tirer le cerf-volant vers le ciel).
+        if (AttendRelance && Time.deltaTime > 0f)
+        {
+            float monteeGauche = (hauteurGauche - ancienneHauteurGauche) / Time.deltaTime;
+            float monteeDroite = (hauteurDroite - ancienneHauteurDroite) / Time.deltaTime;
+            if (monteeGauche > vitesseRelance && monteeDroite > vitesseRelance)
+                aTerre = false;
+        }
+        ancienneHauteurGauche = hauteurGauche;
+        ancienneHauteurDroite = hauteurDroite;
 
         // =========================================
         // VIBRATIONS DES MANETTES
