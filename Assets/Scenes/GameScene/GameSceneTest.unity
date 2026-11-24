@@ -528,6 +528,7 @@ MonoBehaviour:
   - {fileID: 900000701}
   - {fileID: 900000702}
   - {fileID: 900000703}
+  templateChoice: {fileID: 900001002}
   fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
   delaiBascule: 0.2
   dureeFumee: 1.2
@@ -899,7 +900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -907,7 +908,15 @@ PrefabInstance:
       objectReference: {fileID: 333572712}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: TerminerDecoupe
+      value: TerminerDecoupeAvecTemplate
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
+      value:
+      objectReference: {fileID: 900000309}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: PieceDecoupee, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -1159,7 +1168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -1167,7 +1176,15 @@ PrefabInstance:
       objectReference: {fileID: 333572712}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: TerminerDecoupe
+      value: TerminerDecoupeAvecTemplate
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
+      value:
+      objectReference: {fileID: 900000319}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: PieceDecoupee, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -1419,7 +1436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -1427,7 +1444,15 @@ PrefabInstance:
       objectReference: {fileID: 333572712}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: TerminerDecoupe
+      value: TerminerDecoupeAvecTemplate
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
+      value:
+      objectReference: {fileID: 900000329}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: PieceDecoupee, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: quandToutEstRelie.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
@@ -4145,6 +4170,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &900001000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 900001001}
+  - component: {fileID: 900001002}
+  m_Layer: 0
+  m_Name: TemplateChoice
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &900001001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900001000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: 0, y: 0.835, z: 0.37}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
+--- !u!114 &900001002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900001000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c78db730284243ae5483099bd9a7f2, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::TemplateChoice
+  interactionManager: {fileID: 756192407}
+  guideShader: {fileID: 4800000, guid: e0af2eb3e894464cb719f2b68ac706c0, type: 3}
+  labelFont: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  selectionSound: {fileID: 8300000, guid: 833d037b61397c042ab31e590f52d1e4, type: 3}
+  spacing: 0.24
+  previewSize: 0.19
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -4161,6 +4236,7 @@ SceneRoots:
   - {fileID: 900000601}
   - {fileID: 586848753}
   - {fileID: 333572713}
+  - {fileID: 900001001}
   - {fileID: 492643089}
   - {fileID: 1337717996}
   - {fileID: 37294801}
