@@ -928,8 +928,24 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 149883401063830701, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335268946387477563, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 335268946387477563, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 335268946387477563, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 335268946387477563, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 335268946387477563, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
@@ -952,8 +968,24 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 920363296434603694, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1199722329108266776, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1199722329108266776, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1199722329108266776, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1199722329108266776, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1199722329108266776, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
@@ -969,7 +1001,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1376607148176961546, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1376607148176961546, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1376607148176961546, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1376607148176961546, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1376607148176961546, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
@@ -985,7 +1029,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1577808557958933040, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577808557958933040, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577808557958933040, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1577808557958933040, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1577808557958933040, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
@@ -1008,8 +1064,24 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4685127161446320174, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5176576264529298967, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5176576264529298967, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5176576264529298967, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5176576264529298967, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5176576264529298967, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
@@ -1031,6 +1103,10 @@ PrefabInstance:
     - target: {fileID: 5812832643048718863, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_IsKinematic
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5812832643048718863, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5833115140752272993, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1080,6 +1156,10 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6372383941792740624, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6609230348629685467, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_Name
       value: Boite_Crayons_Dessin
@@ -1092,8 +1172,24 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7171753479377146232, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7615615034936758921, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_TrackScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7615615034936758921, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_FarAttachMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7615615034936758921, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
       propertyPath: m_MovementType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7615615034936758921, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
+      propertyPath: m_AttachEaseInTime
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7615615034936758921, guid: 7d6c6ed8877d2124190b722b6b25a414, type: 3}
