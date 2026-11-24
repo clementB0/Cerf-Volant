@@ -8,7 +8,7 @@ public class PlayButton : MonoBehaviour
 
     public void ChangeScene()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene("SceneTestLukas");
         
     }
 }
