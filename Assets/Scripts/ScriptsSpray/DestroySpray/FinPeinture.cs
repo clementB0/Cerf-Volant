@@ -74,8 +74,7 @@ public class FinPeinture : MonoBehaviour
             if (bombe == null)
                 continue;
 
-            // Arrête la peinture et son jet visuel.
-            if (bombe.TryGetComponent<Pen>(out var crayon))
+            foreach (Pen crayon in bombe.GetComponentsInChildren<Pen>(true))
                 crayon.enabled = false;
 
             foreach (SprayPainter peinture in
@@ -90,10 +89,8 @@ public class FinPeinture : MonoBehaviour
                 effet.enabled = false;
             }
 
-            XRGrabInteractable grab =
-                bombe.GetComponent<XRGrabInteractable>();
-
-            if (grab != null)
+            foreach (XRGrabInteractable grab in
+                     bombe.GetComponentsInChildren<XRGrabInteractable>(true))
             {
                 if (grab.interactionManager != null)
                 {
@@ -119,9 +116,7 @@ public class FinPeinture : MonoBehaviour
             if (bombe == null)
                 continue;
 
-            Rigidbody corps = bombe.GetComponent<Rigidbody>();
-
-            if (corps != null)
+            foreach (Rigidbody corps in bombe.GetComponentsInChildren<Rigidbody>(true))
                 corps.isKinematic = true;
 
             CreerFumee(bombe.transform.position);

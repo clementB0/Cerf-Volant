@@ -51,12 +51,13 @@ public class Return : MonoBehaviour
         // On attend la prochaine étape physique
         yield return new WaitForFixedUpdate();
 
-        // On bloque la physique
-        rb.isKinematic = true;
-
         // On arrête les mouvements
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (!rb.isKinematic)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
 
         // On restaure la hiérarchie et la position
         transform.SetParent(initialParent, false);
@@ -76,8 +77,11 @@ public class Return : MonoBehaviour
         // On réactive la physique
         rb.isKinematic = initialKinematic;
 
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (!rb.isKinematic)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
 }
