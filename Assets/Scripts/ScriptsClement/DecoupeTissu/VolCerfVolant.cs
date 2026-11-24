@@ -119,7 +119,23 @@ public class VolCerfVolant : MonoBehaviour
 
         if (!EnVol)
         {
-            vitesse = Vector3.zero;
+            // Tombé (oiseau, ou poignées lâchées : voir RetourPoignees) et personne ne le tient :
+            // il continue de tomber jusqu'au sol, au lieu de rester figé en l'air.
+            if (aTerre && !prise.isSelected && transform.position.y > hauteurDuSol)
+            {
+                vitesse += Physics.gravity * Time.deltaTime;
+                Vector3 chute = transform.position + vitesse * Time.deltaTime;
+                if (chute.y <= hauteurDuSol)
+                {
+                    chute.y = hauteurDuSol;
+                    vitesse = Vector3.zero;
+                }
+                transform.position = chute;
+            }
+            else
+            {
+                vitesse = Vector3.zero;
+            }
             ancienneHauteurGauche = hauteurGauche;
             ancienneHauteurDroite = hauteurDroite;
             return;

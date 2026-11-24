@@ -308,6 +308,7 @@ GameObject:
   - component: {fileID: 900000318}
   - component: {fileID: 900000951}
   - component: {fileID: 900000952}
+  - component: {fileID: 900000953}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -1297,7 +1298,7 @@ Transform:
   m_GameObject: {fileID: 900000051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.25, y: 0.06, z: -0.3375}
+  m_LocalPosition: {x: -0.25, y: 0.06, z: -0.2075}
   m_LocalScale: {x: 0.04, y: 0.06, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1635,7 +1636,7 @@ Transform:
   m_GameObject: {fileID: 900000101}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0.06, z: -0.3375}
+  m_LocalPosition: {x: 0.25, y: 0.06, z: -0.2075}
   m_LocalScale: {x: 0.04, y: 0.06, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2034,7 +2035,7 @@ Transform:
   m_GameObject: {fileID: 900000401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.25, y: 0.02, z: -0.2075}
+  m_LocalPosition: {x: -0.25, y: 0.02, z: -0.3375}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2368,7 +2369,7 @@ Transform:
   m_GameObject: {fileID: 900000421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0.02, z: -0.2075}
+  m_LocalPosition: {x: 0.25, y: 0.02, z: -0.3375}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2742,3 +2743,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   couleur: {r: 1, g: 0.85, b: 0.2, a: 1}
   distance: 0.7
+--- !u!114 &900000953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3400a0f4557247b79fd1e269811a52fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poignees:
+  - {fileID: 900000057}
+  - {fileID: 900000107}
+  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
+  tempsAvantRetour: 1.5

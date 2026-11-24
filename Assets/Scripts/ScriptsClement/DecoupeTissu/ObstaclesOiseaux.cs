@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // FONCTIONNALITÉ : pendant le vol, des oiseaux (pour l'instant de petits cubes) traversent le ciel.
-// Il faut les esquiver : si un oiseau touche le cerf-volant, il tombe (puis le vent le relance).
+// Il faut les esquiver : si un oiseau touche le cerf-volant, il tombe (il faudra le relancer en levant les deux poignées).
+// Un oiseau qui le frôle sans le toucher fait une figure au hasard autour du cerf-volant, puis il s'envole (FigureOiseau).
 // À mettre sur l'objet "PieceDecoupee", à côté de VolCerfVolant.
 public class ObstaclesOiseaux : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class ObstaclesOiseaux : MonoBehaviour
     [SerializeField] private float precision = 0.4f;          // ils visent jusqu'à 40 cm à gauche ou à droite du cerf-volant (petit = plus dur)
     [SerializeField] private float tailleOiseau = 0.15f;      // un cube de 15 cm
     [SerializeField] private float rayonTouche = 0.3f;        // plus près que ça du cerf-volant = touché
+    [SerializeField] private float rayonFrole = 0.8f;         // passé à moins de 80 cm sans toucher = frôlé : il fait une figure
     [SerializeField] private AudioClip sonPassage;            // le "swoosh" quand un oiseau passe au-dessus de ta tête (swoosh.mp3)
 
     private VolCerfVolant vol;
@@ -43,9 +45,21 @@ public class ObstaclesOiseaux : MonoBehaviour
             oiseaux[i].position += vitesses[i] * Time.deltaTime;
 
             // Touché ? (seulement s'il vole encore : un cerf-volant déjà au sol ne retombe pas)
-            bool touche = vol.EnVol && !vol.Tombe && Vector3.Distance(oiseaux[i].position, transform.position) < rayonTouche;
+            float distance = Vector3.Distance(oiseaux[i].position, transform.position);
+            bool touche = vol.EnVol && !vol.Tombe && distance < rayonTouche;
             if (touche)
                 vol.Tomber();
+
+            // Frôlé ? Il est passé tout près sans toucher, et il s'éloigne déjà (il a dépassé le point le plus proche) :
+            // il fait sa figure (FigureOiseau s'occupe de lui maintenant, on l'enlève de la liste sans le détruire).
+            bool frole = !touche && vol.EnVol && !vol.Tombe && distance < rayonFrole
+                         && Vector3.Dot(vitesses[i], oiseaux[i].position - transform.position) > 0f;
+            if (frole)
+            {
+                oiseaux[i].gameObject.AddComponent<FigureOiseau>().Lancer(transform, vitesses[i]);
+                Oublier(i);
+                continue;
+            }
 
             // L'oiseau disparaît s'il a touché, ou quand il a fini de traverser le ciel.
             if (touche || Time.time > fins[i])
@@ -90,6 +104,12 @@ public class ObstaclesOiseaux : MonoBehaviour
     private void Retirer(int i)
     {
         Destroy(oiseaux[i].gameObject);
+        Oublier(i);
+    }
+
+    // On ne s'occupe plus de cet oiseau (sans le détruire).
+    private void Oublier(int i)
+    {
         oiseaux.RemoveAt(i);
         vitesses.RemoveAt(i);
         fins.RemoveAt(i);
