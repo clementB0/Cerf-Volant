@@ -8,6 +8,7 @@ public class RadioButton : MonoBehaviour
     private enum Command { Previous, PlayPause, Next }
     [SerializeField] private Command command;
     [SerializeField] private Transform cap;
+    [SerializeField] private Vector3 pressDirection = Vector3.down;
     private RadioPlayer player;
     private XRSimpleInteractable button;
     private Vector3 rest;
@@ -30,7 +31,7 @@ public class RadioButton : MonoBehaviour
 
     private void Press(SelectEnterEventArgs args)
     {
-        cap.localPosition = rest + Vector3.down * 0.006f;
+        cap.localPosition = rest + pressDirection.normalized * 0.006f;
         releaseTime = Time.time + 0.12f;
         if (command == Command.PlayPause)
             player.Toggle();

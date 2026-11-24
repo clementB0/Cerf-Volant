@@ -11,6 +11,7 @@ public class ChoixCerfVolant : MonoBehaviour
     [SerializeField] private GameObject miniatures;            // le groupe des petits cerfs-volants (on le cache d'un coup)
     [SerializeField] private float dureeAgrandissement = 0.6f;  // en secondes
     [SerializeField] private AudioClip sonChoix;                // petit son quand on choisit (SonChoix.wav)
+    [SerializeField] private GameObject cutter;
 
     private Transform choisi;  // l'atelier choisi (vide tant qu'on n'a pas choisi)
     private float temps;       // depuis combien de temps il grandit
@@ -42,6 +43,8 @@ public class ChoixCerfVolant : MonoBehaviour
         tailleFinale = choisi.localScale;
         choisi.localScale = tailleFinale * 0.1f; // il part tout petit...
         atelier.SetActive(true);
+        if (cutter != null)
+            cutter.SetActive(true);
     }
 
     private void Update()
