@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6e9d32efff7053f4285293180b2d5303
+guid: c744a6bbf795f5c4d8a0845e271e346e
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Hand Craft
+  - North Kids
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
