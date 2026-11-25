@@ -18,9 +18,12 @@ public class TraceurCutter : MonoBehaviour
     public Transform Pointe => pointeDuCutter;
     [SerializeField] private float distanceContact = 0.08f; // la pointe "touche" jusqu'à 8 cm au-dessus ou en dessous du tissu (au cas où on rate)
     [SerializeField] private float forceVibration = 0.15f;  // de 0 (rien) à 1 (très fort) : légère
+    [Tooltip("Distance maximale de suivi entre deux images (0 pour tester uniquement la pointe).")]
+    [SerializeField, Min(0f)] private float distanceSuiviMax;
 
     private XRGrabInteractable cutter; // le composant du template qui permet d'attraper le cutter : il sait si on le tient
     private PatronPointilles patron;   // les pointillés du même tissu, à relier
+    private Vector3? contactPrecedent;
 
     private void Start()
     {
@@ -32,7 +35,10 @@ public class TraceurCutter : MonoBehaviour
     {
         // Personne ne tient le cutter ("isSelected" = attrapé) : on ne découpe pas.
         if (!cutter.isSelected)
+        {
+            contactPrecedent = null;
             return;
+        }
 
         // Position de la pointe vue "depuis le tissu" : x et y = où on est sur le tissu, z = hauteur au-dessus.
         Vector3 local = transform.InverseTransformPoint(pointeDuCutter.position);
@@ -45,13 +51,22 @@ public class TraceurCutter : MonoBehaviour
         if (auDessusDuTissu && assezPres)
         {
             // On "écrase" la pointe sur le tissu (z = 0) pour comparer avec les traits, qui sont à plat.
-            patron.RelierTraitsPres(transform.TransformPoint(new Vector3(local.x, local.y, 0f)));
+            Vector3 contact = transform.TransformPoint(new Vector3(local.x, local.y, 0f));
+            Vector3 debut = contactPrecedent ?? contact;
+            if ((contact - debut).sqrMagnitude > distanceSuiviMax * distanceSuiviMax)
+                debut = contact;
+            patron.RelierTraitsPres(debut, contact);
+            contactPrecedent = distanceSuiviMax > 0f ? contact : null;
 
             // Légère vibration dans la manette qui tient le cutter, seulement quand la lame vient de découper un pointillé
             // (pas sur le reste du tissu). En suivant les pointillés, les traits s'enchaînent : la vibration paraît continue.
             // (Une main suivie sans manette ne peut pas vibrer : dans ce cas, il ne se passe rien.)
             if (Time.time - patron.DerniereDecoupe < 0.1f && cutter.interactorsSelecting[0] is XRBaseInputInteractor manette)
                 manette.SendHapticImpulse(forceVibration, Time.deltaTime * 2f);
+        }
+        else
+        {
+            contactPrecedent = null;
         }
     }
 

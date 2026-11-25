@@ -8,7 +8,7 @@ public class PlayButton : MonoBehaviour
 {
     [Tooltip("Chemin ou nom d'une scène activée dans la liste de scènes du profil de build.")]
     [SerializeField] private string gameSceneName;
-    [SerializeField] private Transform cutTab;
+    [SerializeField] private CutCoupon coupon;
     [SerializeField] private TMP_Text playLabel;
 
     private bool cutValidated;
@@ -21,7 +21,7 @@ public class PlayButton : MonoBehaviour
 
         cutValidated = true;
         if (playLabel != null)
-            playLabel.color = new Color(0.76f, 1f, 0.81f);
+            playLabel.color = new Color(0.02f, 0.35f, 0.26f);
 
         string destination = gameSceneName?.Trim();
         if (string.IsNullOrEmpty(destination))
@@ -31,32 +31,17 @@ public class PlayButton : MonoBehaviour
         else if (!Application.CanStreamedLevelBeLoaded(destination))
         {
             Debug.LogError($"Menu : la scène « {destination} » doit être activée dans les profils de build.", this);
+            destination = null;
         }
-        else
-        {
-            StartCoroutine(LoadAfterFeedback(destination));
-        }
+        StartCoroutine(LoadAfterFeedback(destination));
     }
 
     private IEnumerator LoadAfterFeedback(string destination)
     {
-        const float duration = 0.35f;
-        if (cutTab != null)
-        {
-            Vector3 start = cutTab.localPosition;
-            Vector3 end = start + new Vector3(0f, -0.03f, -0.045f);
-            for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
-            {
-                cutTab.localPosition = Vector3.Lerp(start, end, elapsed / duration);
-                yield return null;
-            }
-            cutTab.localPosition = end;
-        }
-        else
-        {
-            yield return new WaitForSecondsRealtime(duration);
-        }
+        if (coupon != null)
+            yield return coupon.Separate();
 
-        SceneManager.LoadSceneAsync(destination);
+        if (!string.IsNullOrEmpty(destination))
+            SceneManager.LoadSceneAsync(destination);
     }
 }

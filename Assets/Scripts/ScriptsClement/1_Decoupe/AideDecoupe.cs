@@ -10,6 +10,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 [RequireComponent(typeof(PatronPointilles), typeof(TraceurCutter))]
 public class AideDecoupe : MonoBehaviour
 {
+    [SerializeField] private bool montrerAvantPrise;
     [SerializeField] private float attente = 5f;             // l'aide revient après 5 secondes sans découper
     [SerializeField] private float vitesse = 0.05f;          // le segment avance de 5 cm par seconde (lentement)
     [SerializeField] private float longueurSegment = 0.04f;  // il fait 4 cm de long
@@ -64,8 +65,9 @@ public class AideDecoupe : MonoBehaviour
     private void Update()
     {
         List<Transform> traits = patron.TraitsEnCours;
-        // Cutter en main, et pas de découpe depuis 5 secondes (ou jamais découpé : tout de suite).
-        bool montrer = traits != null && traits.Count > 0 && cutter.gameObject.activeInHierarchy && prise.isSelected
+        // L'aide revient après une pause dans la découpe.
+        bool montrer = traits != null && traits.Count > 0 && cutter.gameObject.activeInHierarchy
+                       && (prise.isSelected || montrerAvantPrise)
                        && Time.time - patron.DerniereDecoupe > attente;
         segment.SetActive(montrer);
         fantome.SetActive(montrer);

@@ -13,6 +13,7 @@ public class PatronPointilles : MonoBehaviour
     [SerializeField] private FormeCerfVolant forme;
     [Tooltip("Points d'un tracé ouvert. Si la liste est vide, le contour fermé de la forme est utilisé.")]
     [SerializeField] private Vector2[] traceOuvert;
+    public IReadOnlyList<Vector2> TraceOuvert => traceOuvert;
 
     [SerializeField] private float ecartEntreTraits = 0.06f; // un trait tous les 6 cm (le trait fait la moitié : 3 cm)
     [SerializeField] private float epaisseurTrait = 0.01f;   // 1 cm (la fente fait la moitié : 5 mm)
@@ -246,6 +247,17 @@ public class PatronPointilles : MonoBehaviour
     // Appelé par TraceurCutter avec la position de la pointe du cutter : relie les traits tout près d'elle.
     public void RelierTraitsPres(Vector3 positionPointe)
     {
+        RelierTraitsPres(positionPointe, positionPointe);
+    }
+
+    public void MasquerTrace()
+    {
+        foreach (Transform trait in tousLesTraits)
+            trait.gameObject.SetActive(false);
+    }
+
+    public void RelierTraitsPres(Vector3 positionPrecedente, Vector3 positionPointe)
+    {
         // Pendant que le tissu tourne, une fois tout découpé, ou si les pointillés n'ont pas pu être créés : on ne découpe pas.
         if (attendLaSuite || toutEstRelie || etapes.Count == 0)
             return;
@@ -255,10 +267,18 @@ public class PatronPointilles : MonoBehaviour
         Vector3 dernierTrait = positionPointe; // l'endroit du dernier trait découpé (pour les étoiles de fin d'étape)
 
         // On parcourt la liste à l'envers : retirer un élément ne fait alors sauter aucune case.
+        Vector3 mouvement = positionPointe - positionPrecedente;
+        float amplitude = mouvement.sqrMagnitude;
         for (int i = traitsPasRelies.Count - 1; i >= 0; i--)
         {
             Transform trait = traitsPasRelies[i];
-            if (Vector3.Distance(trait.position, positionPointe) < rayonContact)
+            Vector3 contact = positionPointe;
+            if (amplitude > 0f)
+            {
+                float progression = Mathf.Clamp01(Vector3.Dot(trait.position - positionPrecedente, mouvement) / amplitude);
+                contact = positionPrecedente + progression * mouvement;
+            }
+            if ((trait.position - contact).sqrMagnitude < rayonContact * rayonContact)
             {
                 // Le trait devient une fente : il double de longueur (il bouche les deux demi-trous et touche ses voisins),
                 // devient deux fois plus fin, et foncé comme l'ombre dans une vraie entaille.
