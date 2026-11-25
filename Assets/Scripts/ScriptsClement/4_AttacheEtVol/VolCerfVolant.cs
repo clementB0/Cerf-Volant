@@ -21,12 +21,14 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float portanceMainsBasses = 4f;   // mains basses : il descend nettement
     [SerializeField] private float portanceMainsHautes = 13f;  // mains hautes : il monte nettement
     [SerializeField] private float frottement = 1f;
+    [SerializeField] private float resistance = 2f;            // l'air freine ses mouvements : plus grand = il se déplace plus lentement, plus lourdement (0 = pas de frein)
     [SerializeField] private float angleDAttaque = 20f;
 
     [Header("Direction")]
     [SerializeField] private float angleDeVirageMax = 60f;
     [SerializeField] private float sensibiliteVirage = 1.6f;      // plus grand = il tourne avec moins d'écart de hauteur entre les mains (1 = pente des mains telle quelle)
     [SerializeField] private float lissageVirage = 0.4f;          // il met environ 0,4 s à suivre un changement gauche/droite des mains (0 = tout de suite)
+    [SerializeField] private float inertieMains = 0.4f;           // il met environ 0,4 s à suivre un déplacement des mains (0 = il copie les mains tout de suite)
     [SerializeField] private float amplitudeHauteurMains = 0.3f;  // de mains basses à mains hautes en 30 cm de mouvement (plus grand = le haut/bas réagit moins aux petits gestes)
 
     [Header("Sol et chute")]
@@ -58,11 +60,13 @@ public class VolCerfVolant : MonoBehaviour
     private bool aTerre;
     private float finDeChute;
     private float pencheLisse;           // la pente des mains, lissée (gauche/droite moins direct)
+    private Vector3 milieuLisse;         // le milieu des deux mains, suivi avec un peu de retard (voir inertieMains)
     private float ancienneHauteurGauche; // la hauteur des poignées à l'image d'avant (pour savoir si elles montent)
     private float ancienneHauteurDroite;
     private float prochaineVibration;
 
     private XRGrabInteractable prise;
+    private Rigidbody corps;
     private Vector3 vitesse;
 
     private bool cordeGaucheValidee;
@@ -72,6 +76,7 @@ public class VolCerfVolant : MonoBehaviour
     private void Start()
     {
         prise = GetComponent<XRGrabInteractable>();
+        corps = GetComponent<Rigidbody>();
     }
 
     // Appelé par RetourPoignees quand une poignée est lâchée : le cerf-volant tombe
@@ -79,6 +84,20 @@ public class VolCerfVolant : MonoBehaviour
     {
         aTerre = true;
         finDeChute = Time.time + dureeChute;
+    }
+
+    // Le début du montage : les deux poignées et les deux cordes à accrocher apparaissent, et le vol est prêt.
+    // (D'habitude, c'est la fin de la peinture qui le fait, avec ses actions réglées dans l'Inspector.
+    //  RaccourciMontage s'en sert pour y aller directement.)
+    public void CommencerMontage()
+    {
+        poigneeGauche.gameObject.SetActive(true);
+        poigneeDroite.gameObject.SetActive(true);
+        if (boutCordeGauche != null)
+            boutCordeGauche.gameObject.SetActive(true);
+        if (boutCordeDroite != null)
+            boutCordeDroite.gameObject.SetActive(true);
+        enabled = true; // ce script est éteint jusqu'au montage
     }
 
     internal void ConfirmerConnexion(Transform bout)
@@ -117,6 +136,11 @@ public class VolCerfVolant : MonoBehaviour
         // Empêcher d'attraper le cerf-volant pendant le vol
         prise.enabled = !EnVol;
 
+        // En vol, c'est ce script qui place le cerf-volant à chaque image. Le réglage "Interpolate" de son Rigidbody
+        // le ramenait un peu en arrière entre deux images (il rejouait d'anciennes positions) : le vol saccadait. On le coupe.
+        if (EnVol && corps != null)
+            corps.interpolation = RigidbodyInterpolation.None;
+
         // La hauteur des poignées, gardée pour l'image suivante (pour savoir si elles montent).
         float hauteurGauche = poigneeGauche.transform.position.y;
         float hauteurDroite = poigneeDroite.transform.position.y;
@@ -142,6 +166,8 @@ public class VolCerfVolant : MonoBehaviour
             }
             ancienneHauteurGauche = hauteurGauche;
             ancienneHauteurDroite = hauteurDroite;
+            // Pas en vol : le point d'attache du fil reste sur les mains (prêt pour le prochain décollage).
+            milieuLisse = (poigneeGauche.transform.position + poigneeDroite.transform.position) / 2f;
             return;
         }
 
@@ -197,6 +223,11 @@ public class VolCerfVolant : MonoBehaviour
         Vector3 gauche = poigneeGauche.transform.position;
         Vector3 droite = poigneeDroite.transform.position;
         Vector3 milieu = (gauche + droite) / 2f;
+
+        // Le fil est accroché à un point qui suit le milieu des mains avec un peu de retard :
+        // le cerf-volant ne copie plus chaque petit geste, il a du poids au bout du fil.
+        milieuLisse = inertieMains > 0f ? Vector3.Lerp(milieuLisse, milieu, 1f - Mathf.Exp(-dt / inertieMains)) : milieu;
+        milieu = milieuLisse;
 
         // =========================================
         // 1. VENT ET RAFALES
@@ -313,8 +344,9 @@ public class VolCerfVolant : MonoBehaviour
 
         Vector3 frein = VentApparent * frottement;
 
+        // "- vitesse * resistance" : l'air le freine, d'autant plus fort qu'il va vite (il ne file plus d'un bord à l'autre).
         vitesse +=
-            (pousseeDuVent + frein + Physics.gravity) * dt;
+            (pousseeDuVent + frein + Physics.gravity - vitesse * resistance) * dt;
 
         // =========================================
         // 7. POSITION DU CERF-VOLANT
