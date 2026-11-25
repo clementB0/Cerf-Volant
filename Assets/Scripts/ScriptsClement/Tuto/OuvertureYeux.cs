@@ -1,22 +1,20 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// FONCTIONNALITÉ : au lancement, on se réveille. Deux paupières noires couvrent la vue,
-// s'entrouvrent, se referment (on cligne un peu)... puis s'ouvrent complètement et disparaissent.
-// Rien à poser dans la scène : il se crée tout seul au lancement du jeu.
+// FONCTIONNALITÉ : quand on appuie sur Y pour recommencer, on ferme les yeux (deux paupières noires),
+// la scène se recharge pendant qu'ils sont fermés, puis on se réveille : les yeux s'entrouvrent,
+// se referment (on cligne un peu)... puis s'ouvrent complètement.
+// Remplace la fumée de rechargement (ReloadGame est désactivé dans la scène). Rien ne se passe au lancement du jeu.
 public class OuvertureYeux : MonoBehaviour
 {
-    // Au lancement (une seule fois, après le chargement de la première scène) : on crée l'effet,
-    // sauf s'il a déjà été posé à la main sur un objet.
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void AuLancement()
-    {
-        if (FindFirstObjectByType<OuvertureYeux>() == null)
-            new GameObject("OuvertureYeux").AddComponent<OuvertureYeux>();
-    }
+    [SerializeField] private InputActionReference boutonY;   // le bouton qui relance la partie
+    [SerializeField] private float dureeFermeture = 0.4f;    // le temps pour fermer les yeux avant le rechargement
 
-    // L'ouverture des yeux dans le temps : 0 = fermés, 1 = grands ouverts. Le temps est en secondes.
+    // L'ouverture des yeux après le rechargement : 0 = fermés, 1 = grands ouverts. Le temps est en secondes.
     [SerializeField] private AnimationCurve ouverture = new AnimationCurve(
         new Keyframe(0f, 0f),
         new Keyframe(0.8f, 0f),     // on dort encore un instant
@@ -26,45 +24,109 @@ public class OuvertureYeux : MonoBehaviour
         new Keyframe(2.1f, 0.1f),   // ... on cligne encore
         new Keyframe(3.2f, 1f));    // puis grands ouverts
 
+    private static bool enCours;    // un rechargement est déjà lancé : on ignore les autres appuis sur Y
+
     private RectTransform paupiereHaut;
     private RectTransform paupiereBas;
-    private float temps;
+    private bool estLEffet;         // vrai seulement pour la copie qui survit au rechargement
 
-    private void Update()
+    private void OnEnable()
     {
-        // La tête du joueur (la caméra du casque) peut arriver une image après nous : on attend qu'elle soit là.
-        if (paupiereHaut == null)
+        if (boutonY == null)
+            return;
+        boutonY.action.performed += AppuiY;
+        boutonY.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        if (boutonY != null)
+            boutonY.action.performed -= AppuiY;
+    }
+
+    private void AppuiY(InputAction.CallbackContext contexte)
+    {
+        if (enCours)
+            return;
+        enCours = true;
+
+        // Ce composant disparaît avec la scène : on crée une copie à part qui, elle, survit au rechargement.
+        OuvertureYeux effet = new GameObject("Clignement des yeux").AddComponent<OuvertureYeux>();
+        effet.ouverture = ouverture;
+        effet.dureeFermeture = dureeFermeture;
+        effet.estLEffet = true;
+        DontDestroyOnLoad(effet.gameObject);
+        effet.StartCoroutine(effet.Recharger(gameObject.scene.buildIndex));
+    }
+
+    private IEnumerator Recharger(int scene)
+    {
+        Creer();
+        Application.onBeforeRender += SuivreTete;
+
+        // 1) On ferme les yeux.
+        for (float t = 0f; t < dureeFermeture; t += Time.deltaTime)
         {
-            if (Camera.main == null)
-                return;
-            Creer(Camera.main.transform);
+            Placer(1f - t / dureeFermeture);
+            yield return null;
+        }
+        Placer(0f);
+        yield return null; // une image bien noire avant de changer de scène
+
+        // 2) La scène se recharge pendant que les yeux sont fermés.
+        yield return SceneManager.LoadSceneAsync(scene);
+
+        // 3) On se réveille, en clignant.
+        float fin = ouverture.keys[ouverture.length - 1].time;
+        for (float t = 0f; t < fin; t += Time.deltaTime)
+        {
+            Placer(Mathf.Clamp01(ouverture.Evaluate(t)));
+            yield return null;
         }
 
-        temps += Time.deltaTime;
-        float o = Mathf.Clamp01(ouverture.Evaluate(temps));
+        Destroy(gameObject); // fini : on enlève les paupières
+    }
 
-        // Ici 1 = 1 mm. Fermés : les bords flous se chevauchent de 3 cm (pas de fente de lumière).
-        // Grands ouverts : chaque bord est à 27 cm du centre, hors de la vue (on voit environ jusqu'à 21 cm).
+    // Les paupières restent collées à la tête du joueur (la caméra du casque change avec la nouvelle scène).
+    private void SuivreTete()
+    {
+        if (Camera.main != null)
+            transform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
+    }
+
+    private void LateUpdate()
+    {
+        if (estLEffet)
+            SuivreTete();
+    }
+
+    // o = ouverture des yeux (0 = fermés, 1 = grands ouverts).
+    // Ici 1 = 1 mm. Fermés : les bords flous se chevauchent de 3 cm (pas de fente de lumière).
+    // Grands ouverts : chaque bord est à 27 cm du centre, hors de la vue (on voit environ jusqu'à 21 cm).
+    private void Placer(float o)
+    {
         float bord = o * 300f - 30f;
         paupiereHaut.anchoredPosition = new Vector2(0f, bord);
         paupiereBas.anchoredPosition = new Vector2(0f, -bord);
-
-        // Fini : on enlève les paupières.
-        if (temps > ouverture.keys[ouverture.length - 1].time)
-        {
-            Destroy(paupiereHaut.parent.gameObject);
-            enabled = false;
-        }
     }
 
-    // Crée les deux paupières, à 15 cm devant les yeux (elles suivent la tête).
-    private void Creer(Transform tete)
+    private void OnDestroy()
+    {
+        if (!estLEffet)
+            return;
+        Application.onBeforeRender -= SuivreTete;
+        enCours = false;
+    }
+
+    // Crée les deux paupières, à 15 cm devant les yeux (cet objet suit la tête).
+    private void Creer()
     {
         GameObject objet = new GameObject("Paupieres");
         objet.layer = 5; // calque "UI" : l'appareil photo ne le filme pas
-        objet.transform.SetParent(tete, false);
+        objet.transform.SetParent(transform, false);
         objet.transform.localPosition = new Vector3(0f, 0f, 0.15f);
         objet.transform.localScale = Vector3.one * 0.001f; // 1 pixel du Canvas = 1 mm
+        SuivreTete();
 
         Canvas canvas = objet.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
@@ -83,6 +145,7 @@ public class OuvertureYeux : MonoBehaviour
 
         paupiereHaut = Paupiere(objet.transform, materiau, degrade, 1f);
         paupiereBas = Paupiere(objet.transform, materiau, degrade, -1f);
+        Placer(1f); // au départ les yeux sont ouverts
     }
 
     // Une paupière : un rectangle noir de 2 m x 60 cm, son bord flou au centre de la vue.

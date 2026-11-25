@@ -1,27 +1,39 @@
 using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Filtering;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
+// Le pot se pose sur le pistolet (au point d'insertion), puis on le tourne sur lui-même
+// (d'un côté ou de l'autre, un petit geste suffit) pour le clipser. Pour l'enlever : on le reprend et on le tire.
 [DisallowMultipleComponent]
 public class ReservoirSocket : MonoBehaviour
 {
-    [SerializeField] private Transform insertionPoint;
+    [SerializeField] private Transform insertionPoint;  // là où le pot est posé ; on tourne autour de son axe "up"
     [SerializeField] private Collider gunCollider;
     [SerializeField] private PaintReservoir[] compatibleReservoirs;
     [SerializeField, Min(0.01f)] private float captureRadius = 0.065f;
-    [SerializeField, Min(0.01f)] private float slideDistance = 0.045f;
+    [SerializeField, Range(5f, 180f)] private float clipAngle = 15f;    // de combien tourner pour clipser
+    [SerializeField, Min(0.01f)] private float pullDistance = 0.04f;   // de combien tirer (en m) pour l'enlever
 
+    private XRGrabInteractable gunGrab;
+    private XRSelectFilterDelegate potFirst;
     private PaintReservoir attached;
     private PaintReservoir lastRemoved;
-    private IXRSelectInteractor slidingHand;
+    private IXRSelectInteractor twistingHand;
+    private Quaternion lastHandRotation;
+    private Vector3 handStart;
     private bool waitForRelease;
-    private float handStart;
-    private float railPosition;
     private bool locked;
+    private float twist;      // degrés tournés par la main depuis qu'elle a posé le pot
+    private float seatAngle;  // angle du pot une fois clipsé (+clipAngle ou -clipAngle)
 
     public PaintReservoir LockedReservoir =>
-        locked && railPosition >= slideDistance - 0.002f && attached != null &&
-        attached.isActiveAndEnabled ? attached : null;
+        locked && attached != null && attached.isActiveAndEnabled ? attached : null;
+
+    // Pot posé mais pas encore clipsé (pour les flèches "tourne").
+    public PaintReservoir PendingReservoir => locked ? null : attached;
+    public Transform InsertionPoint => insertionPoint;
 
     public event Action<IXRSelectInteractor> ReservoirLocked;
 
@@ -48,36 +60,36 @@ public class ReservoirSocket : MonoBehaviour
                 return;
             }
 
-            // Releasing partway through removal returns the reservoir to its seat.
-            slidingHand = null;
+            // Lâché : le pot reste clipsé.
+            twistingHand = null;
             waitForRelease = false;
-            railPosition = slideDistance;
         }
-        else if (!waitForRelease && hand != slidingHand)
+        else if (!waitForRelease && hand != twistingHand)
         {
-            BeginSlide(hand);
+            BeginTwist(hand);
         }
-        else if (!waitForRelease)
+        else if (!waitForRelease && !locked)
         {
-            float travel = HandPosition(hand) - handStart;
-            railPosition = Mathf.Clamp((locked ? slideDistance : 0f) + travel, 0f, slideDistance);
-            if (!locked && railPosition >= slideDistance)
+            twist += HandTwistDelta(hand);
+            if (Mathf.Abs(twist) >= clipAngle)
             {
                 locked = true;
-                // Keep the current grip seated until it is released and grabbed again.
+                seatAngle = Mathf.Sign(twist) * clipAngle;
+                // La main doit lâcher puis reprendre le pot pour l'enlever.
                 waitForRelease = true;
                 ReservoirLocked?.Invoke(hand);
             }
-            else if (locked && railPosition <= 0f)
-            {
-                PlaceOnRail();
-                lastRemoved = attached;
-                Detach();
-                return;
-            }
+        }
+        else if (!waitForRelease &&
+                 (hand.GetAttachTransform(attached.Grab).position - handStart).sqrMagnitude >= pullDistance * pullDistance)
+        {
+            // Clipsé : il suffit de le tirer pour l'enlever.
+            lastRemoved = attached;
+            Detach();
+            return;
         }
 
-        PlaceOnRail();
+        PlaceInSeat();
     }
 
     private void FindCandidate()
@@ -111,26 +123,33 @@ public class ReservoirSocket : MonoBehaviour
         attached = closest;
         attached.SetOnRail(true);
         Physics.IgnoreCollision(gunCollider, attached.GrabCollider, true);
-        BeginSlide(attached.Grab.firstInteractorSelecting);
-        PlaceOnRail();
+        BeginTwist(attached.Grab.firstInteractorSelecting);
+        PlaceInSeat();
     }
 
-    private void BeginSlide(IXRSelectInteractor hand)
+    private void BeginTwist(IXRSelectInteractor hand)
     {
-        slidingHand = hand;
-        handStart = HandPosition(hand);
+        twistingHand = hand;
+        lastHandRotation = hand.GetAttachTransform(attached.Grab).rotation;
+        handStart = hand.GetAttachTransform(attached.Grab).position;
     }
 
-    private float HandPosition(IXRSelectInteractor hand)
+    // De combien la main a tourné autour de l'axe du pot depuis la dernière image.
+    private float HandTwistDelta(IXRSelectInteractor hand)
     {
-        Vector3 grip = hand.GetAttachTransform(attached.Grab).position;
-        return Vector3.Dot(grip - insertionPoint.position, insertionPoint.right);
+        Quaternion rotation = hand.GetAttachTransform(attached.Grab).rotation;
+        (rotation * Quaternion.Inverse(lastHandRotation)).ToAngleAxis(out float angle, out Vector3 axis);
+        lastHandRotation = rotation;
+        if (angle > 180f)
+            angle -= 360f;
+        return angle < 0.01f && angle > -0.01f ? 0f : angle * Vector3.Dot(axis, insertionPoint.up);
     }
 
-    private void PlaceOnRail()
+    private void PlaceInSeat()
     {
+        float angle = locked ? seatAngle : Mathf.Clamp(twist, -clipAngle, clipAngle);
         attached.transform.SetPositionAndRotation(
-            insertionPoint.position + insertionPoint.right * railPosition, insertionPoint.rotation);
+            insertionPoint.position, Quaternion.AngleAxis(angle, insertionPoint.up) * insertionPoint.rotation);
     }
 
     private void Detach()
@@ -142,14 +161,28 @@ public class ReservoirSocket : MonoBehaviour
         }
 
         attached = null;
-        slidingHand = null;
+        twistingHand = null;
         waitForRelease = false;
-        railPosition = 0f;
+        twist = 0f;
+        seatAngle = 0f;
         locked = false;
+    }
+
+    private void OnEnable()
+    {
+        gunGrab = GetComponent<XRGrabInteractable>();
+        potFirst = new XRSelectFilterDelegate((hand, _) => !IsOnLockedPot(hand));
+        gunGrab.selectFilters.Add(potFirst);
     }
 
     private void OnDisable()
     {
+        gunGrab.selectFilters.Remove(potFirst);
         Detach();
     }
+
+    // Une main qui touche le pot clipsé prend le pot, pas le pistolet (sauf si elle tient déjà le pistolet).
+    private bool IsOnLockedPot(IXRSelectInteractor hand) =>
+        LockedReservoir != null && !hand.IsSelecting(gunGrab) &&
+        hand is IXRHoverInteractor hover && LockedReservoir.Grab.IsHovered(hover);
 }

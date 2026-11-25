@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 // FONCTIONNALITÉ : le choix du motif (TemplateChoice, de Louis) arrive après le spray, juste avant le dessin aux crayons.
@@ -12,7 +12,7 @@ public class ChoixMotifAvantDessin : MonoBehaviour
     [SerializeField] private TemplateChoice choixMotif;    // le choix du motif, de Louis
     [SerializeField] private GameObject boiteCrayons;      // la boîte de crayons (Boite_Crayons_Dessin)
     [SerializeField] private Component boutonMontage;      // le bouton "Passer au montage"
-    [SerializeField] private ParticleSystem fumeePrefab;   // le nuage de fumée (FumeeTransition)
+    [SerializeField] private ParticleSystem fumeePrefab;   // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;            // le "pouf !" (SonFumee.wav)
 
     private bool lance;
@@ -52,6 +52,6 @@ public class ChoixMotifAvantDessin : MonoBehaviour
         ParticleSystem fumee = Instantiate(fumeePrefab, position, Quaternion.identity);
         fumee.gameObject.SetActive(true); // au cas où le prefab est enregistré caché
         fumee.Play(true);
-        Destroy(fumee.gameObject, 1.2f);
+        Destroy(fumee.gameObject, 2.5f); // l'effet APPARITION dure 2,5 s
     }
 }

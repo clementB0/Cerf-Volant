@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -10,7 +10,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class RetourPoignees : MonoBehaviour
 {
     [SerializeField] private XRGrabInteractable[] poignees;   // les deux poignées (gauche, droite)
-    [SerializeField] private ParticleSystem fumeePrefab;      // le nuage de fumée (FumeeTransition)
+    [SerializeField] private ParticleSystem fumeePrefab;      // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;               // le "pouf !" (SonFumee.wav)
     [SerializeField] private float tempsAvantRetour = 1.5f;   // le temps de la voir tomber, avant qu'elle revienne sur la table
 
@@ -78,6 +78,6 @@ public class RetourPoignees : MonoBehaviour
         ParticleSystem fumee = Instantiate(fumeePrefab, position, Quaternion.identity);
         fumee.gameObject.SetActive(true); // au cas où le prefab est enregistré caché
         fumee.Play(true);
-        Destroy(fumee.gameObject, 1.2f);
+        Destroy(fumee.gameObject, 2.5f); // l'effet APPARITION dure 2,5 s
     }
 }

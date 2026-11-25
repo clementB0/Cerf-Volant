@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 // FONCTIONNALITÉ : quand la découpe est finie, le cerf-volant fait "pouf" et réapparaît sur un petit chevalet
@@ -7,7 +7,7 @@ using UnityEngine;
 // À mettre sur l'objet "PieceDecoupee" : il apparaît pile à la fin de la découpe, donc son Start = "découpe finie".
 public class PresentoirCerfVolant : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem fumeePrefab;     // le nuage de fumée (le même que pour les bombes : FumeeTransition)
+    [SerializeField] private ParticleSystem fumeePrefab;     // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;              // le "pouf !" (SonFumee.wav)
     [SerializeField] private Material materiauPresentoir;    // la couleur du chevalet (Table.mat : bois marron)
     [SerializeField] private float attente = 0.9f;           // on laisse d'abord la pièce faire son petit saut de victoire (ReussiteDecoupe)
@@ -119,6 +119,6 @@ public class PresentoirCerfVolant : MonoBehaviour
         ParticleSystem fumee = Instantiate(fumeePrefab, position, Quaternion.identity);
         fumee.gameObject.SetActive(true); // au cas où le prefab est enregistré caché
         fumee.Play(true);
-        Destroy(fumee.gameObject, 1.2f);
+        Destroy(fumee.gameObject, 2.5f); // l'effet APPARITION dure 2,5 s
     }
 }

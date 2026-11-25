@@ -218,7 +218,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2253659315437618115, guid: 4c1862690ebd4062b4cab093344835fa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 900001500}
   m_SourcePrefab: {fileID: 100100000, guid: 4c1862690ebd4062b4cab093344835fa, type: 3}
 --- !u!1001 &143509035
 PrefabInstance:
@@ -507,9 +510,9 @@ MonoBehaviour:
   crayons:
   - {fileID: 1117417489}
   boutonMontage: {fileID: 5419331888460242979}
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   delaiDisparition: 0.2
-  dureeFumee: 1.2
+  dureeFumee: 2.5
 --- !u!114 &333572712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,9 +532,9 @@ MonoBehaviour:
   - {fileID: 900000703}
   - {fileID: 900000704}
   templateChoice: {fileID: 0}
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   delaiBascule: 0.2
-  dureeFumee: 1.2
+  dureeFumee: 2.5
 --- !u!4 &333572713
 Transform:
   m_ObjectHideFlags: 0
@@ -744,6 +747,7 @@ GameObject:
   - component: {fileID: 634727760}
   - component: {fileID: 634727759}
   - component: {fileID: 634727761}
+  - component: {fileID: 900001501}
   m_Layer: 0
   m_Name: RealodScene
   m_TagString: Untagged
@@ -758,7 +762,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634727758}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d7067c6269ff7a4ca6ba2b79740ff14, type: 3}
   m_Name: 
@@ -3166,7 +3170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   livre: {fileID: 900000722}
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
   sonDeclencheur: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
   zoom: 30
@@ -3215,7 +3219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4825d180b35ce9269e68126826fa6cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
 --- !u!1 &900000901
 GameObject:
@@ -3345,7 +3349,7 @@ MonoBehaviour:
   choixMotif: {fileID: 900001002}
   boiteCrayons: {fileID: 1117417489}
   boutonMontage: {fileID: 5419331888460242979}
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
 --- !u!114 &981220002
 MonoBehaviour:
@@ -4258,3 +4262,35 @@ SceneRoots:
   - {fileID: 1863276864}
   - {fileID: 177410751}
   - {fileID: 900001001}
+--- !u!114 &900001500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067d42e6c6174226b67e3cd241488e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlechesClipsagePot
+  rayon: 0.06
+  hauteur: 0
+  epaisseur: 0.006
+  couleur: {r: 1, g: 1, b: 1, a: 1}
+  balancement: 25
+  vitesse: 4
+--- !u!114 &900001501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634727758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b2c290f2aa7044584f05a51dd45555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OuvertureYeux
+  boutonY: {fileID: -4356849895405025009, guid: 8fc7e7ad33b842b4aba1edf6eb74915a, type: 3}
+  dureeFermeture: 0.4

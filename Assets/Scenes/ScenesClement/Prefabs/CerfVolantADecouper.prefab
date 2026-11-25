@@ -852,7 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04aa5f7b588068a45297bc779309f67f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
   materiauPresentoir: {fileID: 2100000, guid: 11bd6cce75896b9c3557df4a42d53183, type: 2}
   attente: 0.9
@@ -2762,7 +2762,7 @@ MonoBehaviour:
   poignees:
   - {fileID: 900000057}
   - {fileID: 900000107}
-  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  fumeePrefab: {fileID: 5925184788085688080, guid: f6753a47ca074b4588f73a5bf092f39d, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
   tempsAvantRetour: 1.5
 --- !u!114 &900000954

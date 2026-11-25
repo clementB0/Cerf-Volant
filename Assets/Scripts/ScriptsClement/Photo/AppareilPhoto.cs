@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -14,7 +14,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class AppareilPhoto : MonoBehaviour
 {
     [SerializeField] private LivrePhotos livre;            // le livre où les photos arrivent
-    [SerializeField] private ParticleSystem fumeePrefab;   // le nuage de fumée (FumeeTransition)
+    [SerializeField] private ParticleSystem fumeePrefab;   // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;            // le "pouf !" (SonFumee.wav)
     [SerializeField] private AudioClip sonDeclencheur;     // le "clic" de la photo (SonPrise.wav)
     [SerializeField] private float zoom = 30f;             // le champ de vision du viseur, en degrés (petit = zoom fort)
@@ -219,7 +219,7 @@ public class AppareilPhoto : MonoBehaviour
         ParticleSystem fumee = Instantiate(fumeePrefab, position, Quaternion.identity);
         fumee.gameObject.SetActive(true);
         fumee.Play(true);
-        Destroy(fumee.gameObject, 1.2f);
+        Destroy(fumee.gameObject, 2.5f); // l'effet APPARITION dure 2,5 s
     }
 
     private void OnDestroy()

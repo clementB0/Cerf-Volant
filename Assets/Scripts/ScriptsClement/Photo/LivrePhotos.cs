@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 // FONCTIONNALITÉ : un livre ouvert posé sur la table, où arrivent les photos prises avec l'appareil (avec un "pouf").
 // 4 places (2 par page) ; à la 5e photo, elle remplace la plus ancienne.
 // À mettre sur un objet vide posé sur la table, à côté de l'appareil photo (le joueur est côté -z du livre).
 public class LivrePhotos : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem fumeePrefab; // le nuage de fumée (FumeeTransition)
+    [SerializeField] private ParticleSystem fumeePrefab; // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;          // le "pouf !" (SonFumee.wav)
 
     // Les 4 places des photos sur les pages (gauche haut, gauche bas, droite haut, droite bas), au-dessus du papier.
@@ -83,6 +83,6 @@ public class LivrePhotos : MonoBehaviour
         ParticleSystem fumee = Instantiate(fumeePrefab, position, Quaternion.identity);
         fumee.gameObject.SetActive(true);
         fumee.Play(true);
-        Destroy(fumee.gameObject, 1.2f);
+        Destroy(fumee.gameObject, 2.5f); // l'effet APPARITION dure 2,5 s
     }
 }

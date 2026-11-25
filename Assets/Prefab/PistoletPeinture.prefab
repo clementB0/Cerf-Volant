@@ -4913,7 +4913,6 @@ Transform:
   - {fileID: 2181977084059330531}
   - {fileID: 1978296391871965092}
   - {fileID: 7400000000000000015}
-  - {fileID: 7400000000000000017}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &7456899062406679495
@@ -5278,7 +5277,7 @@ Transform:
   m_GameObject: {fileID: 7400000000000000014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.045, y: 0.04616, z: 0.06924}
+  m_LocalPosition: {x: 0, y: 0.04616, z: 0.06924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5300,7 +5299,8 @@ MonoBehaviour:
   gunCollider: {fileID: 8341880111485361615}
   compatibleReservoirs: []
   captureRadius: 0.065
-  slideDistance: 0.045
+  clipAngle: 15
+  pullDistance: 0.04
 --- !u!114 &7400000000000000011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5347,57 +5347,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SonSpray
   sonSpray: {fileID: 8300000, guid: 634474aad02c7d64a8a545242dfeca99, type: 3}
   volume: 0.803
---- !u!1 &7400000000000000016
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7400000000000000017}
-  - component: {fileID: 7400000000000000018}
-  - component: {fileID: 7400000000000000019}
-  m_Layer: 0
-  m_Name: Glissiere reservoir
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7400000000000000017
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400000000000000016}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.023, y: 0.102, z: 0.06924}
-  m_LocalScale: {x: 0.082, y: 0.008, z: 0.033}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6237188200436635574}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7400000000000000018
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400000000000000016}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &7400000000000000019
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400000000000000016}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_RenderingLayerMask: 1
-  m_Materials:
-  - {fileID: 2100000, guid: a35de9ba4a15438aa26b820e211ef6bf, type: 2}
