@@ -29,10 +29,6 @@ public class SprayConeVFX : MonoBehaviour
     private SprayInput sprayInput;
     private SprayColor sprayColor;
 
-    private ParticleSystem.Particle[] particleBuffer;
-    private Color previousColor;
-    private bool hasColor;
-
     // Le script de peinture lit ces mêmes réglages.
     public float ConeHalfAngle => coneHalfAngle;
     public float SprayRange => sprayRange;
@@ -113,9 +109,6 @@ public class SprayConeVFX : MonoBehaviour
         var colorOverLifetime = sprayParticles.colorOverLifetime;
         colorOverLifetime.enabled = true;
         colorOverLifetime.color = fade;
-
-        particleBuffer =
-            new ParticleSystem.Particle[main.maxParticles];
     }
 
     private void Update()
@@ -135,10 +128,8 @@ public class SprayConeVFX : MonoBehaviour
 
     private void ApplySettings()
     {
-        Color color = sprayColor.PaintColor;
-
         var main = sprayParticles.main;
-        main.startColor = color;
+        main.startColor = sprayColor.PaintColor;
         main.startSpeed = new ParticleSystem.MinMaxCurve(particleSpeed * 0.78f, particleSpeed);
         main.startSize = new ParticleSystem.MinMaxCurve(particleSize * 0.65f, particleSize);
 
@@ -150,23 +141,6 @@ public class SprayConeVFX : MonoBehaviour
 
         var shape = sprayParticles.shape;
         shape.angle = coneHalfAngle;
-
-        if (!hasColor || previousColor != color)
-        {
-            int count =
-                sprayParticles.GetParticles(particleBuffer);
-
-            for (int i = 0; i < count; i++)
-                particleBuffer[i].startColor = color;
-
-            sprayParticles.SetParticles(
-                particleBuffer,
-                count
-            );
-
-            previousColor = color;
-            hasColor = true;
-        }
     }
 
     private void StopSpray()

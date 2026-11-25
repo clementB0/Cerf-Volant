@@ -7,15 +7,33 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class SprayInput : MonoBehaviour
 {
     private XRGrabInteractable grab;
+    [SerializeField] private ReservoirSocket reservoirSocket;
     [SerializeField, Range(0f, 1f)] private float vibrationDeclenchement = 0.16f;
     private bool triggerHeld;
 
-    // Lu par SprayPainter pour peindre et par SprayConeVFX pour afficher le jet.
-    public bool IsSpraying =>
+    private bool TriggerAvailable =>
         isActiveAndEnabled &&
         grab != null &&
-        grab.isSelected &&
-        triggerHeld;
+        grab.isSelected;
+
+    private bool HasPaint => reservoirSocket == null || reservoirSocket.LockedReservoir != null;
+
+    public bool IsSpraying => TriggerAvailable && triggerHeld && HasPaint;
+
+    public float TriggerPressure
+    {
+        get
+        {
+            if (!TriggerAvailable)
+                return 0f;
+
+            if (grab.firstInteractorSelecting is XRBaseInputInteractor hand &&
+                hand.activateInput.TryReadValue(out float pressure))
+                return Mathf.Clamp01(pressure);
+
+            return triggerHeld ? 1f : 0f;
+        }
+    }
 
     private void Awake()
     {
@@ -44,7 +62,7 @@ public class SprayInput : MonoBehaviour
             return;
 
         triggerHeld = true;
-        if (grab.firstInteractorSelecting is XRBaseInputInteractor manette)
+        if (HasPaint && grab.firstInteractorSelecting is XRBaseInputInteractor manette)
             manette.SendHapticImpulse(vibrationDeclenchement, 0.055f);
     }
 

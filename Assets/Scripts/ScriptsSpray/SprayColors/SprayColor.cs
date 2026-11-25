@@ -9,7 +9,11 @@ public class SprayColor : MonoBehaviour
 
     [SerializeField] private Renderer reservoir;
 
-    public Color PaintColor => paintColor;
+    [SerializeField] private ReservoirSocket reservoirSocket;
+
+    public Color PaintColor => reservoirSocket != null && reservoirSocket.LockedReservoir != null
+        ? reservoirSocket.LockedReservoir.PaintColor
+        : paintColor;
 
     private void Awake()
     {

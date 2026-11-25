@@ -6,30 +6,38 @@ public class ReloadGame : MonoBehaviour
 {
     [SerializeField]
     private InputActionReference buttonY;
+    [SerializeField] private ReloadSmoke transition;
+
+    private bool ownsAction;
 
     private void OnEnable()
     {
-        buttonY.action.performed += OnButtonY;
-        buttonY.action.Enable();
+        var action = buttonY?.action;
+        if (action == null)
+            return;
+
+        ownsAction = !action.enabled;
+        action.performed += OnButtonY;
+        action.Enable();
     }
 
     private void OnDisable()
     {
-        buttonY.action.performed -= OnButtonY;
-        buttonY.action.Disable();
+        var action = buttonY?.action;
+        if (action == null)
+            return;
+
+        action.performed -= OnButtonY;
+        if (ownsAction)
+            action.Disable();
     }
 
     private void OnButtonY(InputAction.CallbackContext context)
     {
-        Debug.Log("Bouton Y appuyé !");
-
-        // Ton action ici
-        FaireAction();
-    }
-
-    private void FaireAction()
-    {
-        SceneManager.LoadScene("DecoupeTissu");
+        if (transition != null)
+            transition.Reload(gameObject.scene.buildIndex);
+        else
+            SceneManager.LoadScene("DecoupeTissu");
     }
 }
 

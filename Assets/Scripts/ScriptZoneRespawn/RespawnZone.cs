@@ -46,6 +46,9 @@ public class RespawnZone : MonoBehaviour
 
     private static void ReplacerObjet(Transform cible, Pose spawn)
     {
+        if (cible.TryGetComponent(out PaintReservoir reservoir) && reservoir.OnRail)
+            return;
+
         if (cible.TryGetComponent(out Rigidbody rb))
         {
             if (!rb.isKinematic)
