@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 // FONCTIONNALITÉ : une fois le cerf-volant parti en vol, lâcher une poignée la fait tomber, et le cerf-volant tombe avec
-// (il faudra le relancer en levant les deux poignées : "Monte", voir VolCerfVolant et MessageRelance).
+// (il faudra le relancer en levant les deux poignées : "Releve", voir VolCerfVolant et MessageRelance).
 // Peu après, la poignée réapparaît sur la table, à sa place de départ, dans un pouf.
 // À mettre sur "PieceDecoupee", avec VolCerfVolant.
 [RequireComponent(typeof(VolCerfVolant))]

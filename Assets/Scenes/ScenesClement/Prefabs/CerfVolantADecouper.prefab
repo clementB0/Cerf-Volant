@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 900000951}
   - component: {fileID: 900000952}
   - component: {fileID: 900000953}
+  - component: {fileID: 900000954}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -2729,6 +2730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   couleur: {r: 1, g: 0.85, b: 0.2, a: 1}
+  police: {fileID: 11400000, guid: 0d9fb8e267cfbd64cbe5ecc985494d12, type: 2}
 --- !u!114 &900000952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2743,6 +2745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   couleur: {r: 1, g: 0.85, b: 0.2, a: 1}
   distance: 0.7
+  police: {fileID: 11400000, guid: 0d9fb8e267cfbd64cbe5ecc985494d12, type: 2}
 --- !u!114 &900000953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2761,3 +2764,22 @@ MonoBehaviour:
   fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
   sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
   tempsAvantRetour: 1.5
+--- !u!114 &900000954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06391e0c09ef14914f630fe1bda49c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duree: 1.2
+  hauteur: 1
+  sonFigure: {fileID: 8300000, guid: 42de2678ffb2aa2187ab4f89841ecd1a, type: 3}
+  volume: 0.6
+  nombreEtoiles: 25
+  tailleEtoiles: 0.12
+  vitesseEtoiles: 1.5

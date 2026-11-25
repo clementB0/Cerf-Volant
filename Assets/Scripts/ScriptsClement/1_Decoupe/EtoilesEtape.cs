@@ -28,7 +28,15 @@ public class EtoilesEtape : MonoBehaviour
         hautParleur.playOnAwake = false;
         hautParleur.spatialBlend = 1f; // le son vient de l'endroit des étoiles
 
-        etoiles = objet.AddComponent<ParticleSystem>();
+        etoiles = CreerEtoiles(objet, vitesse, taille, couleur1, couleur2);
+        GetComponent<PatronPointilles>().EtapeFinie += Lancer;
+    }
+
+    // Fabrique les étoiles sur "objet" et les renvoie : on les fait jaillir ensuite avec "Emit(combien)".
+    // "public static" : un autre script peut s'en servir sans avoir d'EtoilesEtape (FigureCerfVolant, pour la figure en vol).
+    public static ParticleSystem CreerEtoiles(GameObject objet, float vitesse, float taille, Color couleur1, Color couleur2)
+    {
+        ParticleSystem etoiles = objet.AddComponent<ParticleSystem>();
         etoiles.Stop(); // on les lance nous-mêmes (Emit)
         ParticleSystem.MainModule reglages = etoiles.main;
         reglages.simulationSpace = ParticleSystemSimulationSpace.World;
@@ -68,8 +76,7 @@ public class EtoilesEtape : MonoBehaviour
         Material matiere = new Material(Shader.Find("Sprites/Default")); // gère la transparence et la couleur des particules
         matiere.mainTexture = ImageEtoile(64);
         objet.GetComponent<ParticleSystemRenderer>().sharedMaterial = matiere;
-
-        GetComponent<PatronPointilles>().EtapeFinie += Lancer;
+        return etoiles;
     }
 
     private void OnDestroy()

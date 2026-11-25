@@ -17,6 +17,7 @@ public class ReservoirBombe : MonoBehaviour
     [SerializeField] private float vitesseSecousse = 0.6f;     // en dessous de 0,6 m/s, ce n'est pas une secousse (juste un mouvement)
     [SerializeField] private AudioClip sonSecouer;             // le "cling cling" de la bille dans la bombe (PaintShake.mp3)
     [SerializeField, Range(0f, 1f)] private float volumeSecouer = 0.8f;
+    [SerializeField] private TMP_FontAsset police;            // la police du "Secoue !" (North Kids SDF) ; vide = la police par défaut
 
     // Combien de peinture il reste (1 = pleine, 0 = vide). Lu par SonSpray pour baisser le son quand elle se vide.
     public float Charge { get; private set; } = 1f;
@@ -116,6 +117,8 @@ public class ReservoirBombe : MonoBehaviour
         texte.rectTransform.sizeDelta = new Vector2(0.4f, 0.08f);
         texte.text = "Secoue !";
         texte.fontSize = 0.4f; // environ 4 cm de haut
+        if (police != null)
+            texte.font = police; // la police choisie dans l'Inspector
         texte.fontStyle = FontStyles.Bold;
         texte.alignment = TextAlignmentOptions.Center;
         texte.color = couleurAide;

@@ -50,9 +50,9 @@ public class VolCerfVolant : MonoBehaviour
     public bool EnVol { get; private set; }
     public Vector3 Vent { get; private set; }
     public Vector3 VentApparent { get; private set; }
-    // Touché par un oiseau : il tombe et reste au sol jusqu'à ce que le joueur le relance (en levant les deux poignées).
+    // Poignées lâchées (RetourPoignees) : il tombe et reste au sol jusqu'à ce que le joueur le relance (en levant les deux poignées).
     public bool Tombe => aTerre;
-    // Il est tombé depuis assez longtemps : il attend que le joueur lève les deux poignées (MessageRelance affiche "Monte").
+    // Il est tombé depuis assez longtemps : il attend que le joueur lève les deux poignées (MessageRelance affiche "Releve").
     public bool AttendRelance => aTerre && Time.time >= finDeChute;
 
     private bool aTerre;
@@ -74,7 +74,7 @@ public class VolCerfVolant : MonoBehaviour
         prise = GetComponent<XRGrabInteractable>();
     }
 
-    // Appelé lorsqu'un obstacle touche le cerf-volant
+    // Appelé par RetourPoignees quand une poignée est lâchée : le cerf-volant tombe
     public void Tomber()
     {
         aTerre = true;

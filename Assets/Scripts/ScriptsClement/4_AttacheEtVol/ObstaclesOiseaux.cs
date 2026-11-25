@@ -2,20 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // FONCTIONNALITÉ : pendant le vol, des oiseaux (des hirondelles) traversent le ciel.
-// Il faut les esquiver : si un oiseau touche le cerf-volant, il tombe (il faudra le relancer en levant les deux poignées).
-// Un oiseau qui le frôle sans le toucher vient tourner doucement autour du cerf-volant (OiseauEnOrbite).
+// Ils ne touchent jamais le cerf-volant : un oiseau qui arrive tout près l'évite et vient tourner doucement autour de lui (OiseauEnOrbite).
 // Au 5e oiseau autour, ils s'envolent tous dans le ciel, et on peut en rassembler de nouveaux.
-// Si un oiseau touche le cerf-volant, on perd ceux qui tournaient autour : ils s'envolent aussi.
 // À mettre sur l'objet "PieceDecoupee", à côté de VolCerfVolant.
 public class ObstaclesOiseaux : MonoBehaviour
 {
     [SerializeField] private float tempsEntreOiseaux = 2.5f;  // un nouvel oiseau toutes les 2,5 secondes environ
     [SerializeField] private float vitesseOiseau = 1.5f;      // en mètres par seconde (lent : ils arrivent de derrière, on les voit tard)
     [SerializeField] private float distanceDepart = 6f;       // ils partent 6 m derrière le cerf-volant (donc derrière toi)
-    [SerializeField] private float precision = 0.4f;          // ils visent jusqu'à 40 cm à gauche ou à droite du cerf-volant (petit = plus dur)
+    [SerializeField] private float precision = 0.4f;          // ils visent jusqu'à 40 cm à gauche ou à droite du cerf-volant (petit = ils viennent presque tous tourner autour)
     [SerializeField] private GameObject modeleOiseau;          // le modèle 3D de l'oiseau (Asset_Hirondelle)
-    [SerializeField] private float rayonTouche = 0.3f;        // plus près que ça du cerf-volant = touché
-    [SerializeField] private float rayonFrole = 0.8f;         // passé à moins de 80 cm sans toucher = frôlé : il vient tourner autour
+    [SerializeField] private float rayonFrole = 0.8f;         // arrivé à moins de 80 cm du cerf-volant, il l'évite et vient tourner autour
     [SerializeField] private int oiseauxAutourMax = 5;        // au 5e oiseau autour du cerf-volant, ils s'envolent tous
     [SerializeField] private AudioClip sonPassage;            // le "swoosh" quand un oiseau passe au-dessus de ta tête (swoosh.mp3)
 
@@ -27,7 +24,7 @@ public class ObstaclesOiseaux : MonoBehaviour
     private List<Vector3> vitesses = new List<Vector3>();
     private List<float> fins = new List<float>();
 
-    // Les oiseaux qui tournent autour du cerf-volant (après l'avoir frôlé).
+    // Les oiseaux qui tournent autour du cerf-volant (après s'en être approchés).
     private List<OiseauEnOrbite> autour = new List<OiseauEnOrbite>();
 
     private void Start()
@@ -50,20 +47,10 @@ public class ObstaclesOiseaux : MonoBehaviour
         {
             oiseaux[i].position += vitesses[i] * Time.deltaTime;
 
-            // Touché ? (seulement s'il vole encore : un cerf-volant déjà au sol ne retombe pas)
+            // Il arrive tout près du cerf-volant (seulement s'il vole) : il ne le touche pas, il l'évite et vient tourner autour
+            // (OiseauEnOrbite s'occupe de lui maintenant, on l'enlève de la liste sans le détruire).
             float distance = Vector3.Distance(oiseaux[i].position, transform.position);
-            bool touche = vol.EnVol && !vol.Tombe && distance < rayonTouche;
-            if (touche)
-            {
-                vol.Tomber();
-                EnvolerTous(); // touché : on perd les oiseaux qui tournaient autour, ils s'en vont
-            }
-
-            // Frôlé ? Il est passé tout près sans toucher, et il s'éloigne déjà (il a dépassé le point le plus proche) :
-            // il vient tourner autour du cerf-volant (OiseauEnOrbite s'occupe de lui maintenant, on l'enlève de la liste sans le détruire).
-            bool frole = !touche && vol.EnVol && !vol.Tombe && distance < rayonFrole
-                         && Vector3.Dot(vitesses[i], oiseaux[i].position - transform.position) > 0f;
-            if (frole)
+            if (vol.EnVol && !vol.Tombe && distance < rayonFrole)
             {
                 OiseauEnOrbite oiseau = oiseaux[i].gameObject.AddComponent<OiseauEnOrbite>();
                 oiseau.Rejoindre(transform, autour.Count, oiseauxAutourMax); // la place suivante sur le cercle
@@ -76,8 +63,8 @@ public class ObstaclesOiseaux : MonoBehaviour
                 continue;
             }
 
-            // L'oiseau disparaît s'il a touché, ou quand il a fini de traverser le ciel.
-            if (touche || Time.time > fins[i])
+            // L'oiseau disparaît quand il a fini de traverser le ciel (il est passé trop loin du cerf-volant pour le rejoindre).
+            if (Time.time > fins[i])
                 Retirer(i);
         }
     }
@@ -89,7 +76,7 @@ public class ObstaclesOiseaux : MonoBehaviour
         Vector3 cote = Vector3.Cross(Vector3.up, devant); // la droite, quand on regarde dans le vent
 
         // Le point qu'il vise : à la hauteur du cerf-volant, un peu à gauche ou à droite au hasard.
-        // Il arrive pile à sa hauteur : pour l'esquiver, il faut emmener le cerf-volant sur le côté.
+        // Il arrive pile à sa hauteur : il passe donc presque toujours assez près pour venir tourner autour.
         Vector3 cible = transform.position + cote * Random.Range(-precision, precision);
 
         // L'oiseau : une hirondelle (Asset_Hirondelle), à sa vraie taille (environ 30 cm d'une aile à l'autre).
@@ -111,7 +98,7 @@ public class ObstaclesOiseaux : MonoBehaviour
         oiseau.transform.rotation = Quaternion.LookRotation(devant);  // ... et regarde là où il va
 
         // Le "swoosh" : il part de l'oiseau (en 3D), juste avant qu'il passe au plus près de ta tête.
-        // Comme il arrive de derrière, c'est ce son qui te prévient qu'il faut esquiver.
+        // Comme il arrive de derrière, c'est ce son qui te prévient qu'un oiseau arrive.
         if (sonPassage != null && Camera.main != null)
         {
             AudioSource son = oiseau.AddComponent<AudioSource>();

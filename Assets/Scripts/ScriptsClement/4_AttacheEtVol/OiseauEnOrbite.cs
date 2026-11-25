@@ -1,9 +1,9 @@
 using UnityEngine;
 
-// FONCTIONNALITÉ : un oiseau qui a frôlé le cerf-volant (sans le toucher) vient tourner calmement autour de lui,
+// FONCTIONNALITÉ : un oiseau qui arrive tout près du cerf-volant l'évite et vient tourner calmement autour de lui,
 // sur un cercle à plat autour du cerf-volant (le cercle le suit en douceur quand il bouge). Les oiseaux se répartissent sur le cercle.
-// Quand il y en a assez, ou quand le cerf-volant est touché, ils s'envolent tous haut dans le ciel et disparaissent (voir ObstaclesOiseaux).
-// Rien à poser dans la scène : ObstaclesOiseaux l'ajoute tout seul sur l'oiseau qui vient de frôler.
+// Quand il y en a assez, ils s'envolent tous haut dans le ciel et disparaissent (voir ObstaclesOiseaux).
+// Rien à poser dans la scène : ObstaclesOiseaux l'ajoute tout seul sur l'oiseau qui vient d'arriver tout près.
 public class OiseauEnOrbite : MonoBehaviour
 {
     private const float rayon = 0.65f;          // ils tournent à 65 cm du cerf-volant (autour des ailes, sans les toucher)
@@ -17,7 +17,7 @@ public class OiseauEnOrbite : MonoBehaviour
     private Transform cerfVolant;
     private Vector3 centre;       // le centre du cercle : il suit le cerf-volant en douceur (le cerf-volant tremble un peu dans le vent)
     private float decalage;      // sa place sur le cercle (de 0 à 1 tour), pour que les oiseaux soient bien répartis
-    private Vector3 ecartDepart; // où il était par rapport au centre au moment du frôlement
+    private Vector3 ecartDepart; // où il était par rapport au centre au moment où il est arrivé tout près
     private float temps;
     private bool envol;
     private float tempsEnvol;
@@ -54,7 +54,8 @@ public class OiseauEnOrbite : MonoBehaviour
             Vector3 surLeCercle = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * rayon + Vector3.up * hauteur;
 
             // Au début, il glisse de là où il était jusqu'à sa place (pas de saut).
-            transform.position = centre + Vector3.Lerp(ecartDepart, surLeCercle, Mathf.SmoothStep(0f, 1f, temps / dureeArrivee));
+            // "Slerp" (et pas "Lerp") : il contourne le cerf-volant en arc de cercle, au lieu de couper tout droit à travers lui.
+            transform.position = centre + Vector3.Slerp(ecartDepart, surLeCercle, Mathf.SmoothStep(0f, 1f, temps / dureeArrivee));
 
             // Il regarde dans le sens du cercle (pas selon ses petites secousses), penché dans le virage, et s'y tourne en douceur.
             Vector3 sensDuCercle = new Vector3(-Mathf.Sin(angle), 0f, Mathf.Cos(angle));

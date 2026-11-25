@@ -10,6 +10,7 @@ using UnityEngine;
 public class IndicationsCordes : MonoBehaviour
 {
     [SerializeField] private Color couleur = new Color(1f, 0.85f, 0.2f); // jaune vif, comme les ronds
+    [SerializeField] private TMP_FontAsset police; // la police des mots (North Kids SDF) ; vide = la police par défaut
 
     private PointAccroche accroche;                             // sait où sont les deux ronds
     private Transform[] bouts;                                  // les bouts libres des cordes : gauche, puis droite
@@ -92,6 +93,8 @@ public class IndicationsCordes : MonoBehaviour
         texte.rectTransform.sizeDelta = new Vector2(0.3f, 0.06f);
         texte.text = mot;
         texte.fontSize = 0.35f; // environ 3,5 cm de haut
+        if (police != null)
+            texte.font = police; // la police choisie dans l'Inspector
         texte.fontStyle = FontStyles.Bold;
         texte.alignment = TextAlignmentOptions.Center;
         texte.color = couleur;

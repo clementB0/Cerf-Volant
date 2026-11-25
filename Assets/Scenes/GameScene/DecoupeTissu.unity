@@ -277,11 +277,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.64479005
+      value: -0.778
+      objectReference: {fileID: 0}
+    - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.72
       objectReference: {fileID: 0}
     - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.8725716
+      value: 0.682
       objectReference: {fileID: 0}
     - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
       propertyPath: m_LocalRotation.w
@@ -298,10 +302,6 @@ PrefabInstance:
     - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.72
       objectReference: {fileID: 0}
     - target: {fileID: 1005, guid: d1eaeab53df0e89cb45f54814ecf9354, type: 3}
       propertyPath: volume
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   brushRadiusPixels: 18
   suivreCouverture: 1
-  couvertureRequise: 0.14
+  couvertureRequise: 0.99
   opaciteRequise: 0.5
   quandPeintureTerminee:
     m_PersistentCalls:
@@ -1284,7 +1284,7 @@ MonoBehaviour:
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   brushRadiusPixels: 18
   suivreCouverture: 1
-  couvertureRequise: 1
+  couvertureRequise: 0.99
   opaciteRequise: 0.5
   quandPeintureTerminee:
     m_PersistentCalls:
@@ -1552,7 +1552,7 @@ MonoBehaviour:
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   brushRadiusPixels: 18
   suivreCouverture: 1
-  couvertureRequise: 1
+  couvertureRequise: 0.99
   opaciteRequise: 0.5
   quandPeintureTerminee:
     m_PersistentCalls:
@@ -1773,8 +1773,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a2d542a3bc5ff88fb0db91d03d9de3b, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   attenteMax: 3
 --- !u!114 &900000505
 MonoBehaviour:
@@ -3236,6 +3236,7 @@ MonoBehaviour:
   vitesseSecousse: 0.6
   sonSecouer: {fileID: 8300000, guid: 6c3d6d817852f5340a7bb06477c1e1ec, type: 3}
   volumeSecouer: 0.8
+  police: {fileID: 11400000, guid: 0d9fb8e267cfbd64cbe5ecc985494d12, type: 2}
 --- !u!114 &900000802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3268,6 +3269,7 @@ MonoBehaviour:
   vitesseSecousse: 0.6
   sonSecouer: {fileID: 8300000, guid: 6c3d6d817852f5340a7bb06477c1e1ec, type: 3}
   volumeSecouer: 0.8
+  police: {fileID: 11400000, guid: 0d9fb8e267cfbd64cbe5ecc985494d12, type: 2}
 --- !u!114 &900000804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3300,6 +3302,7 @@ MonoBehaviour:
   vitesseSecousse: 0.6
   sonSecouer: {fileID: 8300000, guid: 6c3d6d817852f5340a7bb06477c1e1ec, type: 3}
   volumeSecouer: 0.8
+  police: {fileID: 11400000, guid: 0d9fb8e267cfbd64cbe5ecc985494d12, type: 2}
 --- !u!114 &900000806
 MonoBehaviour:
   m_ObjectHideFlags: 0

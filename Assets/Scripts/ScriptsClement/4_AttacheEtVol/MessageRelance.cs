@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-// FONCTIONNALITÉ : après une chute (un oiseau a touché le cerf-volant), "Monte" s'affiche devant les yeux,
+// FONCTIONNALITÉ : après une chute (une poignée a été lâchée), "Releve" s'affiche devant les yeux,
 // avec une flèche de chaque côté qui monte et descend : il faut lever les deux poignées d'un coup pour le faire repartir.
 // Le message disparaît dès que le cerf-volant repart (voir VolCerfVolant : AttendRelance).
 // À mettre sur "PieceDecoupee", avec VolCerfVolant.
@@ -10,9 +10,10 @@ public class MessageRelance : MonoBehaviour
 {
     [SerializeField] private Color couleur = new Color(1f, 0.85f, 0.2f); // jaune vif, comme les autres indications
     [SerializeField] private float distance = 0.7f;                      // le message flotte à 70 cm devant les yeux
+    [SerializeField] private TMP_FontAsset police;                             // la police du message (North Kids SDF) ; vide = la police par défaut
 
     private VolCerfVolant vol;
-    private Transform message;                              // "Monte" + les deux flèches (accroché à la tête)
+    private Transform message;                              // "Releve" + les deux flèches (accroché à la tête)
     private readonly Transform[] fleches = new Transform[2]; // à gauche, puis à droite du mot
 
     private void Start()
@@ -38,7 +39,7 @@ public class MessageRelance : MonoBehaviour
         // Les flèches montent et descendent de 4 cm, un peu plus d'une fois par seconde : le geste à faire.
         float bouge = (Mathf.Sin(Time.time * 7f) + 1f) * 0.02f;
         for (int i = 0; i < 2; i++)
-            fleches[i].localPosition = new Vector3(i == 0 ? -0.14f : 0.14f, -0.02f + bouge, 0f);
+            fleches[i].localPosition = new Vector3(i == 0 ? -0.17f : 0.17f, -0.02f + bouge, 0f);
     }
 
     // Crée le message, accroché à la tête : il suit le regard, toujours au même endroit dans la vue.
@@ -52,9 +53,12 @@ public class MessageRelance : MonoBehaviour
         TextMeshPro texte = new GameObject("Texte").AddComponent<TextMeshPro>();
         texte.gameObject.layer = 5;
         texte.transform.SetParent(message, false);
-        texte.rectTransform.sizeDelta = new Vector2(0.3f, 0.1f);
-        texte.text = "Monte";
+        texte.rectTransform.sizeDelta = new Vector2(0.4f, 0.1f);
+        // shortcut: "Releve" sans accent, car la police North Kids n'a pas le "è" ; écrire "Relève" quand la police aura les accents.
+        texte.text = "Releve";
         texte.fontSize = 0.6f; // environ 6 cm de haut
+        if (police != null)
+            texte.font = police; // la police choisie dans l'Inspector
         texte.fontStyle = FontStyles.Bold;
         texte.alignment = TextAlignmentOptions.Center;
         texte.color = couleur;
