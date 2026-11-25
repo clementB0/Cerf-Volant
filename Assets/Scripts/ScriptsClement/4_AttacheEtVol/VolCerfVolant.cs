@@ -27,7 +27,7 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float angleDeVirageMax = 60f;
     [SerializeField] private float sensibiliteVirage = 1.6f;      // plus grand = il tourne avec moins d'écart de hauteur entre les mains (1 = pente des mains telle quelle)
     [SerializeField] private float lissageVirage = 0.4f;          // il met environ 0,4 s à suivre un changement gauche/droite des mains (0 = tout de suite)
-    [SerializeField] private float amplitudeHauteurMains = 0.2f;  // de mains basses à mains hautes en 20 cm de mouvement : le haut/bas suit bien les mains
+    [SerializeField] private float amplitudeHauteurMains = 0.3f;  // de mains basses à mains hautes en 30 cm de mouvement (plus grand = le haut/bas réagit moins aux petits gestes)
 
     [Header("Sol et chute")]
     [SerializeField] private float hauteurDuSol = 0.3f;
@@ -288,7 +288,7 @@ public class VolCerfVolant : MonoBehaviour
         if (Camera.main != null)
         {
             // Les mains au milieu = 50 cm sous les yeux. De là, monter ou descendre les mains de la moitié de
-            // "amplitudeHauteurMains" (10 cm) suffit pour la portance la plus forte ou la plus faible.
+            // "amplitudeHauteurMains" (15 cm) suffit pour la portance la plus forte ou la plus faible.
             float milieuMains = Camera.main.transform.position.y - 0.5f;
             mainsHautes = Mathf.InverseLerp(
                 milieuMains - amplitudeHauteurMains / 2f,
