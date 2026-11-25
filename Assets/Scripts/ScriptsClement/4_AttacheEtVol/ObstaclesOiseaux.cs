@@ -3,7 +3,8 @@ using UnityEngine;
 
 // FONCTIONNALITÉ : pendant le vol, des oiseaux (des hirondelles) traversent le ciel.
 // Ils ne touchent jamais le cerf-volant : un oiseau qui arrive tout près l'évite et vient tourner doucement autour de lui (OiseauEnOrbite).
-// Au 5e oiseau autour, ils s'envolent tous dans le ciel, et on peut en rassembler de nouveaux.
+// Au 5e oiseau autour, ils s'envolent tous dans le ciel (et le cerf-volant fête ça avec la figure de son animal : voir FigureAnimal),
+// puis on peut en rassembler de nouveaux.
 // À mettre sur l'objet "PieceDecoupee", à côté de VolCerfVolant.
 public class ObstaclesOiseaux : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class ObstaclesOiseaux : MonoBehaviour
     [SerializeField] private float rayonFrole = 0.8f;         // arrivé à moins de 80 cm du cerf-volant, il l'évite et vient tourner autour
     [SerializeField] private int oiseauxAutourMax = 5;        // au 5e oiseau autour du cerf-volant, ils s'envolent tous
     [SerializeField] private AudioClip sonPassage;            // le "swoosh" quand un oiseau passe au-dessus de ta tête (swoosh.mp3)
+
+    // Prévient quand le cercle est complet et que les oiseaux s'envolent (FigureAnimal s'en sert pour lancer sa figure).
+    public event System.Action CercleComplet;
 
     private VolCerfVolant vol;
     private float prochainOiseau;   // le moment où le prochain oiseau part
@@ -59,7 +63,10 @@ public class ObstaclesOiseaux : MonoBehaviour
 
                 // Le cercle est complet : ils s'envolent tous, et on recommence à zéro.
                 if (autour.Count >= oiseauxAutourMax)
+                {
                     EnvolerTous();
+                    CercleComplet?.Invoke(); // "?." : seulement si quelqu'un écoute
+                }
                 continue;
             }
 

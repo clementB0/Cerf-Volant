@@ -65,6 +65,17 @@ public class PatronPointilles : MonoBehaviour
     public event System.Action<Vector3> EtapeFinie;
 
     // Appelé par ChoixCerfVolant quand on choisit un cerf-volant dans le menu (avant que le tissu apparaisse).
+    // Raccourci (RaccourciMontage) : fait comme si toute la découpe venait d'être finie.
+    // On prévient la scène tout de suite (la pièce apparaît, le tissu disparaît), sauf si c'était déjà fait.
+    public void FinirTout()
+    {
+        if (toutEstRelie && !finirApresMouvement)
+            return; // la découpe était déjà finie et la scène déjà prévenue
+        toutEstRelie = true;
+        finirApresMouvement = false;
+        quandToutEstRelie.Invoke();
+    }
+
     public void ChangerForme(FormeCerfVolant nouvelleForme)
     {
         forme = nouvelleForme;

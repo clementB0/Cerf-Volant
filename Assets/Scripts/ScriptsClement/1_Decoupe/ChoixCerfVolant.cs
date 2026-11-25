@@ -14,6 +14,9 @@ public class ChoixCerfVolant : MonoBehaviour
     [SerializeField] private GameObject cutter;
 
     private Transform choisi;  // l'atelier choisi (vide tant qu'on n'a pas choisi)
+
+    // L'atelier choisi, pour les autres scripts ("null" = aucun cerf-volant choisi pour l'instant). RaccourciMontage s'en sert.
+    public GameObject AtelierChoisi => choisi != null ? choisi.gameObject : null;
     private float temps;       // depuis combien de temps il grandit
     private Vector3 tailleFinale; // sa taille réglée dans la scène, qu'il retrouve en fin de croissance
     private Vector3 depart;       // d'où il part : la miniature choisie

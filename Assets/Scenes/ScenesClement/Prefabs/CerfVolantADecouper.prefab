@@ -310,6 +310,7 @@ GameObject:
   - component: {fileID: 900000952}
   - component: {fileID: 900000953}
   - component: {fileID: 900000954}
+  - component: {fileID: 900000955}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -2780,6 +2781,25 @@ MonoBehaviour:
   hauteur: 1
   sonFigure: {fileID: 8300000, guid: 42de2678ffb2aa2187ab4f89841ecd1a, type: 3}
   volume: 0.6
-  nombreEtoiles: 25
+  nombreEtoiles: 8
+  tempsEntreEtoiles: 0.12
   tailleEtoiles: 0.12
   vitesseEtoiles: 1.5
+--- !u!114 &900000955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ed48321953bfc6ee968c7ed16ca2cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duree: 1.2
+  sonDragon: {fileID: 8300000, guid: acd84e252b977a7e3793167c1698f374, type: 3}
+  sonRaie: {fileID: 8300000, guid: 64af9292236d2b795dc65af7256da5e3, type: 3}
+  sonPapillon: {fileID: 8300000, guid: e0f120538076055fed3092d7e55d115a, type: 3}
+  volume: 0.7
+  tailleEffet: 0.18
