@@ -7,6 +7,7 @@ public class TransitionDecoupePeinture : MonoBehaviour
     [Header("Outils")]
     [SerializeField] private GameObject cutter;
     [SerializeField, InspectorName("Outils de peinture")] private GameObject[] bombes;
+    [SerializeField] private TemplateChoice templateChoice;
 
     [Header("Effet")]
     [SerializeField] private ParticleSystem fumeePrefab;
@@ -28,6 +29,16 @@ public class TransitionDecoupePeinture : MonoBehaviour
     // À ajouter aux événements de fin de découpe existants.
     public void TerminerDecoupe()
     {
+        TerminerDecoupe(null);
+    }
+
+    public void TerminerDecoupeAvecTemplate(PieceDecoupee piece)
+    {
+        TerminerDecoupe(piece);
+    }
+
+    private void TerminerDecoupe(PieceDecoupee piece)
+    {
         if (transitionLancee)
             return;
 
@@ -41,11 +52,17 @@ public class TransitionDecoupePeinture : MonoBehaviour
             return;
         }
 
+        if (templateChoice != null && (piece == null || !piece.EstConstruite))
+        {
+            Debug.LogError("Transition : la sélection de template attend la pièce découpée.", this);
+            return;
+        }
+
         transitionLancee = true;
-        StartCoroutine(Transition());
+        StartCoroutine(Transition(piece));
     }
 
-    private IEnumerator Transition()
+    private IEnumerator Transition(PieceDecoupee piece)
     {
         // Laisse les événements de découpe finir leur travail.
         yield return null;
@@ -89,6 +106,12 @@ public class TransitionDecoupePeinture : MonoBehaviour
         yield return new WaitForSeconds(
             Mathf.Max(0f, dureeFumee - delaiBascule)
         );
+
+        if (templateChoice != null)
+        {
+            templateChoice.Show(piece);
+            yield return new WaitUntil(() => templateChoice.HasChosen);
+        }
 
         // Un nuage à l'emplacement de chaque bombe.
         foreach (GameObject bombe in bombes)

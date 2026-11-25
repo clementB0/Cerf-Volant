@@ -58,7 +58,7 @@ MonoBehaviour:
   attente: 5
   vitesse: 0.05
   longueurSegment: 0.04
-  couleurSegment: {r: 1, g: 0.95, b: 0.6, a: 1}
+  couleurSegment: {r: 1, g: 0.55, b: 0.1, a: 1}
   opaciteFantome: 0.35
 --- !u!4 &900000002
 Transform:
@@ -147,7 +147,7 @@ MonoBehaviour:
   forme: {fileID: 11400000, guid: 5b4213a761a1b890f4687e4397d81618, type: 2}
   ecartEntreTraits: 0.06
   epaisseurTrait: 0.01
-  materiauTrait: {fileID: 2100000, guid: ec387c3d2353ffc8715eb42834acf300, type: 2}
+  materiauTrait: {fileID: 2100000, guid: b3cba02afaae46b8ab944f6c6e1f183d, type: 2}
   rayonContact: 0.02
   materiauDecoupe: {fileID: 2100000, guid: 3b8f2c6e1a9d4f7b8e5c2a1d0b6f9e47, type: 2}
   sonDecoupe: {fileID: 8300000, guid: 7c1e5a0d2b4f4e8a9d3c6b1a0f2e4d51, type: 3}
@@ -306,6 +306,9 @@ GameObject:
   - component: {fileID: 900000316}
   - component: {fileID: 900000317}
   - component: {fileID: 900000318}
+  - component: {fileID: 900000951}
+  - component: {fileID: 900000952}
+  - component: {fileID: 900000953}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -676,8 +679,8 @@ MonoBehaviour:
   directionDuVent: {x: 0, y: 0, z: 1}
   vitesseDuVent: 6
   rafales: 0.4
-  portanceMainsBasses: 5.5
-  portanceMainsHautes: 10.5
+  portanceMainsBasses: 4
+  portanceMainsHautes: 13
   frottement: 1
   angleDAttaque: 20
   angleDeVirageMax: 60
@@ -818,7 +821,7 @@ MonoBehaviour:
   vitesseOiseau: 1.5
   distanceDepart: 6
   precision: 0.4
-  tailleOiseau: 0.15
+  modeleOiseau: {fileID: 919132149155446097, guid: 7c532aeafe8344c9a7fdedba379d82c5, type: 3}
   rayonTouche: 0.3
   sonPassage: {fileID: 8300000, guid: d88d03c390e3c524194ce99fb84c640b, type: 3}
 --- !u!114 &900000310
@@ -1295,7 +1298,7 @@ Transform:
   m_GameObject: {fileID: 900000051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.75, y: 0.06, z: -0.25}
+  m_LocalPosition: {x: -0.25, y: 0.06, z: -0.2075}
   m_LocalScale: {x: 0.04, y: 0.06, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1633,7 +1636,7 @@ Transform:
   m_GameObject: {fileID: 900000101}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.62, y: 0.06, z: -0.25}
+  m_LocalPosition: {x: 0.25, y: 0.06, z: -0.2075}
   m_LocalScale: {x: 0.04, y: 0.06, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2032,7 +2035,7 @@ Transform:
   m_GameObject: {fileID: 900000401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.75, y: 0.02, z: -0.12}
+  m_LocalPosition: {x: -0.25, y: 0.02, z: -0.3375}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2366,7 +2369,7 @@ Transform:
   m_GameObject: {fileID: 900000421}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.62, y: 0.02, z: -0.12}
+  m_LocalPosition: {x: 0.25, y: 0.02, z: -0.3375}
   m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2692,7 +2695,7 @@ Transform:
   m_GameObject: {fileID: 2051945548}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: -0.4, z: 0}
+  m_LocalPosition: {x: 0, y: -0.4, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2713,3 +2716,48 @@ MonoBehaviour:
   angleMax: 25
   battementsParSeconde: 1.2
   tempsPourDemarrer: 1
+--- !u!114 &900000951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dca1743de4594ba390947ee06682718e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  couleur: {r: 1, g: 0.85, b: 0.2, a: 1}
+--- !u!114 &900000952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27e81ca7d5394c158fccd9f6d1daa4f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  couleur: {r: 1, g: 0.85, b: 0.2, a: 1}
+  distance: 0.7
+--- !u!114 &900000953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3400a0f4557247b79fd1e269811a52fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poignees:
+  - {fileID: 900000057}
+  - {fileID: 900000107}
+  fumeePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  sonPouf: {fileID: 8300000, guid: f5a31088b1003eb6a7039944778bc016, type: 3}
+  tempsAvantRetour: 1.5
