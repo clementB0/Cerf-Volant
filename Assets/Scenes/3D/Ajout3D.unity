@@ -2003,6 +2003,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6376030399823946411, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8d6d9124fe7aa4a4eb9cba6d83c66c1d, type: 2}
+    - target: {fileID: -6200027588563590400, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -6120889776471607972, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8d6d9124fe7aa4a4eb9cba6d83c66c1d, type: 2}
     - target: {fileID: -1453422408199423872, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -2019,9 +2031,45 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1201504834443579779, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -592602062427478087, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 12ea24bd655943d4f87639d9ea256570, type: 2}
+    - target: {fileID: 209392905098639745, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 885444837444382471, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: abcf5033361c3cc4180bf76b08dd0ff1, type: 2}
     - target: {fileID: 919132149155446097, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
       propertyPath: m_Name
       value: SM_Moulin
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972311069760842964, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3750939391782845571, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285624984560926862, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: abcf5033361c3cc4180bf76b08dd0ff1, type: 2}
+    - target: {fileID: 8886209887280210894, guid: 9faf3b6c1e8bb8e428e6fbaf717ced6b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
