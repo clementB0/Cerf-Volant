@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8993980969999298384}
   - component: {fileID: 491813382591848671}
   m_Layer: 0
-  m_Name: COLLISION
+  m_Name: EtoileCompletion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

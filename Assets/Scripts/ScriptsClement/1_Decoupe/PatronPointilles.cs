@@ -23,6 +23,7 @@ public class PatronPointilles : MonoBehaviour
     [SerializeField] private AudioClip sonDecoupe;           // petit "tic" joué à chaque trait découpé (SonDecoupe.wav)
     [SerializeField] private float volumeDecoupe = 0.4f;     // léger
     [SerializeField] private int papiersParTrait = 6;        // combien de petits bouts de tissu sautent à chaque trait découpé
+    [SerializeField] private ParticleSystem copeauxPrefab;
     [SerializeField] private int nombreEtapes = 4;           // le contour est découpé en 4 morceaux, qui apparaissent l'un après l'autre
     [SerializeField] private float opacitePale = 0.35f;      // les pointillés pas encore découpables sont visibles à 35 % (1 = blancs comme les autres)
     [SerializeField] private float attenteDebut = 0.7f;     // le temps que l'atelier finisse d'arriver sur la table (ChoixCerfVolant) avant le 1er mouvement
@@ -214,6 +215,19 @@ public class PatronPointilles : MonoBehaviour
     private void CreerPapiers()
     {
         // Rangé à côté du tissu (pas dedans) : quand le tissu disparaît à la fin, les derniers bouts finissent de tomber.
+        if (copeauxPrefab != null)
+        {
+            papiers = Instantiate(copeauxPrefab, transform.parent, false);
+            papiers.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            var main = papiers.main;
+            main.playOnAwake = false;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+            var emission = papiers.emission;
+            emission.enabled = false;
+            papiers.Play();
+            return;
+        }
+
         GameObject objet = new GameObject("PapiersDecoupe");
         objet.transform.SetParent(transform.parent, false);
         papiers = objet.AddComponent<ParticleSystem>();

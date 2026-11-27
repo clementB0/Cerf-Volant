@@ -223,6 +223,10 @@ PrefabInstance:
       propertyPath: sonPrise
       value: 
       objectReference: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
+    - target: {fileID: 6223259374829655826, guid: 4c1862690ebd4062b4cab093344835fa, type: 3}
+      propertyPath: sprayEffectPrefab
+      value:
+      objectReference: {fileID: 2335969401037907297, guid: 0b26b935a96b39042a852499c7943409, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -231,63 +235,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 900001500}
   m_SourcePrefab: {fileID: 100100000, guid: 4c1862690ebd4062b4cab093344835fa, type: 3}
---- !u!1001 &143509035
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2381197483915661572, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_Name
-      value: FumeeTransition
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.61274
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.37916002
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.19774999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3317592542527551921, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
 --- !u!1001 &177410751
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -816,7 +763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985dbb4455ed4e44a23879237de28e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReloadSmoke
-  smokePrefab: {fileID: 8255668024449481204, guid: 9744d364a8242f14687e1cfc0f76daac, type: 3}
+  smokePrefab: {fileID: 2246503740780038509, guid: 22978a06d98a770429a05a5de82bd2ff, type: 3}
   overlayShader: {fileID: 4800000, guid: 5386636be8c64c9dbf59d715710fda41, type: 3}
   coverColor: {r: 0.33, g: 0.25, b: 0.34, a: 1}
   coverDuration: 0.55
@@ -985,6 +932,14 @@ PrefabInstance:
       propertyPath: cutter
       value: 
       objectReference: {fileID: 1863276865}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: copeauxPrefab
+      value:
+      objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: etoilesPrefab
+      value:
+      objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
@@ -1253,6 +1208,14 @@ PrefabInstance:
       propertyPath: cutter
       value: 
       objectReference: {fileID: 1863276865}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: copeauxPrefab
+      value:
+      objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: etoilesPrefab
+      value:
+      objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
@@ -1521,6 +1484,14 @@ PrefabInstance:
       propertyPath: cutter
       value: 
       objectReference: {fileID: 1863276865}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: copeauxPrefab
+      value:
+      objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: etoilesPrefab
+      value:
+      objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
@@ -7144,5 +7115,4 @@ SceneRoots:
   - {fileID: 1863276864}
   - {fileID: 177410751}
   - {fileID: 900001001}
-  - {fileID: 143509035}
   - {fileID: 1000921326}

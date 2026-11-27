@@ -6,6 +6,7 @@ Shader "CerfVolant/Reload Smoke Overlay"
         [MainColor] _BaseColor ("Tint", Color) = (1, 1, 1, 1)
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 0
         _UseVertexColor ("Use Vertex Color", Float) = 0
+        _UseRedAsAlpha ("Use Red As Alpha", Float) = 0
     }
 
     SubShader
@@ -31,6 +32,7 @@ Shader "CerfVolant/Reload Smoke Overlay"
                 float4 _BaseMap_ST;
                 half4 _BaseColor;
                 half _UseVertexColor;
+                half _UseRedAsAlpha;
             CBUFFER_END
 
             struct Attributes
@@ -63,7 +65,9 @@ Shader "CerfVolant/Reload Smoke Overlay"
             half4 Frag(Varyings input) : SV_Target
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                return SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor * input.color;
+                half4 texel = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
+                texel = lerp(texel, half4(1, 1, 1, texel.r), _UseRedAsAlpha);
+                return texel * _BaseColor * input.color;
             }
             ENDHLSL
         }

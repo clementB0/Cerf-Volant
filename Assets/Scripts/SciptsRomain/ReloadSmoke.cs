@@ -85,13 +85,16 @@ public class ReloadSmoke : MonoBehaviour
         var renderer = smoke.GetComponent<ParticleSystemRenderer>();
         renderer.sortingOrder = coverRenderer.sortingOrder + 1;
         var source = renderer.sharedMaterial;
-        smokeColor = source.color;
+        bool usesMask = source.HasProperty("_MASK") && source.GetTexture("_MASK") != null;
+        smokeColor = usesMask ? source.GetColor("_COULEUR") : source.color;
         smokeMaterial = new Material(overlayShader)
         {
-            mainTexture = source.mainTexture,
+            mainTexture = usesMask ? source.GetTexture("_MASK") : source.mainTexture,
             renderQueue = 4901
         };
+        smokeMaterial.SetFloat("_UseRedAsAlpha", usesMask ? 1f : 0f);
         smokeMaterial.SetFloat("_UseVertexColor", 1f);
+        renderer.renderMode = ParticleSystemRenderMode.Billboard;
         renderer.sharedMaterial = smokeMaterial;
         renderer.SetActiveVertexStreams(new List<ParticleSystemVertexStream>
         {

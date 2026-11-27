@@ -8,6 +8,8 @@ public class SprayConeVFX : MonoBehaviour
     [Header("Référence")]
     [SerializeField]
     private ParticleSystem sprayParticles;
+    [SerializeField]
+    private ParticleSystem sprayEffectPrefab;
 
     [Header("Forme du jet")]
     [SerializeField, Range(1f, 30f)]
@@ -28,6 +30,9 @@ public class SprayConeVFX : MonoBehaviour
 
     private SprayInput sprayInput;
     private SprayColor sprayColor;
+    private ParticleSystemRenderer tintedRenderer;
+    private MaterialPropertyBlock tintProperties;
+    private static readonly int EffectTint = Shader.PropertyToID("_COULEUR");
 
     // Le script de peinture lit ces mêmes réglages.
     public float ConeHalfAngle => coneHalfAngle;
@@ -54,6 +59,15 @@ public class SprayConeVFX : MonoBehaviour
             return;
         }
 
+        if (sprayEffectPrefab != null)
+        {
+            ParticleSystem oldParticles = sprayParticles;
+            Transform nozzle = oldParticles.transform;
+            sprayParticles = Instantiate(sprayEffectPrefab, nozzle.parent, false);
+            sprayParticles.transform.SetLocalPositionAndRotation(nozzle.localPosition, nozzle.localRotation);
+            oldParticles.gameObject.SetActive(false);
+        }
+
         StopSpray();
 
         var main = sprayParticles.main;
@@ -77,6 +91,12 @@ public class SprayConeVFX : MonoBehaviour
         // Seuls les jets en billboard utilisent l'atlas de pigment.
         var sheet = sprayParticles.textureSheetAnimation;
         var particleRenderer = sprayParticles.GetComponent<ParticleSystemRenderer>();
+        if (particleRenderer.sharedMaterial != null && particleRenderer.sharedMaterial.HasProperty(EffectTint))
+        {
+            tintedRenderer = particleRenderer;
+            tintProperties = new MaterialPropertyBlock();
+            tintedRenderer.GetPropertyBlock(tintProperties);
+        }
         sheet.enabled = particleRenderer.renderMode != ParticleSystemRenderMode.Mesh;
         sheet.mode = ParticleSystemAnimationMode.Grid;
         sheet.numTilesX = 2;
@@ -129,7 +149,13 @@ public class SprayConeVFX : MonoBehaviour
     private void ApplySettings()
     {
         var main = sprayParticles.main;
-        main.startColor = sprayColor.PaintColor;
+        Color paint = sprayColor.PaintColor;
+        main.startColor = paint;
+        if (tintedRenderer != null)
+        {
+            tintProperties.SetColor(EffectTint, paint);
+            tintedRenderer.SetPropertyBlock(tintProperties);
+        }
         main.startSpeed = new ParticleSystem.MinMaxCurve(particleSpeed * 0.78f, particleSpeed);
         main.startSize = new ParticleSystem.MinMaxCurve(particleSize * 0.65f, particleSize);
 

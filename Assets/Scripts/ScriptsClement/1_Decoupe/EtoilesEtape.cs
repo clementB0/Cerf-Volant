@@ -7,6 +7,7 @@ using UnityEngine;
 public class EtoilesEtape : MonoBehaviour
 {
     [SerializeField] private AudioClip sonEtoiles;              // SonEtoiles.wav
+    [SerializeField] private ParticleSystem etoilesPrefab;
     [SerializeField, Range(0f, 1f)] private float volume = 0.6f;
     [SerializeField] private int nombre = 16;                   // combien d'étoiles à chaque fois
     [SerializeField] private float vitesse = 0.5f;              // à quelle vitesse elles s'envolent (mètres par seconde)
@@ -28,7 +29,8 @@ public class EtoilesEtape : MonoBehaviour
         hautParleur.playOnAwake = false;
         hautParleur.spatialBlend = 1f; // le son vient de l'endroit des étoiles
 
-        etoiles = CreerEtoiles(objet, vitesse, taille, couleur1, couleur2);
+        if (etoilesPrefab == null)
+            etoiles = CreerEtoiles(objet, vitesse, taille, couleur1, couleur2);
         GetComponent<PatronPointilles>().EtapeFinie += Lancer;
     }
 
@@ -89,8 +91,19 @@ public class EtoilesEtape : MonoBehaviour
     // Une étape est finie : les étoiles jaillissent de cet endroit, avec le son.
     private void Lancer(Vector3 endroit)
     {
-        etoiles.transform.position = endroit + Vector3.up * hauteur;
-        etoiles.Emit(nombre);
+        Vector3 position = endroit + Vector3.up * hauteur;
+        hautParleur.transform.position = position;
+        if (etoilesPrefab != null)
+        {
+            ParticleSystem effet = Instantiate(etoilesPrefab, position, etoilesPrefab.transform.rotation);
+            var main = effet.main;
+            main.stopAction = ParticleSystemStopAction.Destroy;
+            effet.Play(true);
+        }
+        else
+        {
+            etoiles.Emit(nombre);
+        }
         if (sonEtoiles != null)
             hautParleur.PlayOneShot(sonEtoiles, volume);
     }
