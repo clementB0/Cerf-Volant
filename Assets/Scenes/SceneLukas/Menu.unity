@@ -1602,7 +1602,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FreeCutPanel
   cutterTip: {fileID: 2001000071}
   contactDepth: 0.035
-  cutWidth: 0.004
+  cutWidth: 0.002
+  cutSound: {fileID: 8300000, guid: 7c1e5a0d2b4f4e8a9d3c6b1a0f2e4d51, type: 3}
+  cutVolume: 0.35
 --- !u!1 &2001000040
 GameObject:
   m_ObjectHideFlags: 0
@@ -2043,7 +2045,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FreeCutPanel
   cutterTip: {fileID: 2001000071}
   contactDepth: 0.035
-  cutWidth: 0.004
+  cutWidth: 0.002
+  cutSound: {fileID: 8300000, guid: 7c1e5a0d2b4f4e8a9d3c6b1a0f2e4d51, type: 3}
+  cutVolume: 0.35
 --- !u!1 &2001000085
 GameObject:
   m_ObjectHideFlags: 0

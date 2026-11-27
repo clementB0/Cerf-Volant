@@ -56,15 +56,14 @@ public class CutCoupon : MonoBehaviour
         pattern.MasquerTrace();
         Vector3 upperStart = upperPiece.transform.localPosition;
         Vector3 lowerStart = lowerPiece.transform.localPosition;
-        Vector3 upperOffset = acrossCut * 0.064f + Vector3.back * 0.027f;
-        Vector3 lowerOffset = -acrossCut * 0.079f + Vector3.back * 0.12f;
-        Quaternion upperTilt = Quaternion.Euler(-14f, 17f, 12f);
-        Quaternion lowerTilt = Quaternion.Euler(22f, -27f, -16f);
-        const float duration = 0.58f;
+        Vector3 upperOffset = PaperSeparationMotion.Offset(acrossCut, false);
+        Vector3 lowerOffset = PaperSeparationMotion.Offset(-acrossCut, true);
+        Quaternion upperTilt = PaperSeparationMotion.Tilt(false);
+        Quaternion lowerTilt = PaperSeparationMotion.Tilt(true);
 
-        for (float elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
+        for (float elapsed = 0f; elapsed < PaperSeparationMotion.Duration; elapsed += Time.unscaledDeltaTime)
         {
-            float travel = 1f - Mathf.Pow(1f - elapsed / duration, 3f);
+            float travel = PaperSeparationMotion.Progress(elapsed);
             upperPiece.transform.SetLocalPositionAndRotation(upperStart + upperOffset * travel,
                 Quaternion.Slerp(Quaternion.identity, upperTilt, travel));
             lowerPiece.transform.SetLocalPositionAndRotation(lowerStart + lowerOffset * travel,
