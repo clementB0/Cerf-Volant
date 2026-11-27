@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 // FONCTIONNALITÉ : l'aide des figures. Au début du vol, un petit panneau devant les yeux explique
-// comment faire les figures : B + joystick gauche à droite = salto, en bas = toupie, à gauche = rebond (voir FigureCerfVolant).
+// comment faire les figures : B seul = plongeon, B + joystick gauche à droite = salto, en bas = toupie, à gauche = rebond, en haut = fusée (voir FigureCerfVolant).
 // Il disparaît dès la première figure (on a compris), ou au bout de 20 secondes de vol.
 // À mettre sur "PieceDecoupee", avec FigureCerfVolant et VolCerfVolant.
 [RequireComponent(typeof(FigureCerfVolant), typeof(VolCerfVolant))]
@@ -51,8 +51,9 @@ public class AideFigures : MonoBehaviour
         panneau.gameObject.layer = 5; // calque "UI" : l'appareil photo ne le filme pas
         panneau.SetParent(tete, false);
         panneau.localPosition = new Vector3(0f, -0.2f, distance);
-        texte.rectTransform.sizeDelta = new Vector2(0.5f, 0.25f);
-        texte.text = "Fais des figures !\n<size=70%>B + joystick a droite : salto\nB + joystick en bas : toupie\nB + joystick a gauche : rebond</size>";
+        texte.rectTransform.sizeDelta = new Vector2(0.5f, 0.32f);
+        texte.text = "Fais des figures !\n<size=70%>B : plongeon\nB + joystick a droite : salto\nB + joystick en bas : toupie\n" +
+                     "B + joystick a gauche : rebond\nB + joystick en haut : fusee</size>";
         texte.fontSize = 0.4f; // environ 4 cm de haut pour le titre
         if (police != null)
             texte.font = police;

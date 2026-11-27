@@ -2,11 +2,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // FONCTIONNALITÉ : les figures communes. Pendant le vol, on appuie sur le bouton B (manette droite),
-// et c'est le joystick gauche qui choisit la figure : à droite = salto, en bas = toupie, à gauche = rebond
-// (joystick au milieu ou en haut : une figure au hasard, jamais deux fois la même de suite). Les mêmes pour les trois cerfs-volants :
+// et c'est le joystick gauche qui choisit la figure : à droite = salto, en bas = toupie, à gauche = rebond,
+// en haut = fusée, joystick au milieu (B seul) = plongeon. Les mêmes pour les trois cerfs-volants :
 //  - le salto  : il s'envole d'un coup vers le haut et fait un tour complet vers l'avant ;
 //  - la toupie : il monte un peu et tourne 2 fois sur lui-même, à plat, comme une hélice ;
-//  - le rebond : il fait 3 petits bonds vers le haut, en hochant la tête.
+//  - le rebond : il fait 3 petits bonds vers le haut, en hochant la tête ;
+//  - la fusée  : il file tout droit vers le haut (plus haut que le salto) en vrillant sur lui-même, puis redescend ;
+//  - le plongeon : il pique du nez et descend un peu, puis remonte en flèche plus haut que son départ, et revient à sa place.
 // Aucune figure ne l'emmène sur les côtés : il monte, il tourne, mais il reste au même endroit du ciel.
 // Avec des étoiles et le son de clochettes (les mêmes que pendant la découpe, voir EtoilesEtape).
 // (Les figures de chaque animal se font toutes seules quand les 5 oiseaux s'envolent : voir FigureAnimal.)
@@ -37,7 +39,7 @@ public class FigureCerfVolant : MonoBehaviour
     private InputAction joystick;      // le joystick de la manette gauche (choisit la figure)
     private ParticleSystem etoiles;
     private AudioSource hautParleur;
-    private int numero;                // quelle figure : 0 = salto, 1 = toupie, 2 = rebond
+    private int numero;                // quelle figure : 0 = salto, 1 = toupie, 2 = rebond, 3 = fusée, 4 = plongeon
     private float temps = -1f;         // depuis combien de temps la figure dure (-1 = pas de figure en cours)
     private float prochaineEtoile;     // le moment de la prochaine étoile de la traînée
     private Vector3 decalage;          // ce qu'on a ajouté à sa position à l'image d'avant
@@ -47,7 +49,6 @@ public class FigureCerfVolant : MonoBehaviour
     {
         vol = GetComponent<VolCerfVolant>();
         figureAnimal = GetComponent<FigureAnimal>();
-        numero = Random.Range(0, 3); // la toute première figure : au hasard aussi
 
         // Les étoiles et le son, rangés à côté du cerf-volant (pas dedans : les étoiles ne tournent pas avec lui).
         GameObject objet = new GameObject("EtoilesFigure");
@@ -98,14 +99,14 @@ public class FigureCerfVolant : MonoBehaviour
         }
     }
 
-    // Le joystick gauche choisit : à droite = salto (0), en bas = toupie (1), à gauche = rebond (2).
-    // Au milieu (ou en haut) : au hasard parmi les 2 autres figures ("% 3" fait revenir au début après la dernière).
+    // Le joystick gauche choisit : à droite = salto (0), en bas = toupie (1), à gauche = rebond (2), en haut = fusée (3).
+    // Au milieu (B seul) : le plongeon (4).
     private int Choisir(Vector2 direction)
     {
-        if (direction.magnitude < 0.5f || direction.y > Mathf.Abs(direction.x))
-            return (numero + Random.Range(1, 3)) % 3;
-        if (-direction.y > Mathf.Abs(direction.x))
-            return 1;
+        if (direction.magnitude < 0.5f)
+            return 4;
+        if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
+            return direction.y > 0f ? 3 : 1;
         return direction.x > 0f ? 0 : 2;
     }
 
@@ -138,12 +139,27 @@ public class FigureCerfVolant : MonoBehaviour
             decalage = Vector3.up * (hauteur * 0.5f * bosse);
             tour = Quaternion.AngleAxis(720f * doux, Vector3.forward);
         }
-        else
+        else if (numero == 2)
         {
             // Le rebond : 3 petits bonds vers le haut ("Abs" garde la bosse du sinus toujours vers le haut : ça fait 3 bosses),
             // en hochant la tête d'avant en arrière à chaque bond (20° au plus fort).
             decalage = Vector3.up * (hauteur * 0.5f * Mathf.Abs(Mathf.Sin(t * Mathf.PI * 3f)));
             tour = Quaternion.AngleAxis(20f * Mathf.Sin(t * Mathf.PI * 6f) * bosse, Vector3.right);
+        }
+        else if (numero == 3)
+        {
+            // La fusée : il file vers le haut (1,5 fois la hauteur du salto) et redescend,
+            // en vrillant 2 fois sur lui-même autour de son axe tête-queue, comme une fusée.
+            decalage = Vector3.up * (hauteur * 1.5f * bosse);
+            tour = Quaternion.AngleAxis(720f * doux, Vector3.up);
+        }
+        else
+        {
+            // Le plongeon : 1re moitié, il pique du nez et descend un peu ; 2e moitié, il remonte en flèche, le nez en l'air,
+            // plus haut que son point de départ, puis revient à sa place. (Haut et bas seulement, jamais sur les côtés.)
+            float vague = Mathf.Sin(t * Mathf.PI * 2f); // descend (0 à 0,5) puis remonte (0,5 à 1)
+            decalage = Vector3.up * (hauteur * (vague > 0f ? -0.4f : 0.8f) * Mathf.Abs(vague));
+            tour = Quaternion.AngleAxis(45f * vague, Vector3.right);
         }
 
         transform.position += decalage;

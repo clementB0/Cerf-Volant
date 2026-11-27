@@ -22,6 +22,7 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float portanceMainsHautes = 13f;  // mains hautes : il monte nettement
     [SerializeField] private float frottement = 1f;
     [SerializeField] private float resistance = 3.5f;            // l'air freine ses mouvements : plus grand = il se déplace plus lentement, plus lourdement (0 = pas de frein)
+    [SerializeField, Range(0f, 1f)] private float resistanceDescente = 0.85f; // quand il descend (bras qui baissent), 15 % de frein en moins : il suit un peu mieux
     [SerializeField] private float angleDAttaque = 20f;
 
     [Header("Direction")]
@@ -345,8 +346,10 @@ public class VolCerfVolant : MonoBehaviour
         Vector3 frein = VentApparent * frottement;
 
         // "- vitesse * resistance" : l'air le freine, d'autant plus fort qu'il va vite (il ne file plus d'un bord à l'autre).
+        // En descente, un peu moins de frein : il suit mieux les bras qui baissent.
+        float freinAir = vitesse.y < 0f ? resistance * resistanceDescente : resistance;
         vitesse +=
-            (pousseeDuVent + frein + Physics.gravity - vitesse * resistance) * dt;
+            (pousseeDuVent + frein + Physics.gravity - vitesse * freinAir) * dt;
 
         // =========================================
         // 7. POSITION DU CERF-VOLANT

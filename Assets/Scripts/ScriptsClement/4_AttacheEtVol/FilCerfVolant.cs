@@ -11,7 +11,7 @@ public class FilCerfVolant : MonoBehaviour
     [SerializeField] private Transform cerfVolant;          // où arrive le fil une fois accroché (PieceDecoupee)
     [SerializeField] private Transform boutDeCorde;         // le bout libre de la corde (CordeGauche ou CordeDroite)
     [SerializeField] private Material materiauFil;          // couleur du fil
-    [SerializeField] private float epaisseurFil = 0.003f;   // 3 mm
+    [SerializeField] private float epaisseurFil = 0.005f;   // 5 mm
 
     [SerializeField] private float poids = 0.06f;           // le fil pend sous son poids : 0.06 = il descend de 6 % de sa longueur au milieu
     [SerializeField] private float pousseeDuVent = 0.03f;   // en vol, le vent pousse le milieu du fil (0 = le vent ne le courbe pas)

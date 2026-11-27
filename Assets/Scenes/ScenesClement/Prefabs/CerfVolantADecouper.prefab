@@ -617,6 +617,7 @@ MonoBehaviour:
   portanceMainsHautes: 13
   frottement: 1
   resistance: 3.5
+  resistanceDescente: 0.85
   angleDAttaque: 20
   angleDeVirageMax: 60
   sensibiliteVirage: 1.6
@@ -1755,7 +1756,7 @@ MonoBehaviour:
   cerfVolant: {fileID: 900000012}
   boutDeCorde: {fileID: 900000402}
   materiauFil: {fileID: 2100000, guid: ec387c3d2353ffc8715eb42834acf300, type: 2}
-  epaisseurFil: 0.003
+  epaisseurFil: 0.005
   poids: 0.06
   pousseeDuVent: 0.03
   noeudADroite: 0
@@ -2094,7 +2095,7 @@ MonoBehaviour:
   cerfVolant: {fileID: 900000012}
   boutDeCorde: {fileID: 900000422}
   materiauFil: {fileID: 2100000, guid: ec387c3d2353ffc8715eb42834acf300, type: 2}
-  epaisseurFil: 0.003
+  epaisseurFil: 0.005
   poids: 0.06
   pousseeDuVent: 0.03
   noeudADroite: 1
