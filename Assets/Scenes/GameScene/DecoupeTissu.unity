@@ -227,6 +227,10 @@ PrefabInstance:
       propertyPath: sprayEffectPrefab
       value:
       objectReference: {fileID: 2335969401037907297, guid: 0b26b935a96b39042a852499c7943409, type: 3}
+    - target: {fileID: 6223259374829655826, guid: 4c1862690ebd4062b4cab093344835fa, type: 3}
+      propertyPath: particleSize
+      value: 0.005
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -936,10 +940,26 @@ PrefabInstance:
       propertyPath: copeauxPrefab
       value:
       objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: papiersParTrait
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: plateauVfx
+      value:
+      objectReference: {fileID: 900000614}
     - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: etoilesPrefab
       value:
       objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: vitesse
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: taille
+      value: 0.016
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
@@ -1212,10 +1232,26 @@ PrefabInstance:
       propertyPath: copeauxPrefab
       value:
       objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: papiersParTrait
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: plateauVfx
+      value:
+      objectReference: {fileID: 900000614}
     - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: etoilesPrefab
       value:
       objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: vitesse
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: taille
+      value: 0.016
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
@@ -1488,10 +1524,26 @@ PrefabInstance:
       propertyPath: copeauxPrefab
       value:
       objectReference: {fileID: 7606429922944090881, guid: 27a9392dc76d8614ba8ce592188e0b73, type: 3}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: papiersParTrait
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000005, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: plateauVfx
+      value:
+      objectReference: {fileID: 900000614}
     - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
       propertyPath: etoilesPrefab
       value:
       objectReference: {fileID: 8993980969999298384, guid: ff4acfb26558d4745953bfeb504b464d, type: 3}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: vitesse
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 900000010, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}
+      propertyPath: taille
+      value: 0.016
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 900000021, guid: d876018b8bf43d491d31ff046fdb1596, type: 3}

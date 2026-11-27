@@ -18,6 +18,7 @@ public class EtoilesEtape : MonoBehaviour
 
     private ParticleSystem etoiles;
     private AudioSource hautParleur;
+    private PatronPointilles patron;
 
     private void Start()
     {
@@ -31,7 +32,8 @@ public class EtoilesEtape : MonoBehaviour
 
         if (etoilesPrefab == null)
             etoiles = CreerEtoiles(objet, vitesse, taille, couleur1, couleur2);
-        GetComponent<PatronPointilles>().EtapeFinie += Lancer;
+        patron = GetComponent<PatronPointilles>();
+        patron.EtapeFinie += Lancer;
     }
 
     // Fabrique les étoiles sur "objet" et les renvoie : on les fait jaillir ensuite avec "Emit(combien)".
@@ -83,7 +85,6 @@ public class EtoilesEtape : MonoBehaviour
 
     private void OnDestroy()
     {
-        PatronPointilles patron = GetComponent<PatronPointilles>();
         if (patron != null)
             patron.EtapeFinie -= Lancer;
     }
@@ -91,13 +92,25 @@ public class EtoilesEtape : MonoBehaviour
     // Une étape est finie : les étoiles jaillissent de cet endroit, avec le son.
     private void Lancer(Vector3 endroit)
     {
-        Vector3 position = endroit + Vector3.up * hauteur;
+        Vector3 position = patron.PositionAuDessusDuPlateau(endroit, hauteur);
         hautParleur.transform.position = position;
         if (etoilesPrefab != null)
         {
             ParticleSystem effet = Instantiate(etoilesPrefab, position, etoilesPrefab.transform.rotation);
+            effet.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             var main = effet.main;
+            main.scalingMode = ParticleSystemScalingMode.Shape;
+            // Le maillage Plane du prefab mesure 10 unités avec une taille de particule à 1.
+            main.startSize = new ParticleSystem.MinMaxCurve(taille * 0.06f, taille * 0.1f);
+            main.startSpeed = new ParticleSystem.MinMaxCurve(vitesse * 0.5f, vitesse);
+            main.simulationSpeed = 0.65f;
             main.stopAction = ParticleSystemStopAction.Destroy;
+            var shape = effet.shape;
+            shape.shapeType = ParticleSystemShapeType.Cone;
+            shape.angle = 65f;
+            shape.radius = 0.008f;
+            var velocity = effet.velocityOverLifetime;
+            velocity.enabled = false;
             effet.Play(true);
         }
         else

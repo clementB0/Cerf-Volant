@@ -24,6 +24,7 @@ public class PatronPointilles : MonoBehaviour
     [SerializeField] private float volumeDecoupe = 0.4f;     // léger
     [SerializeField] private int papiersParTrait = 6;        // combien de petits bouts de tissu sautent à chaque trait découpé
     [SerializeField] private ParticleSystem copeauxPrefab;
+    [SerializeField] private Collider plateauVfx;
     [SerializeField] private int nombreEtapes = 4;           // le contour est découpé en 4 morceaux, qui apparaissent l'un après l'autre
     [SerializeField] private float opacitePale = 0.35f;      // les pointillés pas encore découpables sont visibles à 35 % (1 = blancs comme les autres)
     [SerializeField] private float attenteDebut = 0.7f;     // le temps que l'atelier finisse d'arriver sur la table (ChoixCerfVolant) avant le 1er mouvement
@@ -222,8 +223,19 @@ public class PatronPointilles : MonoBehaviour
             var main = papiers.main;
             main.playOnAwake = false;
             main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.scalingMode = ParticleSystemScalingMode.Shape;
+            main.startSize3D = false;
+            // Le maillage Plane du prefab mesure 10 unités avec une taille de particule à 1.
+            main.startSize = new ParticleSystem.MinMaxCurve(0.0006f, 0.0012f);
+            main.maxParticles = Mathf.Max(main.maxParticles, papiersParTrait * 40);
             var emission = papiers.emission;
             emission.enabled = false;
+            var shape = papiers.shape;
+            shape.enabled = false;
+            var velocity = papiers.velocityOverLifetime;
+            velocity.enabled = false;
+            var noise = papiers.noise;
+            noise.enabled = false;
             papiers.Play();
             return;
         }
@@ -261,12 +273,27 @@ public class PatronPointilles : MonoBehaviour
     private void LancerPapiers(Vector3 position)
     {
         ParticleSystem.EmitParams bout = new ParticleSystem.EmitParams();
-        bout.position = position;
+        bool copeaux = copeauxPrefab != null;
+        if (copeaux)
+            papiers.transform.position = PositionAuDessusDuPlateau(position, 0.018f);
+        else
+            bout.position = position;
+
+        float vitesseVerticale = copeaux ? 0.16f : 0.4f;
+        float dispersion = copeaux ? 0.08f : 0.25f;
         for (int i = 0; i < papiersParTrait; i++)
         {
-            bout.velocity = Vector3.up * 0.4f + Random.insideUnitSphere * 0.25f; // en mètres par seconde
+            bout.velocity = Vector3.up * vitesseVerticale + Random.insideUnitSphere * dispersion;
             papiers.Emit(bout, 1);
         }
+    }
+
+    internal Vector3 PositionAuDessusDuPlateau(Vector3 position, float marge)
+    {
+        position.y += marge;
+        if (plateauVfx != null)
+            position.y = Mathf.Max(position.y, plateauVfx.bounds.max.y + marge);
+        return position;
     }
 
     // Appelé par TraceurCutter avec la position de la pointe du cutter : relie les traits tout près d'elle.

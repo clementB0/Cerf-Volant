@@ -78,6 +78,11 @@ public class SprayConeVFX : MonoBehaviour
 
         main.gravityModifier = 0f;
         main.maxParticles = 1000;
+        if (sprayEffectPrefab != null)
+        {
+            var noise = sprayParticles.noise;
+            noise.strength = 0.025f;
+        }
 
         var emission = sprayParticles.emission;
         emission.enabled = true;
