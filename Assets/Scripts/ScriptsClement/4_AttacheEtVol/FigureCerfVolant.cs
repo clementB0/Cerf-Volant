@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// FONCTIONNALITÉ : les figures communes. Pendant le vol, on appuie sur le bouton B (manette droite) :
-// le cerf-volant fait une figure choisie au hasard parmi 3 (les mêmes pour les trois cerfs-volants, jamais deux fois la même de suite) :
+// FONCTIONNALITÉ : les figures communes. Pendant le vol, on appuie sur le bouton B (manette droite),
+// et c'est le joystick gauche qui choisit la figure : à droite = salto, en bas = toupie, à gauche = rebond
+// (joystick au milieu ou en haut : une figure au hasard, jamais deux fois la même de suite). Les mêmes pour les trois cerfs-volants :
 //  - le salto  : il s'envole d'un coup vers le haut et fait un tour complet vers l'avant ;
 //  - la toupie : il monte un peu et tourne 2 fois sur lui-même, à plat, comme une hélice ;
 //  - le rebond : il fait 3 petits bonds vers le haut, en hochant la tête.
@@ -28,10 +29,12 @@ public class FigureCerfVolant : MonoBehaviour
 
     // Vrai pendant la figure (FigureAnimal attend qu'elle soit finie avant de lancer la sienne).
     public bool EnCours => temps >= 0f;
+    public int FiguresFaites { get; private set; } // combien de figures depuis le début (AideFigures se cache après la 1re)
 
     private VolCerfVolant vol;
     private FigureAnimal figureAnimal; // l'autre figure (celle de l'animal), s'il y en a une : jamais les deux en même temps
     private InputAction boutonB;       // le bouton B de la manette droite
+    private InputAction joystick;      // le joystick de la manette gauche (choisit la figure)
     private ParticleSystem etoiles;
     private AudioSource hautParleur;
     private int numero;                // quelle figure : 0 = salto, 1 = toupie, 2 = rebond
@@ -59,11 +62,15 @@ public class FigureCerfVolant : MonoBehaviour
         // "{SecondaryButton}" = le 2e bouton de la manette : B sur la manette droite d'un Quest.
         boutonB = new InputAction(binding: "<XRController>{RightHand}/{SecondaryButton}");
         boutonB.Enable();
+        // "{Primary2DAxis}" = le joystick : celui de la manette gauche.
+        joystick = new InputAction(type: InputActionType.Value, binding: "<XRController>{LeftHand}/{Primary2DAxis}");
+        joystick.Enable();
     }
 
     private void OnDisable()
     {
         boutonB.Dispose(); // on arrête d'écouter le bouton
+        joystick.Dispose();
         temps = -1f;       // figure coupée net : rien à enlever à la prochaine apparition
         decalage = Vector3.zero;
         tour = Quaternion.identity;
@@ -81,14 +88,25 @@ public class FigureCerfVolant : MonoBehaviour
         bool autreFigure = figureAnimal != null && figureAnimal.EnCours;
         if (temps < 0f && !autreFigure && boutonB.WasPressedThisFrame() && vol.EnVol && !vol.Tombe)
         {
-            // Au hasard parmi les 2 autres figures : on avance de 1 ou 2 cases, et "% 3" fait revenir au début après la dernière.
-            numero = (numero + Random.Range(1, 3)) % 3;
+            numero = Choisir(joystick.ReadValue<Vector2>());
+            FiguresFaites++;
             temps = 0f;
             etoiles.transform.position = transform.position;
             etoiles.Emit(nombreEtoiles);
             if (sonFigure != null)
                 hautParleur.PlayOneShot(sonFigure, volume);
         }
+    }
+
+    // Le joystick gauche choisit : à droite = salto (0), en bas = toupie (1), à gauche = rebond (2).
+    // Au milieu (ou en haut) : au hasard parmi les 2 autres figures ("% 3" fait revenir au début après la dernière).
+    private int Choisir(Vector2 direction)
+    {
+        if (direction.magnitude < 0.5f || direction.y > Mathf.Abs(direction.x))
+            return (numero + Random.Range(1, 3)) % 3;
+        if (-direction.y > Mathf.Abs(direction.x))
+            return 1;
+        return direction.x > 0f ? 0 : 2;
     }
 
     // Après VolCerfVolant : on ajoute la figure par-dessus sa position et sa rotation.

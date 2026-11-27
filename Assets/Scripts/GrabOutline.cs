@@ -41,7 +41,9 @@ public class GrabOutline : MonoBehaviour
                 continue;
             foreach (var hovered in hand.interactablesHovered)
             {
+                // (Pas de contour sur un pot posé sur le pistolet : il clignotait en blanc quand la main s'approchait.)
                 if (hovered is XRGrabInteractable grab && !grab.isSelected && !drawn.Contains(grab) &&
+                    !(grab.TryGetComponent(out PaintReservoir pot) && pot.OnRail) &&
                     grab.GetDistance(hand.transform.position).distanceSqr <= distance * distance &&
                     manager.IsSelectPossible(hand, grab))
                 {

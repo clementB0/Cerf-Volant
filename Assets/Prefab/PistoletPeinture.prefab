@@ -4889,6 +4889,8 @@ GameObject:
   - component: {fileID: 7400000000000000011}
   - component: {fileID: 7400000000000000012}
   - component: {fileID: 7400000000000000013}
+  - component: {fileID: 6302879437436038041}
+  - component: {fileID: 8469399132455087332}
   m_Layer: 0
   m_Name: PistoletPeinture
   m_TagString: Untagged
@@ -4909,7 +4911,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7400000000000000002}
+  - {fileID: 7005540219572807658}
   - {fileID: 2181977084059330531}
   - {fileID: 1978296391871965092}
   - {fileID: 7400000000000000015}
@@ -4952,7 +4954,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable
   m_InteractionManager: {fileID: 0}
   m_Colliders:
@@ -5104,24 +5106,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d98131e2bacad524d92e4350a242a14d, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayColor
-  reservoirSocket: {fileID: 7400000000000000010}
   paintColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!114 &8462100000000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253659315437618115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f288a25e14ae4ed58449200231f5096e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::SonPriseOutil
-  sonPrise: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
-  volume: 0.8
+  reservoir: {fileID: 0}
+  reservoirSocket: {fileID: 7400000000000000010}
 --- !u!114 &1504822642489443854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5132,9 +5121,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0f28c5143aea7d47bf8942517fd5106, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayInput
   reservoirSocket: {fileID: 7400000000000000010}
+  vibrationDeclenchement: 0.16
 --- !u!114 &6223259374829655826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5145,9 +5135,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29cea62ac47f74944a925723e5154d8d, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayConeVFX
   sprayParticles: {fileID: 233335852343052817}
+  sprayEffectPrefab: {fileID: 0}
   coneHalfAngle: 15
   sprayRange: 1.5
   particleSpeed: 6
@@ -5163,7 +5154,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 150b6483db3881f4d883092d38a78a12, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SprayPainter
   paintableSurfaces:
   - {fileID: 0}
@@ -5173,6 +5164,110 @@ MonoBehaviour:
   raysPerTick: 12
   ticksPerSecond: 30
   opacityPerImpact: 0.95
+--- !u!114 &8462100000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f288a25e14ae4ed58449200231f5096e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonPriseOutil
+  sonPrise: {fileID: 8300000, guid: f36c13efdecd2b979d7cf1926b540b6f, type: 3}
+  volume: 0.8
+--- !u!114 &7400000000000000010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c46cee253f5a840a02647512070244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReservoirSocket
+  insertionPoint: {fileID: 7400000000000000015}
+  gunCollider: {fileID: 8341880111485361615}
+  compatibleReservoirs: []
+  captureRadius: 0.065
+  clipAngle: 30
+  pullDistance: 0.04
+--- !u!114 &7400000000000000011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a507f694a4ec1c4aa59c208c5fe5799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReservoirFeedback
+  lockClick: {fileID: 8300000, guid: d14b106713a74b448bcab90869f1706e, type: 3}
+  volume: 0.55
+  hapticAmplitude: 0.23
+  hapticDuration: 0.06
+--- !u!114 &7400000000000000012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34c88de835a1ca40999f95235e2e729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TriggerAnim
+  trigger: {fileID: 1487956167821259531}
+  pressedOffset: {x: 0, y: 0.012, z: -0.09}
+  pressedEulerAngles: {x: -8, y: 0, z: 0}
+  travelTime: 0.07
+--- !u!114 &7400000000000000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4de9f0d8e4b2ac500f617b910fa318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonSpray
+  sonSpray: {fileID: 8300000, guid: 634474aad02c7d64a8a545242dfeca99, type: 3}
+  volume: 0.803
+--- !u!114 &6302879437436038041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ea94abc9d1d0e40b6c891ac8773d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PriseUneSeuleMain
+--- !u!114 &8469399132455087332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2253659315437618115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 716641ad7bef6ea458fd6b2f90d7e5eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SonClipsage
+  sonConfirmation: {fileID: 8300000, guid: 2f6b8d1e4a7c4b9e9d0a3c5e7f1b2d63, type: 3}
+  volume: 0.7
 --- !u!1 &3366978251489068257
 GameObject:
   m_ObjectHideFlags: 0
@@ -5199,6 +5294,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.096, z: -0.052}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6237188200436635574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7400000000000000014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7400000000000000015}
+  m_Layer: 0
+  m_Name: Insertion reservoir
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7400000000000000015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7400000000000000014}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.04616, z: 0.06924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5242,108 +5368,13 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 521f17ef92d7a8141ad79e8c49e68a00, type: 3}
---- !u!4 &7400000000000000002 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 521f17ef92d7a8141ad79e8c49e68a00, type: 3}
-  m_PrefabInstance: {fileID: 7400000000000000001}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7400000000000000003 stripped
+--- !u!4 &1487956167821259531 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1003075063824354550, guid: 521f17ef92d7a8141ad79e8c49e68a00, type: 3}
   m_PrefabInstance: {fileID: 7400000000000000001}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7400000000000000014
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7400000000000000015}
-  m_Layer: 0
-  m_Name: Insertion reservoir
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7400000000000000015
+--- !u!4 &7005540219572807658 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 521f17ef92d7a8141ad79e8c49e68a00, type: 3}
+  m_PrefabInstance: {fileID: 7400000000000000001}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400000000000000014}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.04616, z: 0.06924}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6237188200436635574}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7400000000000000010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253659315437618115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c46cee253f5a840a02647512070244, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::ReservoirSocket
-  insertionPoint: {fileID: 7400000000000000015}
-  gunCollider: {fileID: 8341880111485361615}
-  compatibleReservoirs: []
-  captureRadius: 0.065
-  clipAngle: 15
-  pullDistance: 0.04
---- !u!114 &7400000000000000011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253659315437618115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a507f694a4ec1c4aa59c208c5fe5799, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::ReservoirFeedback
-  lockClick: {fileID: 8300000, guid: d14b106713a74b448bcab90869f1706e, type: 3}
-  volume: 0.55
-  hapticAmplitude: 0.23
-  hapticDuration: 0.06
---- !u!114 &7400000000000000012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253659315437618115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d34c88de835a1ca40999f95235e2e729, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::TriggerAnim
-  trigger: {fileID: 7400000000000000003}
-  pressedOffset: {x: 0, y: 0.012, z: -0.09}
-  pressedEulerAngles: {x: -8, y: 0, z: 0}
-  travelTime: 0.07
---- !u!114 &7400000000000000013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2253659315437618115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a4de9f0d8e4b2ac500f617b910fa318, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::SonSpray
-  sonSpray: {fileID: 8300000, guid: 634474aad02c7d64a8a545242dfeca99, type: 3}
-  volume: 0.803

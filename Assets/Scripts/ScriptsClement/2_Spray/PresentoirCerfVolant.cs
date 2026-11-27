@@ -15,6 +15,12 @@ public class PresentoirCerfVolant : MonoBehaviour
     [SerializeField] private float hauteurRebord = 0.05f;    // le rebord qui porte la toile est à 5 cm au-dessus de la table
     [SerializeField] private float epaisseur = 0.015f;       // les baguettes de bois font 1,5 cm
 
+    // Où est le chevalet (pour ObjetsDerriereChevalet) : vrai tant qu'il est posé sur la table.
+    public bool EstPose { get; private set; }
+    public Vector3 PiedChevalet { get; private set; }  // le point de la table sous la toile
+    public Vector3 Devant { get; private set; }        // du joueur vers le chevalet, à plat
+    public float DemiLargeur { get; private set; }     // la moitié de la largeur de la toile
+
     private void Start()
     {
         StartCoroutine(AllerSurLePresentoir());
@@ -59,10 +65,15 @@ public class PresentoirCerfVolant : MonoBehaviour
         // 4) Le chevalet autour, puis pouf là où il apparaît.
         GameObject presentoir = ConstruirePresentoir(surTable, rebord, centre + hautToile * haut, droite, devant, hautToile, dosToile, demiLargeur);
         Pouf(centre);
+        PiedChevalet = surTable;
+        Devant = devant;
+        DemiLargeur = demiLargeur;
+        EstPose = true;
 
         // 5) La peinture est validée (bouton "Passer au montage") : le chevalet ne sert plus, il disparaît dans un pouf.
         PieceDecoupee piece = GetComponent<PieceDecoupee>();
         yield return new WaitUntil(() => piece == null || piece.PriseFinaleAutorisee);
+        EstPose = false;
         Pouf(surTable + hautToile * 0.1f);
         Destroy(presentoir);
     }
@@ -109,7 +120,8 @@ public class PresentoirCerfVolant : MonoBehaviour
     }
 
     // Un nuage de fumée et un "pouf !" à cet endroit (comme TransitionDecoupePeinture pour les bombes).
-    private void Pouf(Vector3 position)
+    // (Public : ObjetsDerriereChevalet s'en sert aussi.)
+    public void Pouf(Vector3 position)
     {
         if (sonPouf != null)
             AudioSource.PlayClipAtPoint(sonPouf, position, 0.6f);

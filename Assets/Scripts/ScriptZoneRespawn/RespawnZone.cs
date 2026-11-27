@@ -10,6 +10,15 @@ public class RespawnZone : MonoBehaviour
     private readonly Dictionary<Transform, Pose> pointsDeSpawn =
         new Dictionary<Transform, Pose>();
 
+    // Pour ObjetsDerriereChevalet : les objets suivis, et les remettre à leur place de départ.
+    public IEnumerable<Transform> Objets => pointsDeSpawn.Keys;
+
+    public void Replacer(Transform cible)
+    {
+        if (pointsDeSpawn.TryGetValue(cible, out Pose spawn))
+            ReplacerObjet(cible, spawn);
+    }
+
     private void Reset()
     {
         GetComponent<BoxCollider>().isTrigger = true;

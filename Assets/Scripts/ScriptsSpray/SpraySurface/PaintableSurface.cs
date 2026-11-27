@@ -63,6 +63,13 @@ public class PaintableSurface : PenSurface
 
     private bool textureDirty;
 
+    // La peinture telle qu'elle était juste avant le premier trait de crayon (pour la gomme).
+    private Color[] avantCrayons;
+
+    // Pour le message "Appuie quand tu as fini !" (MessageFinPeinture).
+    public float Progression => progressionPourcent; // de 0 à 100
+    public bool Terminee => peintureTerminee;
+
     // Les scènes enregistrées avant gardaient une valeur entre 0 et 1 (0.99 = 99 %) : on la passe en pourcentage.
     private void OnValidate()
     {
@@ -298,15 +305,55 @@ public class PaintableSurface : PenSurface
 
     public override bool DrawPenLine(Vector2Int start, Vector2Int end, Color color)
     {
+        return DrawPenLine(start, end, color, 4);
+    }
+
+    // Le crayon (rayon selon sa taille). Au tout premier trait, on garde une copie de la peinture :
+    // la gomme s'en sert pour effacer les traits de crayon sans toucher à la peinture.
+    public override bool DrawPenLine(Vector2Int start, Vector2Int end, Color color, int rayon)
+    {
+        if (avantCrayons == null)
+            avantCrayons = (Color[])pixels.Clone();
+
         bool depose = false;
         int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
         for (int i = 0; i <= steps; i++)
         {
             float t = steps == 0 ? 0f : (float)i / steps;
             depose |= Stamp(Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t)),
-                            Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t)), 4, color, 1f);
+                            Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t)), Mathf.Max(1, rayon), color, 1f);
         }
         return depose;
+    }
+
+    // La gomme : remet la peinture d'avant les crayons sous la gomme (les traits de crayon s'effacent, la peinture reste).
+    public override bool ErasePenLine(Vector2Int start, Vector2Int end, int rayon)
+    {
+        if (avantCrayons == null)
+            return false; // aucun trait de crayon : rien à gommer
+
+        bool efface = false;
+        int steps = Mathf.Max(Mathf.Abs(end.x - start.x), Mathf.Abs(end.y - start.y));
+        for (int i = 0; i <= steps; i++)
+        {
+            float t = steps == 0 ? 0f : (float)i / steps;
+            int cx = Mathf.RoundToInt(Mathf.Lerp(start.x, end.x, t));
+            int cy = Mathf.RoundToInt(Mathf.Lerp(start.y, end.y, t));
+            for (int y = -rayon; y <= rayon; y++)
+                for (int x = -rayon; x <= rayon; x++)
+                {
+                    int px = cx + x, py = cy + y;
+                    if (px < 0 || px >= resolution || py < 0 || py >= resolution || x * x + y * y > rayon * rayon)
+                        continue;
+                    int index = py * resolution + px;
+                    if (pixels[index] == avantCrayons[index])
+                        continue;
+                    pixels[index] = avantCrayons[index];
+                    efface = true;
+                }
+        }
+        textureDirty |= efface;
+        return efface;
     }
 
     private bool Stamp(int centreX, int centreY, int rayon, Color color, float opacity)
@@ -391,21 +438,26 @@ public class PaintableSurface : PenSurface
             (float)nombrePixelsPeints / nombrePixelsSurface;
 
         progressionPourcent = couverture * 100f;
+        // (La peinture ne finit plus toute seule au pourcentage : c'est l'appui sur le bouton rouge (BoutonAuSpray) qui appelle Terminer.)
+    }
 
-        if (progressionPourcent >= couvertureRequise)
-        {
-            peintureTerminee = true;
+    // Fin de la peinture : appelée quand on appuie sur le bouton rouge (BoutonAuSpray).
+    public void Terminer()
+    {
+        if (peintureTerminee)
+            return;
 
-            Debug.Log(
-                "Peinture du cerf-volant terminée !",
-                this
-            );
+        peintureTerminee = true;
 
-            if (transitionFin != null)
-                transitionFin.TerminerPuis(quandPeintureTerminee);
-            else
-                quandPeintureTerminee.Invoke();
-        }
+        Debug.Log(
+            "Peinture du cerf-volant terminée !",
+            this
+        );
+
+        if (transitionFin != null)
+            transitionFin.TerminerPuis(quandPeintureTerminee);
+        else
+            quandPeintureTerminee.Invoke();
     }
 
     private void ActualiserTexture()
