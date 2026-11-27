@@ -274,6 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   finesse: 40
   dureeAvantDisparition: 2.5
+  arrondiCoins: 14
 --- !u!1 &900000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +312,7 @@ GameObject:
   - component: {fileID: 900000953}
   - component: {fileID: 900000954}
   - component: {fileID: 900000955}
+  - component: {fileID: 900000960}
   m_Layer: 0
   m_Name: PieceDecoupee
   m_TagString: Untagged
@@ -684,8 +686,11 @@ MonoBehaviour:
   portanceMainsBasses: 4
   portanceMainsHautes: 13
   frottement: 1
+  resistance: 3.5
   angleDAttaque: 20
   angleDeVirageMax: 60
+  lissageVirage: 0.7
+  inertieMains: 0.8
   hauteurDuSol: 0.3
   dureeChute: 3
   activerVibrations: 1
@@ -826,6 +831,7 @@ MonoBehaviour:
   modeleOiseau: {fileID: 919132149155446097, guid: 7c532aeafe8344c9a7fdedba379d82c5, type: 3}
   rayonTouche: 0.3
   sonPassage: {fileID: 8300000, guid: d88d03c390e3c524194ce99fb84c640b, type: 3}
+  sonRassemblement: {fileID: 8300000, guid: 7d6b61fb970cd3a449ef1cc50caed9eb, type: 3}
 --- !u!114 &900000310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2803,3 +2809,18 @@ MonoBehaviour:
   sonPapillon: {fileID: 8300000, guid: e0f120538076055fed3092d7e55d115a, type: 3}
   volume: 0.7
   tailleEffet: 0.18
+--- !u!114 &900000960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c37a351d09f43079abaab4fb710f02b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duree: 0.6
+  largeur: 0.05
+  couleur: {r: 1, g: 1, b: 1, a: 0.15}

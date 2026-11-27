@@ -21,14 +21,14 @@ public class VolCerfVolant : MonoBehaviour
     [SerializeField] private float portanceMainsBasses = 4f;   // mains basses : il descend nettement
     [SerializeField] private float portanceMainsHautes = 13f;  // mains hautes : il monte nettement
     [SerializeField] private float frottement = 1f;
-    [SerializeField] private float resistance = 2f;            // l'air freine ses mouvements : plus grand = il se déplace plus lentement, plus lourdement (0 = pas de frein)
+    [SerializeField] private float resistance = 3.5f;            // l'air freine ses mouvements : plus grand = il se déplace plus lentement, plus lourdement (0 = pas de frein)
     [SerializeField] private float angleDAttaque = 20f;
 
     [Header("Direction")]
     [SerializeField] private float angleDeVirageMax = 60f;
     [SerializeField] private float sensibiliteVirage = 1.6f;      // plus grand = il tourne avec moins d'écart de hauteur entre les mains (1 = pente des mains telle quelle)
-    [SerializeField] private float lissageVirage = 0.4f;          // il met environ 0,4 s à suivre un changement gauche/droite des mains (0 = tout de suite)
-    [SerializeField] private float inertieMains = 0.4f;           // il met environ 0,4 s à suivre un déplacement des mains (0 = il copie les mains tout de suite)
+    [SerializeField] private float lissageVirage = 0.7f;          // il met environ 0,7 s à suivre un changement gauche/droite des mains (0 = tout de suite)
+    [SerializeField] private float inertieMains = 0.8f;           // il met environ 0,8 s à suivre un déplacement des mains (0 = il copie les mains tout de suite)
     [SerializeField] private float amplitudeHauteurMains = 0.3f;  // de mains basses à mains hautes en 30 cm de mouvement (plus grand = le haut/bas réagit moins aux petits gestes)
 
     [Header("Sol et chute")]

@@ -14,6 +14,7 @@ public class ChoixMotifAvantDessin : MonoBehaviour
     [SerializeField] private Component boutonMontage;      // le bouton "Passer au montage"
     [SerializeField] private ParticleSystem fumeePrefab;   // le nuage de fumée (VFX/APPARITION)
     [SerializeField] private AudioClip sonPouf;            // le "pouf !" (SonFumee.wav)
+    [SerializeField] private AudioClip sonChoix;           // petit son quand on a choisi le motif (SonChoix.wav)
 
     private bool lance;
 
@@ -36,6 +37,8 @@ public class ChoixMotifAvantDessin : MonoBehaviour
         // Le cerf-volant peint : celui de l'atelier choisi au début (les autres ateliers sont cachés).
         choixMotif.Show(FindFirstObjectByType<PieceDecoupee>());
         yield return new WaitUntil(() => choixMotif.HasChosen);
+        if (sonChoix != null)
+            AudioSource.PlayClipAtPoint(sonChoix, boiteCrayons.transform.position, 0.6f);
 
         // Les crayons et le bouton reviennent, dans un pouf.
         Pouf(boiteCrayons.transform.position);

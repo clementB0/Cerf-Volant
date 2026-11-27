@@ -9,6 +9,7 @@ public class ChutesTissu : MonoBehaviour
 {
     [SerializeField] private int finesse = 40;            // nombre de petites tranches par chute (plus = bord plus lisse)
     [SerializeField] private float dureeAvantDisparition = 2.5f; // une chute tombée disparaît après 2,5 secondes
+    [SerializeField, Range(2f, 30f)] private float arrondiCoins = 14f; // coins du tissu : 14 = à peine arrondis, plus petit = plus rond (2 = un rond), 30 = presque carré
 
     private GameObject[] chutes; // une chute par étape
 
@@ -94,9 +95,9 @@ public class ChutesTissu : MonoBehaviour
             float angle = angleDebut + ouverture * i / finesse;
             Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
-            // Point intérieur : sur le contour de la forme. Point extérieur : sur le bord du carré.
+            // Point intérieur : sur le contour de la forme. Point extérieur : sur le bord du carré aux coins arrondis.
             sommets[i * 2] = direction * DistanceContour(coins, direction);
-            sommets[i * 2 + 1] = direction * (0.5f / Mathf.Max(Mathf.Abs(direction.x), Mathf.Abs(direction.y)));
+            sommets[i * 2 + 1] = direction * DistanceBord(direction);
 
             if (i < finesse)
             {
@@ -131,6 +132,14 @@ public class ChutesTissu : MonoBehaviour
                 plusProche = distance;
         }
         return plusProche;
+    }
+
+    // À quelle distance du milieu est le bord du tissu, dans cette direction ?
+    // Le bord est un "carré arrondi" : |x|^n + |y|^n = 0,5^n (n = arrondiCoins). Sur les côtés c'est presque droit, dans les coins c'est rond.
+    private float DistanceBord(Vector2 direction)
+    {
+        float n = arrondiCoins;
+        return 0.5f / Mathf.Pow(Mathf.Pow(Mathf.Abs(direction.x), n) + Mathf.Pow(Mathf.Abs(direction.y), n), 1f / n);
     }
 
     private static float Croix(Vector2 u, Vector2 v) => u.x * v.y - u.y * v.x;

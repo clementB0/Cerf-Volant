@@ -16,6 +16,7 @@ public class ObstaclesOiseaux : MonoBehaviour
     [SerializeField] private float rayonFrole = 0.8f;         // arrivé à moins de 80 cm du cerf-volant, il l'évite et vient tourner autour
     [SerializeField] private int oiseauxAutourMax = 5;        // au 5e oiseau autour du cerf-volant, ils s'envolent tous
     [SerializeField] private AudioClip sonPassage;            // le "swoosh" quand un oiseau passe au-dessus de ta tête (swoosh.mp3)
+    [SerializeField] private AudioClip sonRassemblement;      // le petit cri quand un oiseau rejoint le cercle autour du cerf-volant (BirdGather.mp3)
 
     // Prévient quand le cercle est complet et que les oiseaux s'envolent (FigureAnimal s'en sert pour lancer sa figure).
     public event System.Action CercleComplet;
@@ -59,6 +60,8 @@ public class ObstaclesOiseaux : MonoBehaviour
                 OiseauEnOrbite oiseau = oiseaux[i].gameObject.AddComponent<OiseauEnOrbite>();
                 oiseau.Rejoindre(transform, autour.Count, oiseauxAutourMax); // la place suivante sur le cercle
                 autour.Add(oiseau);
+                if (sonRassemblement != null)
+                    AudioSource.PlayClipAtPoint(sonRassemblement, oiseaux[i].position, 0.5f); // il vient de l'oiseau, à mi-volume
                 Oublier(i);
 
                 // Le cercle est complet : ils s'envolent tous, et on recommence à zéro.

@@ -20,8 +20,9 @@ public class PaintableSurface : PenSurface
     [SerializeField]
     private bool suivreCouverture = false;
 
-    [SerializeField, Range(0.1f, 1f)]
-    private float couvertureRequise = 0.98f;
+    [Tooltip("Pourcentage de la surface à peindre pour finir (ex. 99.99).")]
+    [SerializeField, Range(10f, 100f)]
+    private float couvertureRequise = 98f;
 
     [Tooltip("Quantité de peinture nécessaire pour compter un pixel.")]
     [SerializeField, Range(0.05f, 0.95f)]
@@ -62,8 +63,16 @@ public class PaintableSurface : PenSurface
 
     private bool textureDirty;
 
+    // Les scènes enregistrées avant gardaient une valeur entre 0 et 1 (0.99 = 99 %) : on la passe en pourcentage.
+    private void OnValidate()
+    {
+        if (couvertureRequise <= 1f)
+            couvertureRequise *= 100f;
+    }
+
     private void Start()
     {
+        OnValidate(); // aussi dans le jeu compilé, où OnValidate n'est jamais appelé
         // La pièce construit son maillage dans Awake.
         // On initialise donc la peinture dans Start.
         surfaceRenderer = GetComponent<MeshRenderer>();
@@ -383,7 +392,7 @@ public class PaintableSurface : PenSurface
 
         progressionPourcent = couverture * 100f;
 
-        if (couverture >= couvertureRequise)
+        if (progressionPourcent >= couvertureRequise)
         {
             peintureTerminee = true;
 
