@@ -2,7 +2,7 @@ using UnityEngine;
 
 internal sealed class KitePattern
 {
-    internal enum Style { Geometric, Symmetric, Creative }
+    internal enum Style { Geometric, Symmetric, Creative, Blank }
 
     private const int Resolution = 512;
     private const float Dash = 0.016f;
@@ -11,16 +11,18 @@ internal sealed class KitePattern
     private readonly Color32[] pixels = new Color32[Resolution * Resolution];
     private readonly Vector3[] vertices;
     private readonly Bounds bounds;
+    private readonly float dashScale;
 
-    private KitePattern(Mesh mesh)
+    private KitePattern(Mesh mesh, float dashScale)
     {
         vertices = mesh.vertices;
         bounds = mesh.bounds;
+        this.dashScale = Mathf.Max(1f, dashScale);
     }
 
-    internal static Texture2D Create(Mesh mesh, Style style)
+    internal static Texture2D Create(Mesh mesh, Style style, float dashScale = 1f)
     {
-        var pattern = new KitePattern(mesh);
+        var pattern = new KitePattern(mesh, dashScale);
         switch (style)
         {
             case Style.Geometric:
@@ -82,6 +84,8 @@ internal sealed class KitePattern
     private void Stroke(bool curved, params Vector2[] points)
     {
         Vector2 previous = Fit(points[0]);
+        float dashLength = Dash * dashScale;
+        float period = Period * dashScale;
         float phase = 0f;
         for (int i = 0; i < points.Length - 1; i++)
         {
@@ -95,15 +99,15 @@ internal sealed class KitePattern
                 Vector2 point = curved ? Curve(a, b, c, d, t) : Vector2.Lerp(b, c, t);
                 Vector2 next = Fit(point);
                 float length = Vector2.Distance(previous, next);
-                for (float start = -phase; start < length; start += Period)
+                for (float start = -phase; start < length; start += period)
                 {
                     float from = Mathf.Max(0f, start);
-                    float to = Mathf.Min(length, start + Dash);
+                    float to = Mathf.Min(length, start + dashLength);
                     if (to > from)
                         Rasterize(Vector2.Lerp(previous, next, from / length),
                             Vector2.Lerp(previous, next, to / length));
                 }
-                phase = (phase + length) % Period;
+                phase = (phase + length) % period;
                 previous = next;
             }
         }
@@ -122,7 +126,8 @@ internal sealed class KitePattern
         Vector2 b = (to + Vector2.one * 0.5f) * Resolution;
         Vector2 delta = b - a;
         float lengthSquared = delta.sqrMagnitude;
-        const float padding = Radius + 0.5f;
+        float corePadding = Radius * dashScale + 0.5f;
+        float padding = corePadding + (dashScale - 1f) * 1.35f;
         int minX = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.x, b.x) - padding));
         int maxX = Mathf.Min(Resolution - 1, Mathf.CeilToInt(Mathf.Max(a.x, b.x) + padding));
         int minY = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.y, b.y) - padding));
@@ -134,8 +139,12 @@ internal sealed class KitePattern
                 Vector2 pixel = new Vector2(x + 0.5f, y + 0.5f);
                 float t = lengthSquared > 0f ? Mathf.Clamp01(Vector2.Dot(pixel - a, delta) / lengthSquared) : 0f;
                 float distance = Vector2.Distance(pixel, a + delta * t);
+                // Red holds the dark stroke. Alpha includes the light outline.
+                byte core = (byte)Mathf.RoundToInt(Mathf.Clamp01(corePadding - distance) * 255f);
                 byte alpha = (byte)Mathf.RoundToInt(Mathf.Clamp01(padding - distance) * 255f);
                 int index = y * Resolution + x;
+                if (core > pixels[index].r)
+                    pixels[index].r = core;
                 if (alpha > pixels[index].a)
                     pixels[index].a = alpha;
             }

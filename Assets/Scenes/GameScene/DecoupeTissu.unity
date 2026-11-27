@@ -3438,6 +3438,8 @@ MonoBehaviour:
   selectionSound: {fileID: 8300000, guid: 833d037b61397c042ab31e590f52d1e4, type: 3}
   spacing: 0.24
   previewSize: 0.19
+  showCreative: 0
+  previewDashScale: 2.2
 --- !u!114 &900001003
 MonoBehaviour:
   m_ObjectHideFlags: 0

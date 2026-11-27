@@ -52,8 +52,10 @@ Shader "Cerf-Volant/Kite Guide"
             half4 Frag(Varyings input) : SV_Target
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                half alpha = SAMPLE_TEXTURE2D(_GuideMap, sampler_GuideMap, input.uv).a;
-                return half4(_GuideColor.rgb, _GuideColor.a * alpha);
+                half4 dash = SAMPLE_TEXTURE2D(_GuideMap, sampler_GuideMap, input.uv);
+                half core = saturate(dash.r / max(dash.a, 0.001h));
+                half3 color = lerp(half3(1, 1, 1), _GuideColor.rgb, core);
+                return half4(color, _GuideColor.a * dash.a);
             }
             ENDHLSL
         }
