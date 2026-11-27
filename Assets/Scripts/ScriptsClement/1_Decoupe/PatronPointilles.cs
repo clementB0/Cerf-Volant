@@ -26,7 +26,7 @@ public class PatronPointilles : MonoBehaviour
     [SerializeField] private ParticleSystem copeauxPrefab;
     [SerializeField] private Collider plateauVfx;
     [SerializeField] private int nombreEtapes = 4;           // le contour est découpé en 4 morceaux, qui apparaissent l'un après l'autre
-    [SerializeField] private float opacitePale = 0.35f;      // les pointillés pas encore découpables sont visibles à 35 % (1 = blancs comme les autres)
+    [SerializeField] private float opacitePale = 0.15f;      // les pointillés pas encore découpables sont visibles à 15 % (1 = blancs comme les autres)
     [SerializeField] private float attenteDebut = 0.7f;     // le temps que l'atelier finisse d'arriver sur la table (ChoixCerfVolant) avant le 1er mouvement
 
     // Ce qui se passe quand tous les traits sont reliés. Se règle dans l'Inspector (liste "Quand Tout Est Relie").

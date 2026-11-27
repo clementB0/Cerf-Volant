@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // OUTIL (dans l'éditeur seulement) : menu "Clement > Peinture : couleurs des réservoirs".
-// Dans la scène ouverte, les réservoirs de peinture du pistolet ("MHS_Reservoir ...") prennent les 5 couleurs de la palette.
+// Dans la scène ouverte, les réservoirs de peinture du pistolet ("MHS_Reservoir ...") prennent les 6 couleurs de la palette.
 // S'il en manque, il duplique un réservoir existant (comme Ctrl+D : même prefab, mêmes réglages), et ajoute la copie
 // partout où les autres réservoirs sont listés (le pistolet, les transitions, FinPeinture, le respawn du sol...).
 // Ils sont rangés en ligne sur la table, à la place des anciens. On peut le relancer sans risque.
@@ -14,8 +14,8 @@ using UnityEngine.SceneManagement;
 public static class CouleursReservoirs
 {
     // La palette, dans l'ordre où les réservoirs sont posés sur la table (de gauche à droite).
-    private static readonly string[] noms = { "rouge", "mauve", "violet", "vert", "marron" };
-    private static readonly string[] couleurs = { "#CF4141", "#6664A3", "#61235C", "#739240", "#804C39" };
+    private static readonly string[] noms = { "brun", "rouge", "orange", "vert", "bleu", "violet" };
+    private static readonly string[] couleurs = { "#956257", "#DD6969", "#F1B06A", "#96AD75", "#7899CE", "#8F5395" };
 
     private const float ecart = 0.13f; // distance entre deux réservoirs (13 cm, comme avant)
 

@@ -14,6 +14,10 @@ public abstract class PenSurface : MonoBehaviour
     protected abstract Vector2Int PixelAt(Vector2 uv);
     public abstract bool DrawPenLine(Vector2Int start, Vector2Int end, Color color);
 
+    // Crayons de tailles différentes (rayon du trait en pixels), et la gomme. Par défaut : comme avant / rien.
+    public virtual bool DrawPenLine(Vector2Int start, Vector2Int end, Color color, int rayon) => DrawPenLine(start, end, color);
+    public virtual bool ErasePenLine(Vector2Int start, Vector2Int end, int rayon) => false;
+
     public bool TryGetContact(Vector3 tip, float tolerance, out Vector2Int pixel,
                               out float squaredDistance)
     {

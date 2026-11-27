@@ -12,6 +12,10 @@ public class Pen : MonoBehaviour
     [SerializeField] private Color couleurMine = Color.black;
     [SerializeField] private Renderer indicateur;
     [SerializeField] private bool dessinerEnMainSeulement;
+    [Tooltip("Épaisseur du trait en pixels (petit crayon 2, moyen 4, grand 7).")]
+    [SerializeField, Range(1, 12)] private int rayonTrait = 4;
+    [Tooltip("Coché = c'est une gomme : elle efface les traits de crayon (pas la peinture).")]
+    [SerializeField] private bool gomme;
 
     private XRGrabInteractable prise;
     private PenSurface zonePrecedente;
@@ -109,7 +113,10 @@ public class Pen : MonoBehaviour
         bool trace = toucheSurface && (zone != zonePrecedente || point != pixelTouche);
         if (trace)
         {
-            if (zone.DrawPenLine(zone == zonePrecedente ? pixelTouche : point, point, couleurMine))
+            Vector2Int depart = zone == zonePrecedente ? pixelTouche : point;
+            bool depose = gomme ? zone.ErasePenLine(depart, point, rayonTrait)
+                                : zone.DrawPenLine(depart, point, couleurMine, rayonTrait);
+            if (depose)
                 EmettreParticulesMine(contact);
 
             if (Time.unscaledTime >= prochaineVibration && prise != null &&
